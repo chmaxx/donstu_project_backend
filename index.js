@@ -1,12 +1,10 @@
-// Инициализация всего, что нужно для работы бекэнда
-
 const express        = require('express');
 const MongoClient    = require('mongodb').MongoClient;
 const server         = express();
 
-/* Подгружаем конфиг 
- * Если не удается подгрузить - отменяем запуск сервера
- */
+
+//Подгружаем конфиг 
+//Если не удается подгрузить - отменяем запуск сервера
 var config 
 try {
   config = require('./config/config.json');
