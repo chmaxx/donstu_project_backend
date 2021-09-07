@@ -22,16 +22,13 @@ server.use(bodyParser.urlencoded({ extended: true }));
 // Установим переменную port
 server.set('port', config.port || 8000);
 
-
-// Подгружаем модули
-require('./api/modules')(server, {})
+// Подгружаем маршруты
+require('./api/routes')(server, config)
 
 // Подключаемся к базе данных. При успешном подключении - начинаем прослушку 
 MongoClient.connect(config.db_settings.url, (err, database) => {
   if (err) return console.error(err)
-  
-  require('./api/modules')(server, database);
-
+    
   let port = server.get('port')
 
   server.listen(port, () => {
