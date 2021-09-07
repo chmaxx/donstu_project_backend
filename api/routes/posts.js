@@ -1,15 +1,27 @@
-/*
-	Это тестовый модуль - здесь я просто проверяю работу приложения 
-	На данном этапе мы можем отправить POST-запрос на приложение <сайт>:8000/create-post
-	с флагом x-www-form-urlencoded и определенными данными в Body, а затем получить их здесь
-	в отформатированном виде (req.body)
-*/
-module.exports = function(server, db) {
-	server.post('/create-post', (req, res) => {
-		console.log('Got POST!')
-		console.log(req.body)
+/* Тестовый маршрут Posts 
+ * Запросы происходят по пути:
+ *
+ * http://<сайт>/1.0/posts/
+ *
+ * Далее все добавляемые маршруты через router будут автоматически отнесенены к 1.0/posts/
+ * 
+ * Например: 
+ *
+ * 		router.route('/create')
+ *			.get(console.log)
+ *
+ * ^^^ при такой инициализации маршрута полный путь до него будет:
+ * http://<сайт>/1.0/posts/create
+ *
+ * при этом стоит обратить внимание, что 1.0 здесь - версия API, указанная в конфиге
+ */
+const {Router} 	= require('express');
+const router 		= Router();
 
-		let test_val = req.test_value ? req.test_value : 'Nothing in test_value...'
-		res.send('Got your POST! ' + test_val)
-	});
-};
+router.route('/')
+	.get((req, res) => {
+		console.log('GET /1.0/posts/')
+		res.send(req.query);
+	})
+
+module.exports = router
