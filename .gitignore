@@ -1,6 +1,9 @@
 #custom folders
 notes
 
+#ssl certificates
+cert
+
 # Logs
 logs
 *.log
