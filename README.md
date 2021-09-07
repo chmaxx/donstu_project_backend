@@ -12,7 +12,7 @@ npm install
 ```json
 {
   "port": 8000,
-  "api_version": "1.0",
+  "api_version": "v1",
   "db_settings": {
     "url": "mongodb+srv://<пользователь>:<пароль>@<сайт>/<база_данных>?retryWrites=true&w=majority"
   }
