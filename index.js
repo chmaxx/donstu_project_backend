@@ -2,7 +2,6 @@
 
 const express        = require('express');
 const MongoClient    = require('mongodb').MongoClient;
-const bodyParser     = require('body-parser');
 const server         = express();
 
 /* Подгружаем конфиг 
@@ -15,9 +14,6 @@ try {
   console.error('Не удается загрузить конфигурационный файл!')
   return 
 }
-
-// Научим express обрабатывать формы 
-server.use(bodyParser.urlencoded({ extended: true }));
 
 // Установим переменную port
 server.set('port', config.port || 8000);
