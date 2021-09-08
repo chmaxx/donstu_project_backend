@@ -26,7 +26,7 @@ let ArticleSchema = new mongoose.Schema({
 	// Время последнего редактирования будет меняться при каждом обновлении записи 
 	// Пыри создании записи будет идентично create_time  
 	last_update_time: Date
-})
+}, {versionKey: false})
 
 ArticleSchema.pre('save', (next, done) => {
 	next();
