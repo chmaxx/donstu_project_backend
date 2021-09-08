@@ -85,8 +85,6 @@ function parseTags(tagsData, fallbackTo) {
 
   if (!isJSON(tagsData)) return fallbackTags; 
 
-  console.log(tagsData)
-
   // Пытаемся спарсить входные данные. Не получается - присваиваем fallbackTags
   var json_tags; 
   try
@@ -122,8 +120,6 @@ router.get('/', (req, res) => {
 
   var filter = {};
 
-  console.log(isJSON(req.body.filters));
-
   // Пользовательские фильтры
   if (req.body.filters && isJSON(req.body.filters)) {
     var req_filters = JSON.parse(req.body.filters);
@@ -131,8 +127,6 @@ router.get('/', (req, res) => {
     // Конкретный автор
     if (req_filters.author_id) filter.author_id = req_filters.author_id;
 
-    console.log(req_filters);
-    
     // Наличие определенных тегов
     if (req_filters.tags) filter.tags = req_filters.tags;
     
@@ -144,8 +138,6 @@ router.get('/', (req, res) => {
         "$lte": req_filters.date_interval[1] ? req_filters.date_interval[1] : new Date()};
     };
   };
-
-  console.log(filter);
 
   Article.find(filter, (err, docs) => {
     if (err) {
