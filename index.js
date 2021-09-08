@@ -22,17 +22,19 @@ db_connect(config.db_settings.url);
 
 
 // Подгружаем ssl сертификат и ключ
-// В случае ошибки - отменяем запуск сервера
+// В случае ошибки при 443 порте - отменяем запуск сервера
 try {
   var cert_opt = {
     key: fs.readFileSync(config.key_path),
     cert: fs.readFileSync(config.cert_path)
   };
 } catch (err) {
-  console.log('Ошибка при загрузке ssl сертификата и ключа!')
   if (config.port == 443) {
+    console.log('Ошибка при загрузке ssl сертификата и ключа!')
     console.log('Отмена запуска сервера на порту 443. Смените порт или укажите правильеый путь к ssl сертификату и ключу')
     return
+  } else {
+    console.log('SSL сертификат и ключ не загружены!')
   }
 }
 
