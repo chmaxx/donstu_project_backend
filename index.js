@@ -34,13 +34,12 @@ try {
     cert: fs.readFileSync(config.cert_path)
   };
 } catch (err) {
-  console.log('SSL сертификат и ключ не загружен. Работа по HTTPS невозможна');
   if (isHTTPS) {
     console.log('Ошибка при загрузке ssl сертификата и ключа!');
     console.log('Отмена запуска сервера на порту 443. Смените порт или укажите правильный путь к ssl сертификату и ключу');
     return;
   } else {
-    console.log('SSL сертификат и ключ не загружены!');
+    console.log('SSL сертификат и ключ не загружены. Работа по HTTPS невозможна');
   }
 }
 
