@@ -19,13 +19,20 @@ server.set('port', config.port || 8000);
 // Подгружаем маршруты
 require('./api/routes')(server, config)
 
-// Подключаемся к базе данных. При успешном подключении - начинаем прослушку 
+// Подключаемся к базе данных. 
+// При не успешном подключении начинаем в аварийном режиме
 MongoClient.connect(config.db_settings.url, (err, database) => {
-  if (err) return console.error(err)
-    
-  let port = server.get('port')
+  if (err) {
+    console.log('Ошибка подключения к базе данных!')
+    console.log('Пытаемся начать работу в аварийном режиме. Часть маршрутов не будет работать')
 
-  server.listen(port, () => {
-    console.log('Начинаем прослушку порта ' + port);
-  });               
+    return console.error(err)
+  }               
 })
+
+
+let port = server.get('port')
+
+server.listen(port, () => {
+  console.log('Начинаем прослушку порта ' + port);
+});  
