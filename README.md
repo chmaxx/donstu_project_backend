@@ -16,7 +16,8 @@ npm install
   "key_path" : "path/to/ssl.key",
   "api_version": "v1",
   "db_settings": {
-    "url": "mongodb+srv://<пользователь>:<пароль>@<сайт>/<база_данных>?retryWrites=true&w=majority"
+    "url": "mongodb://<пользователь>:<пароль>@<сайт>/<база_данных (можно без нее)>?retryWrites=true",
+    "reconnect_delay": 4000
   }
 }
 ```
