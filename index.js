@@ -1,6 +1,6 @@
-const express        = require('express');
-const MongoClient    = require('mongodb').MongoClient;
-const app         = express();
+var app = require('express')();
+var MongoClient = require('mongodb').MongoClient;
+var fs = require('fs')
 
 
 //Подгружаем конфиг 
@@ -14,20 +14,34 @@ try {
 }
 
 
+// Подгружаем маршруты
+require('./api/routes')(app, config)
+
 // TODO: вынести функцию подключения к дб в отдельный файл
 db_connect(config.db_settings.url);
 
-// поднрузка сертификатов и https при 443 порте
+
+// Подгружаем ssl сертификат и ключ
+var cert_opt = {
+  key: fs.readFileSync(config.key_path),
+  cert: fs.readFileSync(config.cert_path)
+};
+
+
+// проверка порта для запуска нужного протокола
 if (config.port == 443) {
-  console.log('443 port') //todo
+  var https = require('https').createServer(cert_opt,app);
+  https.listen(port, function () {
+    console.log('HTTP: Начинаем прослушку порта ', port);
+  });
 } else {
-  // Установим переменную port
-  app.set('port', config.port || 8000);
+  // Начинаем прослушку на не https порту
+  app.listen(port, () => {
+    console.log('HTTP: Начинаем прослушку порта ', port);
+  }); 
 }
 
 
-// Подгружаем маршруты
-require('./api/routes')(app, config)
 
 // Подключаемся к базе данных. 
 // При не успешном подключении начинаем в аварийном режиме
@@ -41,9 +55,3 @@ function db_connect(db_url) {
     }               
   })
 }
-
-let port = app.get('port')
-
-app.listen(port, () => {
-  console.log('Начинаем прослушку порта ' + port);
-});  

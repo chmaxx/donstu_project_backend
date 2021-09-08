@@ -12,8 +12,8 @@ npm install
 ```json
 {
   "port": 8000,
-  "cert_path" : "/path/to/ssl.pem",
-  "key_path" : "/path/to/ssl.key",
+  "cert_path" : "path/to/ssl.pem",
+  "key_path" : "path/to/ssl.key",
   "api_version": "v1",
   "db_settings": {
     "url": "mongodb+srv://<пользователь>:<пароль>@<сайт>/<база_данных>?retryWrites=true&w=majority"
