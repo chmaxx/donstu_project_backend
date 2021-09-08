@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports = function(server, config) {
+module.exports = function(app, config) {
   fs.readdir('./api/routes/', (err, files) => {
     if (err) return console.error('Ошибка при чтении маршрутов!');
 
@@ -20,8 +20,8 @@ module.exports = function(server, config) {
       var route_name = file.split('.').slice(0, -1).join('.')
 
       // Загружаем маршрут 
-      server.use(api_placeholder + route_name, require('./routes/' + route_name))
-      console.log('Загружен маршрут ' + route_name + '!')
+      app.use(api_placeholder + route_name, require('./routes/' + route_name))
+      console.log('[+]Загружен маршрут ' + route_name + '!')
     })
 
   })
