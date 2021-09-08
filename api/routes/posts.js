@@ -15,8 +15,10 @@
  *
  * при этом стоит обратить внимание, что v1 здесь - версия API, указанная в конфиге
  */
-const {Router} 	= require('express');
-const router 		= Router();
+
+ // "/" тут относительно названия файла маршрута
+const {Router} = require('express');
+const router = Router();
 
 router.route('/')
 	.get((req, res) => {
