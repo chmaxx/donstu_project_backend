@@ -21,7 +21,7 @@ module.exports = function(app, config) {
 
       // Загружаем маршрут 
       app.use(api_placeholder + route_name, require('./routes/' + route_name))
-      console.log('Загружен маршрут ' + route_name + '!')
+      console.log('[+]Загружен маршрут ' + route_name + '!')
     })
 
   })
