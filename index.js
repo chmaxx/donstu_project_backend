@@ -30,32 +30,31 @@ if (api_config.db_settings.enabled) {
 }
 
 // Подгружаем ssl сертификат и ключ
-// В случае ошибки при 443 порте - отменяем запуск сервера
-let isHTTPS = config.port == 443
+// В случае ошибки при https - отменяем запуск сервера
 try {
   let cert_opt = {
     key: fs.readFileSync(config.key_path),
     cert: fs.readFileSync(config.cert_path)
   };
 } catch (err) {
-  if (isHTTPS) {
+  if (config.https_enable) {
     console.log('Ошибка при загрузке ssl сертификата и ключа!');
-    console.log('Отмена запуска сервера на порту 443. Смените порт или укажите правильный путь к ssl сертификату и ключу');
+    console.log('Отмена запуска сервера на https. Смените порт или укажите правильный путь к ssl сертификату и ключу');
     return;
   } else {
     console.log('SSL сертификат и ключ не загружены. Работа по HTTPS невозможна');
   }
 }
 
-// проверка порта для запуска нужного протокола
-if (isHTTPS) {
+// запуск с нужным протоколом
+if (config.https_enable) {
   let https = require('https').createServer(cert_opt, app);
-  https.listen(config.port, function () {
-    console.log('HTTPS: Начинаем прослушку порта ', config.port);
+  https.listen(config.port, config.ip, function () {
+    console.log('HTTPS: Начинаем прослушку порта ', config.port, "на ip адрессе ", config.ip);
   });
 } else {
-  // Начинаем прослушку не на https порте
-  app.listen(config.port, () => {
-    console.log('HTTP: Начинаем прослушку порта ', config.port);
+  // Начинаем прослушку на http
+  app.listen(config.port, config.ip, () => {
+    console.log('HTTP: Начинаем прослушку порта ', config.port, "на ip адрессе ", config.ip);
   }); 
 }

@@ -12,6 +12,8 @@ npm install
 ```json
 {
   "port": 8000,
+  "ip" : "127.0.0.1",
+  "https_enable" : false,
   "cert_path" : "cert/ssl-cert-api.wkeep.ru.pem",
   "key_path" : "cert/ssl-cert-api.wkeep.ru.key",
   "api_version": "v1",
@@ -23,11 +25,12 @@ npm install
 }
 ```
 
-## Поддержка HTTPS
+## Поддержка HTTPS (работоспособность не проверена)
 Для включения https протокола необходимо:
 * Создать папку `cert` в корне проекта
 * Переместить в неё ssl сертификат(`.pem` или `.crt`) и ключ(`.key`)
 * Изменить в `config.json` значение `port` на `443`
+* Изменить в `config.json` значение `https_enable` на `true`
 * Изменить в `config.json` значение `cert_path` на относительный путь сертификата(`.pem` или `.crt`)
 * Изменить в `config.json` значение `key_path` на относительный путь ключа(`.key`)
 * Запустить сервер. При правильной настройки должно вывеститься сообщение об прослушивании порта 443 на HTTPS
