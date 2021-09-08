@@ -8,14 +8,15 @@ var fs = require('fs')
 var config 
 try {
   config = require('./config/config.json');
+  global.api_config = config;
 } catch (err) {
-  console.error('Не удается загрузить конфигурационный файл!')
-  return 
+  console.error('Не удается загрузить конфигурационный файл!');
+  return;
 }
 
 
 // Подгружаем маршруты
-require('./api/routes')(app, config)
+require('./api/routes')(app, config);
 
 // TODO: вынести функцию подключения к дб в отдельный файл
 db_connect(config.db_settings.url);
@@ -29,13 +30,13 @@ try {
     cert: fs.readFileSync(config.cert_path)
   };
 } catch (err) {
-  console.log('SSL сертификат и ключ не загружен. Работа по HTTPS невозможна')
+  console.log('SSL сертификат и ключ не загружен. Работа по HTTPS невозможна');
   if (config.port == 443) {
-    console.log('Ошибка при загрузке ssl сертификата и ключа!')
-    console.log('Отмена запуска сервера на порту 443. Смените порт или укажите правильеый путь к ssl сертификату и ключу')
-    return
+    console.log('Ошибка при загрузке ssl сертификата и ключа!');
+    console.log('Отмена запуска сервера на порту 443. Смените порт или укажите правильеый путь к ssl сертификату и ключу');
+    return;
   } else {
-    console.log('SSL сертификат и ключ не загружены!')
+    console.log('SSL сертификат и ключ не загружены!');
   }
 }
 
@@ -60,10 +61,10 @@ if (config.port == 443) {
 function db_connect(db_url) {
   MongoClient.connect(db_url, (err, database) => {
     if (err) {
-      console.log('Ошибка подключения к базе данных!')
-      console.log('Пытаемся начать работу в аварийном режиме. Часть маршрутов не будет работать')
+      console.log('Ошибка подключения к базе данных!');
+      console.log('Пытаемся начать работу в аварийном режиме. Часть маршрутов не будет работать');
 
-      return console.error(err)
+      return console.error(err);
     }               
   })
 }
