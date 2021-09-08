@@ -22,22 +22,31 @@ db_connect(config.db_settings.url);
 
 
 // Подгружаем ssl сертификат и ключ
-var cert_opt = {
-  key: fs.readFileSync(config.key_path),
-  cert: fs.readFileSync(config.cert_path)
-};
+// В случае ошибки - отменяем запуск сервера
+try {
+  var cert_opt = {
+    key: fs.readFileSync(config.key_path),
+    cert: fs.readFileSync(config.cert_path)
+  };
+} catch (err) {
+  console.log('Ошибка при загрузке ssl сертификата и ключа!')
+  if (config.port == 443) {
+    console.log('Отмена запуска сервера на порту 443. Смените порт или укажите правильеый путь к ssl сертификату и ключу')
+    return
+  }
+}
 
 
 // проверка порта для запуска нужного протокола
 if (config.port == 443) {
   var https = require('https').createServer(cert_opt,app);
-  https.listen(port, function () {
-    console.log('HTTP: Начинаем прослушку порта ', port);
+  https.listen(config.port, function () {
+    console.log('HTTP: Начинаем прослушку порта ', config.port);
   });
 } else {
-  // Начинаем прослушку на не https порту
-  app.listen(port, () => {
-    console.log('HTTP: Начинаем прослушку порта ', port);
+  // Начинаем прослушку не на https порте
+  app.listen(config.port, () => {
+    console.log('HTTP: Начинаем прослушку порта ', config.port);
   }); 
 }
 
