@@ -23,7 +23,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 require('./api/routes')(app, config);
 
 // Инициализация базы данных 
-app.use(require('./db'));
+if (api_config.db_settings.enabled) {
+  app.use(require('./db'));
+} else {
+  console.log('Не подключаемся к базе данных, потому что она отключена в конфиге!');
+}
 
 // Подгружаем ssl сертификат и ключ
 // В случае ошибки при 443 порте - отменяем запуск сервера

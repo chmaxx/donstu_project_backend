@@ -17,6 +17,7 @@ npm install
   "api_version": "v1",
   "db_settings": {
     "url": "mongodb://<пользователь>:<пароль>@<сайт>/<база_данных (можно без нее)>?retryWrites=true",
+    "enabled": true, 
     "reconnect_delay": 4000
   }
 }
