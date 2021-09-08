@@ -1,5 +1,6 @@
-let app = require('express')();
-let fs = require('fs')
+let app         = require('express')();
+let bodyParser  = require('body-parser');
+let fs          = require('fs');
 
 // Подгружаем конфиг 
 // Если не удается подгрузить - отменяем запуск сервера
@@ -12,11 +13,17 @@ try {
   return;
 }
 
+// Учим Express парсить application/json
+app.use(bodyParser.json());
+
+// Учим Express парсить application/x-www-form-urlencoded (и заодно body)
+app.use(bodyParser.urlencoded({ extended: false }));
+
 // Подгружаем маршруты
 require('./api/routes')(app, config);
 
 // Инициализация базы данных 
-app.use(require('./db'))
+app.use(require('./db'));
 
 // Подгружаем ssl сертификат и ключ
 // В случае ошибки при 443 порте - отменяем запуск сервера
