@@ -1,6 +1,6 @@
 const express        = require('express');
 const MongoClient    = require('mongodb').MongoClient;
-const server         = express();
+const app         = express();
 
 
 //Подгружаем конфиг 
@@ -22,12 +22,12 @@ if (config.port = 443) {
   console.log('443 port') //todo
 } else {
   // Установим переменную port
-  server.set('port', config.port || 8000);
+  app.set('port', config.port || 8000);
 }
 
 
 // Подгружаем маршруты
-require('./api/routes')(server, config)
+require('./api/routes')(app, config)
 
 // Подключаемся к базе данных. 
 // При не успешном подключении начинаем в аварийном режиме
@@ -42,8 +42,8 @@ function db_connect(db_url) {
   })
 }
 
-let port = server.get('port')
+let port = app.get('port')
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log('Начинаем прослушку порта ' + port);
 });  
