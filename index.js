@@ -13,23 +13,34 @@ try {
   return 
 }
 
-// Установим переменную port
-server.set('port', config.port || 8000);
+
+// TODO: вынести функцию подключения к дб в отдельный файл
+db_connect(config.db_settings.url);
+
+// поднрузка сертификатов и https при 443 порте
+if (config.port = 443) {
+  console.log('443 port') //todo
+} else {
+  // Установим переменную port
+  server.set('port', config.port || 8000);
+}
+
 
 // Подгружаем маршруты
 require('./api/routes')(server, config)
 
 // Подключаемся к базе данных. 
 // При не успешном подключении начинаем в аварийном режиме
-MongoClient.connect(config.db_settings.url, (err, database) => {
-  if (err) {
-    console.log('Ошибка подключения к базе данных!')
-    console.log('Пытаемся начать работу в аварийном режиме. Часть маршрутов не будет работать')
+function db_connect(db_url) {
+  MongoClient.connect(db_url, (err, database) => {
+    if (err) {
+      console.log('Ошибка подключения к базе данных!')
+      console.log('Пытаемся начать работу в аварийном режиме. Часть маршрутов не будет работать')
 
-    return console.error(err)
-  }               
-})
-
+      return console.error(err)
+    }               
+  })
+}
 
 let port = server.get('port')
 
