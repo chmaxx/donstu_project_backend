@@ -18,7 +18,7 @@ try {
 db_connect(config.db_settings.url);
 
 // поднрузка сертификатов и https при 443 порте
-if (config.port = 443) {
+if (config.port == 443) {
   console.log('443 port') //todo
 } else {
   // Установим переменную port
