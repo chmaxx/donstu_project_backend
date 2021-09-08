@@ -12,8 +12,8 @@ npm install
 ```json
 {
   "port": 8000,
-  "cert_path" : "path/to/ssl.pem",
-  "key_path" : "path/to/ssl.key",
+  "cert_path" : "cert/ssl-cert-api.wkeep.ru.pem",
+  "key_path" : "cert/ssl-cert-api.wkeep.ru.key",
   "api_version": "v1",
   "db_settings": {
     "url": "mongodb://<пользователь>:<пароль>@<сайт>/<база_данных (можно без нее)>?retryWrites=true",
