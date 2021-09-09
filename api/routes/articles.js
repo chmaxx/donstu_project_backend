@@ -116,7 +116,7 @@ function parseTags(tagsData, fallbackTo) {
 
 router.get('/', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({"msg": "База данных отключена!"});
+    res.status(500).json({msg: "База данных отключена!"});
     return;      
   };
 
@@ -155,7 +155,7 @@ router.get('/', (req, res) => {
 
   Article.find(filter, (err, docs) => {
     if (err) {
-      res.status(500).json({"msg": "Ошибка при получении списка статей: " + err});
+      res.status(500).json({msg: "Ошибка при получении списка статей: " + err});
       return; 
     };
 
@@ -167,12 +167,12 @@ router.get('/', (req, res) => {
 
 router.post('/add', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({"msg": "База данных отключена!"});
+    res.status(500).json({msg: "База данных отключена!"});
     return;      
   };
 
   if (!req.body.name) { 
-    res.status(400).json({"msg": "Необходимо ввести название статьи!"});
+    res.status(400).json({msg: "Необходимо ввести название статьи!"});
     return;  
   };
   
@@ -203,11 +203,11 @@ router.post('/add', (req, res) => {
   new_article.save()
     .then((doc) => {
       console.log('Создана новая статья: ' + doc.header);
-      res.status(200).json({"msg": "Статья добавлена!"});
+      res.status(200).json({msg: "Статья добавлена!"});
     })
     .catch((err) => {
       console.log('Ошибка при создании статьи: ' + err);
-      res.status(500).json({"msg": err});
+      res.status(500).json({msg: err});
     });
 });
 
@@ -215,12 +215,12 @@ router.post('/add', (req, res) => {
 
 router.post('/archive', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({"msg": "База данных отключена!"});
+    res.status(500).json({msg: "База данных отключена!"});
     return;      
   };  
 
   if (!req.body.article_id) {
-    res.status(400).json({"msg": "Необходимо ввести ID статьи!"});
+    res.status(400).json({msg: "Необходимо ввести ID статьи!"});
     return;      
   };
 
@@ -228,7 +228,7 @@ router.post('/archive', (req, res) => {
     if (err) return res.status(500).json({msg: err});
 
     // Статья уже находится в архиве
-    if (article.is_archived) return res.status(400).json(msg: "Статья уже архивирована!"); 
+    if (article.is_archived) return res.status(400).json({msg: "Статья уже архивирована!"}); 
 
     article.is_archived = true; 
     article.save(); 
@@ -241,17 +241,17 @@ router.post('/archive', (req, res) => {
 
 router.post('/unarchive', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({"msg": "База данных отключена!"});
+    res.status(500).json({msg: "База данных отключена!"});
     return;      
   };  
 
   if (!req.body.article_id) {
-    res.status(400).json({"msg": "Необходимо ввести ID статьи!"});
+    res.status(400).json({msg: "Необходимо ввести ID статьи!"});
     return;      
   };
 
   // Ищем статью по ID
-  Article.findOne({"_id": req.body.article_id}, (err, article) => {
+  Article.findOne({_id: req.body.article_id}, (err, article) => {
     if (err) return res.status(500).json({msg: err});
     // Статья не заархивирована
     if (article.is_archived != true) return res.status(400).json({msg: "Данной статьи нет в архиве!"});
