@@ -112,6 +112,8 @@ function parseTags(tagsData, fallbackTo) {
   return json_tags;
 }
 
+/* Реализация получения статей */
+
 router.get('/', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
     res.status(500).json({"msg": "База данных отключена!"});
@@ -119,6 +121,12 @@ router.get('/', (req, res) => {
   };
 
   var filter = {};
+
+  /* Убираем из выдачи все архивированные статьи
+   * Поскольку функционал архивирования добавлен недавно, у некоторых статей в базе данных может не быть этого поля,
+   * поэтому стоит добавить флаг $ne
+   */
+  filter.is_archived = {"$ne": true}; 
 
   /* Пользовательские фильтры
    * Мы могли бы обойтись без этого куска кода, просто присваивая filter = req.body.filters,
@@ -154,6 +162,8 @@ router.get('/', (req, res) => {
     res.status(200).json(docs);
   });
 });
+
+/* Реализация добавления статей */
 
 router.post('/add', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
@@ -200,5 +210,58 @@ router.post('/add', (req, res) => {
       res.status(500).json({"msg": err});
     });
 });
+
+/* Реализация архивации статей */
+
+router.post('/archive', (req, res) => {
+  if (api_config && !api_config.db_settings.enabled) {
+    res.status(500).json({"msg": "База данных отключена!"});
+    return;      
+  };  
+
+  if (!req.body.article_id) {
+    res.status(400).json({"msg": "Необходимо ввести ID статьи!"});
+    return;      
+  };
+
+  Article.findOne({_id: req.body.article_id}, (err, article) => {
+    if (err) return res.status(500).json({msg: err});
+
+    // Статья уже находится в архиве
+    if (article.is_archived) return res.status(400).json(msg: "Статья уже архивирована!"); 
+
+    article.is_archived = true; 
+    article.save(); 
+
+    res.status(200).json({msg: "Статья успешно архивирована!"});
+  });
+})
+
+/* Реализация удаления статей из архива */
+
+router.post('/unarchive', (req, res) => {
+  if (api_config && !api_config.db_settings.enabled) {
+    res.status(500).json({"msg": "База данных отключена!"});
+    return;      
+  };  
+
+  if (!req.body.article_id) {
+    res.status(400).json({"msg": "Необходимо ввести ID статьи!"});
+    return;      
+  };
+
+  // Ищем статью по ID
+  Article.findOne({"_id": req.body.article_id}, (err, article) => {
+    if (err) return res.status(500).json({msg: err});
+    // Статья не заархивирована
+    if (article.is_archived != true) return res.status(400).json({msg: "Данной статьи нет в архиве!"});
+
+    article.is_archived = false; 
+    article.save();
+
+    res.status(200).json({msg: "Статья успешно удалена из архива!"});
+  });
+
+})
 
 module.exports = router;

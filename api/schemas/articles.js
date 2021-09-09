@@ -33,9 +33,17 @@ let ArticleSchema = new mongoose.Schema({
 
 	// Время последнего редактирования будет меняться при каждом обновлении записи 
 	// Пыри создании записи будет идентично create_time  
-	last_update_time: Date
+	last_update_time: Date,
+
+	// Архивированные статьи не выдаются при поиске
+	is_archived: {
+		type: Boolean, 
+		default: false
+	}
+
 }, {versionKey: false})
 
+// TODO: почему-то не работает!!!
 ArticleSchema.pre('save', (next, done) => {
 	next();
 
