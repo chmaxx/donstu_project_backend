@@ -112,15 +112,26 @@ function parseTags(tagsData, fallbackTo) {
   return json_tags;
 }
 
+/* Реализация получения статей */
+
 router.get('/', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({"msg": "База данных отключена!"});
+    res.status(500).json({msg: "База данных отключена!"});
     return;      
   };
 
   var filter = {};
 
-  // Пользовательские фильтры
+  /* Убираем из выдачи все архивированные статьи
+   * Поскольку функционал архивирования добавлен недавно, у некоторых статей в базе данных может не быть этого поля,
+   * поэтому стоит добавить флаг $ne
+   */
+  filter.is_archived = {"$ne": true}; 
+
+  /* Пользовательские фильтры
+   * Мы могли бы обойтись без этого куска кода, просто присваивая filter = req.body.filters,
+   * но я решил немного запороться и сделать "небольшую проверку входных данных
+   */
   if (req.body.filters && isJSON(req.body.filters)) {
     var req_filters = JSON.parse(req.body.filters);
     
@@ -129,6 +140,9 @@ router.get('/', (req, res) => {
 
     // Наличие определенных тегов
     if (req_filters.tags) filter.tags = req_filters.tags;
+
+    // Тип контента
+    if (req_filters.content_type) filter.content_type = content_type;
     
     // Временные рамки (создание)
     // Должно быть списком с двумя значениями: начало-конец
@@ -141,7 +155,7 @@ router.get('/', (req, res) => {
 
   Article.find(filter, (err, docs) => {
     if (err) {
-      res.status(500).json({"msg": "Ошибка при получении списка статей: " + err});
+      res.status(500).json({msg: "Ошибка при получении списка статей: " + err});
       return; 
     };
 
@@ -149,44 +163,105 @@ router.get('/', (req, res) => {
   });
 });
 
+/* Реализация добавления статей */
+
 router.post('/add', (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({"msg": "База данных отключена!"});
+    res.status(500).json({msg: "База данных отключена!"});
     return;      
   };
 
   if (!req.body.name) { 
-    res.status(400).json({"msg": "Необходимо ввести название статьи!"});
+    res.status(400).json({msg: "Необходимо ввести название статьи!"});
     return;  
   };
   
-  if (!req.body.author) {
-    res.status(400).json({"msg": "У статьи должен быть автор!"});
-    return;
-  };
+  /* По умолчанию автор всех постов - system
+   * if (!req.body.author) {
+   *   res.status(400).json({"msg": "У статьи должен быть автор!"});
+   *   return;
+   * };
+   */
 
   var contents = parseContents(req.body.contents);
   var tags = parseTags(req.body.tags);
   var currentDate = new Date();
+  var author = req.body.author !== undefined ? req.body.author : 'system';
 
   const new_article = new Article({
     header            : req.body.name, 
-    author_id         : req.body.author, 
+    author_id         : author, 
     contents          : contents, 
     tags              : tags,
     create_time       : currentDate, 
     last_update_time  : currentDate
   });
 
+  if (req.body.content_type && typeof req.body.content_type === 'string') 
+    new_article.content_type = req.body.content_type;
+
   new_article.save()
     .then((doc) => {
       console.log('Создана новая статья: ' + doc.header);
-      res.status(200).json({"msg": "Статья добавлена!"});
+      res.status(200).json({msg: "Статья добавлена!"});
     })
     .catch((err) => {
       console.log('Ошибка при создании статьи: ' + err);
-      res.status(500).json({"msg": err});
+      res.status(500).json({msg: err});
     });
 });
+
+/* Реализация архивации статей */
+
+router.post('/archive', (req, res) => {
+  if (api_config && !api_config.db_settings.enabled) {
+    res.status(500).json({msg: "База данных отключена!"});
+    return;      
+  };  
+
+  if (!req.body.article_id) {
+    res.status(400).json({msg: "Необходимо ввести ID статьи!"});
+    return;      
+  };
+
+  Article.findOne({_id: req.body.article_id}, (err, article) => {
+    if (err) return res.status(500).json({msg: err});
+
+    // Статья уже находится в архиве
+    if (article.is_archived) return res.status(400).json({msg: "Статья уже архивирована!"}); 
+
+    article.is_archived = true; 
+    article.save(); 
+
+    res.status(200).json({msg: "Статья успешно архивирована!"});
+  });
+})
+
+/* Реализация удаления статей из архива */
+
+router.post('/unarchive', (req, res) => {
+  if (api_config && !api_config.db_settings.enabled) {
+    res.status(500).json({msg: "База данных отключена!"});
+    return;      
+  };  
+
+  if (!req.body.article_id) {
+    res.status(400).json({msg: "Необходимо ввести ID статьи!"});
+    return;      
+  };
+
+  // Ищем статью по ID
+  Article.findOne({_id: req.body.article_id}, (err, article) => {
+    if (err) return res.status(500).json({msg: err});
+    // Статья не заархивирована
+    if (article.is_archived != true) return res.status(400).json({msg: "Данной статьи нет в архиве!"});
+
+    article.is_archived = false; 
+    article.save();
+
+    res.status(200).json({msg: "Статья успешно удалена из архива!"});
+  });
+
+})
 
 module.exports = router;
