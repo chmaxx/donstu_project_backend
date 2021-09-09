@@ -67,4 +67,4 @@ npm install
 ### Маршруты 
 
 На данный момент доступны следующие маршруты:
-- Articles - используется для работы со статьями. [Документация по статьям](https://github.com/chmaxx/donstu_project_backend/blob/main/docs/articles.md)
+- Articles - используется для работы со статьями. [Документация по статьям](docs/articles.md)
