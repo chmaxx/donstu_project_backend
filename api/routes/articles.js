@@ -160,18 +160,21 @@ router.post('/add', (req, res) => {
     return;  
   };
   
-  if (!req.body.author) {
-    res.status(400).json({"msg": "У статьи должен быть автор!"});
-    return;
-  };
+  /* По умолчанию автор всех постов - system
+   * if (!req.body.author) {
+   *   res.status(400).json({"msg": "У статьи должен быть автор!"});
+   *   return;
+   * };
+   */
 
   var contents = parseContents(req.body.contents);
   var tags = parseTags(req.body.tags);
   var currentDate = new Date();
+  var author = req.body.author !== undefined ? req.body.author : 'system';
 
   const new_article = new Article({
     header            : req.body.name, 
-    author_id         : req.body.author, 
+    author_id         : author, 
     contents          : contents, 
     tags              : tags,
     create_time       : currentDate, 
