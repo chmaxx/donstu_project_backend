@@ -14,8 +14,8 @@ npm install
   "port": 8000,
   "ip" : "127.0.0.1",
   "https_enable" : false,
-  "cert_path" : "cert/ssl-cert-api.wkeep.ru.pem",
-  "key_path" : "cert/ssl-cert-api.wkeep.ru.key",
+  "cert_path" : "cert/path_to_cert.pem",
+  "key_path" : "cert/path_to_key.key",
   "api_version": "v1",
   "db_settings": {
     "url": "mongodb://<пользователь>:<пароль>@<сайт>/<база_данных (можно без нее)>?retryWrites=true",
