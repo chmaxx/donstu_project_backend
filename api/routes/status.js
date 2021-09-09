@@ -11,7 +11,6 @@ const router = Router();
 // "/" тут относительно названия файла маршрута
 router.route('/')
 	.get((req, res) => {
-		console.log('GET TEST REQUEST')
 		res.sendStatus(200);
 	})
 
