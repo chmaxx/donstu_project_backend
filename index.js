@@ -4,7 +4,7 @@ let fs          = require('fs');
 
 // Подгружаем конфиг 
 // Если не удается подгрузить - отменяем запуск сервера
-let config 
+let config;
 try {
   config = require('./config/config.json');
   global.api_config = config;
@@ -31,11 +31,13 @@ if (api_config.db_settings.enabled) {
 
 // Подгружаем ssl сертификат и ключ
 // В случае ошибки при https - отменяем запуск сервера
+let cert_opt;
 try {
-  let cert_opt = {
+  cert_opt = {
     key: fs.readFileSync(config.key_path),
     cert: fs.readFileSync(config.cert_path)
   };
+  console.log("сертификат загружен")
 } catch (err) {
   if (config.https_enable) {
     console.log('Ошибка при загрузке ssl сертификата и ключа!');
