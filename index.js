@@ -37,7 +37,7 @@ try {
     key: fs.readFileSync(config.key_path),
     cert: fs.readFileSync(config.cert_path)
   };
-  console.log("сертификат загружен")
+  console.log("Сертификат и ключ успешно загружены!")
 } catch (err) {
   if (config.https_enable) {
     console.log("Ошибка при загрузке ssl сертификата и ключа!");
