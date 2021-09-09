@@ -120,7 +120,10 @@ router.get('/', (req, res) => {
 
   var filter = {};
 
-  // Пользовательские фильтры
+  /* Пользовательские фильтры
+   * Мы могли бы обойтись без этого куска кода, просто присваивая filter = req.body.filters,
+   * но я решил немного запороться и сделать "небольшую проверку входных данных
+   */
   if (req.body.filters && isJSON(req.body.filters)) {
     var req_filters = JSON.parse(req.body.filters);
     
@@ -129,6 +132,9 @@ router.get('/', (req, res) => {
 
     // Наличие определенных тегов
     if (req_filters.tags) filter.tags = req_filters.tags;
+
+    // Тип контента
+    if (req_filters.content_type) filter.content_type = content_type;
     
     // Временные рамки (создание)
     // Должно быть списком с двумя значениями: начало-конец
@@ -180,6 +186,9 @@ router.post('/add', (req, res) => {
     create_time       : currentDate, 
     last_update_time  : currentDate
   });
+
+  if (req.body.content_type && typeof req.body.content_type === 'string') 
+    new_article.content_type = req.body.content_type;
 
   new_article.save()
     .then((doc) => {

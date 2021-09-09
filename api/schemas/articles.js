@@ -2,6 +2,14 @@ const mongoose = require('mongoose');
 
 // Создаем схему статьи
 let ArticleSchema = new mongoose.Schema({
+	/* Тип контента
+	 * TODO: по хорошему у каждого контента должен быть свой маршрут 
+	 */
+	content_type: {
+		type: String, 
+		default: 'article'
+	},
+
 	// Заголовок - обязателен
 	header: {
 		type: String, 
