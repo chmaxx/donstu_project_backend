@@ -1,5 +1,5 @@
 function isJSON(item) {
-    item = typeof item !== "string"
+    item = typeof item !== 'string'
       ? JSON.stringify(item)
       : item;
 
@@ -9,7 +9,7 @@ function isJSON(item) {
       return false;
     }
 
-    if (typeof item === "object" && item !== null) {
+    if (typeof item === 'object' && item !== null) {
       return true;
     }
 

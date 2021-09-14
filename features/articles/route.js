@@ -18,8 +18,8 @@ const router    = Router();
  */
 const fallbackContent = [
   {
-    type: "markdown",
-    value: "У данной статьи нет содержимого!"
+    type: 'markdown',
+    value: 'У данной статьи нет содержимого!'
   }
 ]; 
 function parseContents(contentData, fallbackTo) {
@@ -63,7 +63,7 @@ function parseContents(contentData, fallbackTo) {
 /* Функционал парсинга тегов, получаемых от пользователей
  * При любой неудаче возвращает fallbackTags
  */
-const fallbackTags = ["Ошибка при обработке"]
+const fallbackTags = ['Ошибка при обработке']
 function parseTags(tagsData, fallbackTo) {
   // Fallback-контент по умолчанию
   // TODO: есть более адекватный способ установки значения по умолчанию?
@@ -102,7 +102,7 @@ function parseTags(tagsData, fallbackTo) {
 
 router.get('/', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({msg: "База данных отключена!"});
+    res.status(500).json({msg: 'База данных отключена!'});
     return;      
   };
 
@@ -112,11 +112,11 @@ router.get('/', async (req, res) => {
    * Поскольку функционал архивирования добавлен недавно, у некоторых статей в базе данных может не быть этого поля,
    * поэтому стоит добавить флаг $ne
    */
-  filter.is_archived = {"$ne": true}; 
+  filter.is_archived = {'$ne': true}; 
 
   /* Пользовательские фильтры
    * Мы могли бы обойтись без этого куска кода, просто присваивая filter = req.body.filters,
-   * но я решил немного запороться и сделать "небольшую проверку входных данных
+   * но я решил немного запороться и сделать 'небольшую проверку входных данных
    */
   if (req.body.filters && isJSON(req.body.filters)) {
     var req_filters = JSON.parse(req.body.filters);
@@ -134,8 +134,8 @@ router.get('/', async (req, res) => {
     // Должно быть списком с двумя значениями: начало-конец
     if (req_filters.date_interval) {
       filter.create_time = {
-        "$gte": req_filters.date_interval[0], 
-        "$lte": req_filters.date_interval[1] ? req_filters.date_interval[1] : new Date()};
+        '$gte': req_filters.date_interval[0], 
+        '$lte': req_filters.date_interval[1] ? req_filters.date_interval[1] : new Date()};
     };
   };
 
@@ -147,18 +147,18 @@ router.get('/', async (req, res) => {
 
 router.post('/add', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({msg: "База данных отключена!"});
+    res.status(500).json({msg: 'База данных отключена!'});
     return;      
   };
 
   if (!req.body.name) { 
-    res.status(400).json({msg: "Необходимо ввести название статьи!"});
+    res.status(400).json({msg: 'Необходимо ввести название статьи!'});
     return;  
   };
   
   /* По умолчанию автор всех постов - system
    * if (!req.body.author) {
-   *   res.status(400).json({"msg": "У статьи должен быть автор!"});
+   *   res.status(400).json({'msg': 'У статьи должен быть автор!'});
    *   return;
    * };
    */
@@ -183,12 +183,12 @@ router.post('/add', async (req, res) => {
 
 router.post('/archive', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({msg: "База данных отключена!"});
+    res.status(500).json({msg: 'База данных отключена!'});
     return;      
   };  
 
   if (!req.body.article_id) {
-    res.status(400).json({msg: "Необходимо ввести ID статьи!"});
+    res.status(400).json({msg: 'Необходимо ввести ID статьи!'});
     return;      
   };
 
@@ -200,12 +200,12 @@ router.post('/archive', async (req, res) => {
 
 router.post('/unarchive', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
-    res.status(500).json({msg: "База данных отключена!"});
+    res.status(500).json({msg: 'База данных отключена!'});
     return;      
   };  
 
   if (!req.body.article_id) {
-    res.status(400).json({msg: "Необходимо ввести ID статьи!"});
+    res.status(400).json({msg: 'Необходимо ввести ID статьи!'});
     return;      
   };
 

@@ -72,7 +72,7 @@ module.exports.archive = async (article_id) => {
     articleToArchive.save(); 
 
     code = 200;
-    response_contents = {msg: "Статья успешно архивирована!"};
+    response_contents = {msg: 'Статья успешно архивирована!'};
   } 
   catch(err) {
     code = err.name === 'TypeError' ? 400 : 500; 
@@ -97,7 +97,7 @@ module.exports.unarchive = async (article_id) => {
     archivedArticle.save();    
 
     code = 200;
-    response_contents = {msg: "Статья успешно удалена из архива!"};
+    response_contents = {msg: 'Статья успешно удалена из архива!'};
   }
   catch (err) {
     code = err.name === 'TypeError' ? 400 : 500; 
