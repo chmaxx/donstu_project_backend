@@ -3,29 +3,15 @@
  * прим.: пока доступны не все операции :)
  */
 
-const Article   = require('../schemas/articles');
-const {Router}  = require('express');
+const article_controller = require('./controller'); 
+//const Article   = require('./schema');
+const {Router}  = require( 'express');
+const {isJSON}  = require('../utils');
 const router    = Router();
 
 // Функция для проверки аргумента на формат JSON
 // https://stackoverflow.com/questions/9804777/how-to-test-if-a-string-is-json-or-not/33369954#33369954
-function isJSON(item) {
-    item = typeof item !== "string"
-        ? JSON.stringify(item)
-        : item;
 
-    try {
-      item = JSON.parse(item);
-    } catch (e) {
-      return false;
-    }
-
-    if (typeof item === "object" && item !== null) {
-      return true;
-    }
-
-    return false;
-}
 
 /* Функционал парсинга контента, получаемого от пользователей
  * При любой неудаче возвращает fallbackContent
@@ -114,7 +100,7 @@ function parseTags(tagsData, fallbackTo) {
 
 /* Реализация получения статей */
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
     res.status(500).json({msg: "База данных отключена!"});
     return;      
@@ -153,19 +139,13 @@ router.get('/', (req, res) => {
     };
   };
 
-  Article.find(filter, (err, docs) => {
-    if (err) {
-      res.status(500).json({msg: "Ошибка при получении списка статей: " + err});
-      return; 
-    };
-
-    res.status(200).json(docs);
-  });
+  var [code, response_contents] = await article_controller.get(filter);
+  res.status(code).json(response_contents);
 });
 
 /* Реализация добавления статей */
 
-router.post('/add', (req, res) => {
+router.post('/add', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
     res.status(500).json({msg: "База данных отключена!"});
     return;      
@@ -183,37 +163,25 @@ router.post('/add', (req, res) => {
    * };
    */
 
-  var contents = parseContents(req.body.contents);
-  var tags = parseTags(req.body.tags);
-  var currentDate = new Date();
-  var author = req.body.author !== undefined ? req.body.author : 'system';
-
-  const new_article = new Article({
-    header            : req.body.name, 
-    author_id         : author, 
-    contents          : contents, 
-    tags              : tags,
-    create_time       : currentDate, 
-    last_update_time  : currentDate
-  });
-
+  // Это необязательный аргумент, поэтому ничего плохого не произойдет, если мы передадим это в функцию
+  var content_type;
+ 
   if (req.body.content_type && typeof req.body.content_type === 'string') 
-    new_article.content_type = req.body.content_type;
+    content_type = req.body.content_type;
 
-  new_article.save()
-    .then((doc) => {
-      console.log('Создана новая статья: ' + doc.header);
-      res.status(200).json({msg: "Статья добавлена!"});
-    })
-    .catch((err) => {
-      console.log('Ошибка при создании статьи: ' + err);
-      res.status(500).json({msg: err});
-    });
+  var [code, response_contents] = await article_controller.create(
+      req.body.name, // header
+      req.body.author !== undefined ? req.body.author : 'system', // author
+      parseContents(req.body.contents), // contents 
+      parseTags(req.body.tags), // tags
+      content_type // content_type
+    );
+  res.status(code).json(response_contents);
 });
 
 /* Реализация архивации статей */
 
-router.post('/archive', (req, res) => {
+router.post('/archive', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
     res.status(500).json({msg: "База данных отключена!"});
     return;      
@@ -224,22 +192,13 @@ router.post('/archive', (req, res) => {
     return;      
   };
 
-  Article.findOne({_id: req.body.article_id}, (err, article) => {
-    if (err) return res.status(500).json({msg: err});
-
-    // Статья уже находится в архиве
-    if (article.is_archived) return res.status(400).json({msg: "Статья уже архивирована!"}); 
-
-    article.is_archived = true; 
-    article.save(); 
-
-    res.status(200).json({msg: "Статья успешно архивирована!"});
-  });
+  var [code, response_contents] = await article_controller.archive(req.body.article_id);
+  res.status(code).json(response_contents);
 })
 
 /* Реализация удаления статей из архива */
 
-router.post('/unarchive', (req, res) => {
+router.post('/unarchive', async (req, res) => {
   if (api_config && !api_config.db_settings.enabled) {
     res.status(500).json({msg: "База данных отключена!"});
     return;      
@@ -250,18 +209,8 @@ router.post('/unarchive', (req, res) => {
     return;      
   };
 
-  // Ищем статью по ID
-  Article.findOne({_id: req.body.article_id}, (err, article) => {
-    if (err) return res.status(500).json({msg: err});
-    // Статья не заархивирована
-    if (article.is_archived != true) return res.status(400).json({msg: "Данной статьи нет в архиве!"});
-
-    article.is_archived = false; 
-    article.save();
-
-    res.status(200).json({msg: "Статья успешно удалена из архива!"});
-  });
-
+  var [code, response_contents] = await article_controller.unarchive(req.body.article_id);
+  res.status(code).json(response_contents);
 })
 
 module.exports = router;

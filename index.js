@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Подгружаем маршруты
-require("./api/routes")(app, config);
+require("./features")(app);
 
 // Инициализация базы данных 
 if (api_config.db_settings.enabled) {
