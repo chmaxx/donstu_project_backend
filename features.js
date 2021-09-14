@@ -15,7 +15,7 @@ function safeRequire(featureName, path) {
 		log('Загружен ' + featureName + '!');
 	// Возможно есть способ обойтись без этого, но я не уверен
 	// просто молчим
-	} catch (err) {console.log(err)}
+	} catch (err) {}
 
 	return require_return_value;
 }
