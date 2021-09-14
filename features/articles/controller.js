@@ -22,7 +22,7 @@ module.exports.get = async (filters) => {
     code = 200;
   } 
   catch(err) {
-    response_contents = {msg: err};
+    response_contents = {msg: err.message};
     code = 500; 
   };
 
@@ -50,7 +50,7 @@ module.exports.create = async (header, author, contents, tags, content_type) => 
     code = 200;
   } 
   catch (err) {
-    response_contents = {msg: err};
+    response_contents = {msg: err.message};
     code = 500;
   };
 
@@ -76,7 +76,7 @@ module.exports.archive = async (article_id) => {
   } 
   catch(err) {
     code = err.name === 'TypeError' ? 400 : 500; 
-    response_contents = {msg: err.name === 'TypeError' ? err.message : err};
+    response_contents = {msg: err.message};
   };
 
   return [code, response_contents];
@@ -101,7 +101,7 @@ module.exports.unarchive = async (article_id) => {
   }
   catch (err) {
     code = err.name === 'TypeError' ? 400 : 500; 
-    response_contents = {msg: err.name === 'TypeError' ? err.message : err};
+    response_contents = {msg: err.message};
   }
 
   return [code, response_contents];
