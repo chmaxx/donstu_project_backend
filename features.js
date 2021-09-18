@@ -1,4 +1,5 @@
 const fs = require('fs');
+const errorCatcher = require("./middlewares/ErrorCatcher")
 
 // TODO: отдельная middleware для логирования
 function log(msg) {
@@ -36,5 +37,9 @@ module.exports = function(app) {
 			const curr_path = origin_path + matchDirent.name + '/'; 
 			safeRequire(matchDirent.name, curr_path + 'index')(app);
 		});
+
+		// После загрузки всех маршрутов необходимо подключить обработчик ошибок
+		// Примечательно, что это НЕОБХОДИМО делать в последнюю очередь
+		app.use(errorCatcher);
 	})
 }

@@ -1,7 +1,6 @@
 let app         = require('express')();
 let bodyParser  = require('body-parser');
 let cookieParser = require('cookie-parser');
-const errorCatcher = require('./middlewares/ErrorCatcher');
 let fs          = require('fs');
 
 // Подгружаем конфиг 
@@ -32,15 +31,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Учим Express работать с Cookie
 app.use(cookieParser());
 
-// Подгружаем маршруты
-require('./features')(app);
-
 // Инициализация базы данных 
 if (api_config.db_settings.enabled) {
   app.use(require('./db'));
 } else {
   console.log('Не подключаемся к базе данных, потому что она отключена в конфиге!');
 }
+
+// Подгружаем маршруты
+require('./features')(app)
 
 // Подгружаем ssl сертификат и ключ
 // В случае ошибки при https - отменяем запуск сервера
@@ -60,10 +59,6 @@ try {
     console.log('SSL сертификат и ключ не загружены. Работа по HTTPS невозможна');
   }
 }
-
-// Собственный обработчик ошибок
-// Важно: его нужно подключать в самом конце, после загрузки всех маршрутов
-app.use(errorCatcher);
 
 // запуск с нужным протоколом
 // делаем айпи необязательным значением конфига
