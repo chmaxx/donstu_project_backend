@@ -1,9 +1,11 @@
+const ApiError = require('../../middlewares/ApiErrorException');
+
 class UserController {
     async register(req, res, next) {
         try {
 
         } catch (e) {
-
+            
         }
     }
 

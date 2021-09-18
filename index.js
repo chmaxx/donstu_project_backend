@@ -1,6 +1,7 @@
 let app         = require('express')();
 let bodyParser  = require('body-parser');
 let cookieParser = require('cookie-parser');
+const errorCatcher = require('./middlewares/ErrorCatcher');
 let fs          = require('fs');
 
 // Подгружаем конфиг 
@@ -59,6 +60,10 @@ try {
     console.log('SSL сертификат и ключ не загружены. Работа по HTTPS невозможна');
   }
 }
+
+// Собственный обработчик ошибок
+// Важно: его нужно подключать в самом конце, после загрузки всех маршрутов
+app.use(errorCatcher);
 
 // запуск с нужным протоколом
 // делаем айпи необязательным значением конфига
