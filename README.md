@@ -25,10 +25,28 @@ npm install
   "cert_path" : "cert/path_to_cert.pem",
   "key_path" : "cert/path_to_key.key",
   "api_version": "v1",
+
   "db_settings": {
     "url": "mongodb://<пользователь>:<пароль>@<сайт>/<база_данных>?retryWrites=true",
     "enabled": true, 
     "reconnect_delay": 4000
+  },
+
+  "jwt": {
+    "access_token_lifetime": 86400,
+    "access_token_secret": "секретный ключ для JWT Access Token", 
+
+    "refresh_token_lifetime": 1209600,
+    "refresh_token_secret": "секретный ключ для JWT Refresh Token"
+  },
+
+  "mailer": {
+    "host": "SMTP-хост",
+    "port": 587,
+    "secure": false,
+
+    "user": "почта, с которой будет отправляться письмо",
+    "password": "пароль от почты"
   }
 }
 ```
