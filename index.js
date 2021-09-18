@@ -1,5 +1,6 @@
 let app         = require('express')();
 let bodyParser  = require('body-parser');
+let cookieParser = require('cookie-parser');
 let fs          = require('fs');
 
 // Подгружаем конфиг 
@@ -26,6 +27,9 @@ app.use(bodyParser.json());
 
 // Учим Express парсить application/x-www-form-urlencoded (и заодно body)
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Учим Express работать с Cookie
+app.use(cookieParser());
 
 // Подгружаем маршруты
 require('./features')(app);
