@@ -1,7 +1,7 @@
-let app         = require('express')();
-let bodyParser  = require('body-parser');
+const express = require('express');
+let app = express();
 let cookieParser = require('cookie-parser');
-let fs          = require('fs');
+let fs = require('fs');
 
 // Подгружаем конфиг 
 // Если не удается подгрузить - отменяем запуск сервера
@@ -23,10 +23,10 @@ app.use((req, res, next) => {
 });
 
 // Учим Express парсить application/json
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Учим Express парсить application/x-www-form-urlencoded (и заодно body)
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 
 // Учим Express работать с Cookie
 app.use(cookieParser());
