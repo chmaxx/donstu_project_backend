@@ -21,6 +21,10 @@ module.exports = function(req, res, next) {
             throw ApiError.Unauthorized();
         }
 
+        //if (!userData.isActivated) {
+        //    throw ApiError.UnactivatedUser();
+        //}
+
         req.user = userData; 
 
         next();

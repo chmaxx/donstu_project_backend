@@ -18,6 +18,10 @@ class ApiError extends Error {
         return new ApiError(400, message, errors);
     }
 
+    static UnactivatedUser() {
+        return new ApiError(401, "Необходимо активировать пользователя!")
+    }
+
     static JsonFormat(Error) {
         return {message: Error.message, errors: Error.errors};
     }
