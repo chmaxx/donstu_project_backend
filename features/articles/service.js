@@ -1,4 +1,6 @@
 const ArticleSchema = require('./model');
+const UserSchema = require('../users/userModel');
+const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleService {
     async get(filter) {
@@ -19,6 +21,12 @@ class ArticleService {
         let code, response_contents;
         let currentDate = new Date();
 
+        const userExists = await UserSchema.findById(author);
+
+        if (!userExists) {
+            throw ApiError.Unauthorized();
+        }
+
         const new_article = new ArticleSchema({
             header            : header, 
             author_id         : author, 
@@ -36,7 +44,7 @@ class ArticleService {
             code = 200;
         } catch (e) {
             response_contents = {msg: err.message};
-            code = 500;
+            code = e.code || 500;
         };
 
         return [code, response_contents]; 
