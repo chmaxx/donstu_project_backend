@@ -8,10 +8,9 @@
 const {Router} = require('express');
 const router = Router();
 
-// "/" тут относительно названия файла маршрута
-router.route('/')
-	.get((req, res) => {
-		res.sendStatus(200);
-	})
-
-module.exports = router
+module.exports = (app) => {
+	router.all('/', (req, res) => {res.sendStatus(200);});
+	
+	app.use('/', router);
+	app.use('/' + api_config.api_version + '/status', router);
+}

@@ -49,7 +49,7 @@ function checkConnection(res, req, next) {
 		
 		// отключение
 		case 3:
-			var error = new Error('Идет отключени от базы данных!');
+			var error = new Error('Идет отключение от базы данных!');
 			error.status = 500;
 			next(error);
 			break;	
