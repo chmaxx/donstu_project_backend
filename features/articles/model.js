@@ -1,10 +1,10 @@
 const {Schema, model} = require('mongoose');
 
 let ArticleSchema = new Schema({
-	content_type: {
-		type: String, 
-		default: 'article'
-	},
+	//content_type: {
+	//	type: String, 
+	//	default: 'article'
+	//},
 
 	header: {
 		type: String, 
@@ -17,7 +17,16 @@ let ArticleSchema = new Schema({
 		required: [true, 'Необходимо указать автора поста!']
 	},
 
-	contents: {}, 
+	contents: {
+		type: String, 
+		default: "У статьи нет содержимого!"
+	}, 
+
+	description: {
+		type: String, 
+		default: "У статьи нет описания!"
+	},
+
 	tags: {},
 
 	create_time: Date, 
