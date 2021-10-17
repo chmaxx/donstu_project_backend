@@ -17,24 +17,24 @@ class ArticleService {
         return [code, response_contents];
     }
 
-    async create(header, author, contents = [], tags = ['Прочее'], contents_type = 'article') {
+    async create(header, author_id, contents, description, tags = ['Прочее']) {
         let code, response_contents;
         let currentDate = new Date();
 
-        const userExists = await UserSchema.findById(author);
+        const userExists = await UserSchema.findById(author_id);
 
         if (!userExists) {
             throw ApiError.Unauthorized();
         }
 
         const new_article = new ArticleSchema({
-            header            : header, 
-            author_id         : author, 
-            contents          : contents, 
-            tags              : tags,
+            header, 
+            author_id, 
+            contents, 
+            description,
+            tags,
             create_time       : currentDate, 
             last_update_time  : currentDate,
-            contents_type     : contents_type
         });	
           
         try {

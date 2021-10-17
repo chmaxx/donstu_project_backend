@@ -46,18 +46,12 @@ class ArticleController {
                 return res.status(400).json({msg: 'Необходимо ввести название статьи!'});  
             }
             
-            // Это необязательный аргумент, поэтому ничего плохого не произойдет, если мы передадим это в функцию
-            var content_type;
-             
-            if (req.body.content_type && typeof req.body.content_type === 'string') 
-                content_type = req.body.content_type;
-            
             const [code, response_contents] = await ArticleService.create(
                 req.body.name, // header
                 req.user.id, // author
-                parseContents(req.body.contents), // contents 
-                parseTags(req.body.tags), // tags
-                content_type // content_type
+                req.body.contents, // contents 
+                req.body.description, // description
+                parseTags(req.body.tags) // tags
             );
             
             res.status(code).json(response_contents);
@@ -101,44 +95,6 @@ class ArticleController {
     }
 }
 
-
-/* Функционал парсинга контента, получаемого от пользователей
- * При любой неудаче возвращает fallbackContent
- */
-const fallbackContent = [
-    {
-      type: 'markdown',
-      value: 'У данной статьи нет содержимого!'
-    }
-]; 
-function parseContents(contentData, fallbackTo = fallbackContent) {
-    if (!isJSON(contentData)) return fallbackContent; 
-  
-    var json_content;
-    try {
-        json_content = JSON.parse(contentData);
-    } catch (e) {
-        json_content = fallbackContent;
-    }
-  
-    // Если после блока try-catch не удалось спарсить аргумент
-    // (при таком сценарии fallbackContent и json_content - одно и тоже)
-    if (fallbackContent == json_content) return fallbackContent;
-
-    if (json_content.length == 0) return fallbackContent;
-  
-    for (var i = 0; i < json_content.length; i++) {
-      var content_row = contentData[i];
-      // Если в одной из ячеек с контентом не указан тип контента - удаляем ее 
-      if (!content_row.type) {
-        delete(contentData[i]);
-        continue;
-      };
-    };
-  
-    return json_content;
-}
-  
 /* Функционал парсинга тегов, получаемых от пользователей
  * При любой неудаче возвращает fallbackTags
  */
