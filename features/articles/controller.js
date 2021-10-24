@@ -38,10 +38,6 @@ class ArticleController {
 
     async add(req, res, next) {
         try {           
-            if (!req.body.name) { 
-                return res.status(400).json({msg: 'Необходимо ввести название статьи!'});  
-            }
-            
             const [code, response_contents] = await ArticleService.create(
                 req.body.name, // header
                 req.user.id, // author
@@ -57,11 +53,7 @@ class ArticleController {
     }
 
     async archive(req, res, next) {
-        try {
-            if (!req.body.article_id) {
-                return res.status(400).json({msg: 'Необходимо ввести ID статьи!'}); 
-            }
-            
+        try {        
             var [code, response_contents] = await ArticleService.archive(req.body.article_id);
             res.status(code).json(response_contents);
         } catch (e) {
@@ -71,10 +63,6 @@ class ArticleController {
 
     async unarchive(req, res, next) {
         try {           
-            if (!req.body.article_id) {
-                return res.status(400).json({msg: 'Необходимо ввести ID статьи!'});  
-            }
-            
             var [code, response_contents] = await ArticleService.unarchive(req.body.article_id);
             res.status(code).json(response_contents);
         } catch (e) {
