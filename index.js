@@ -33,7 +33,9 @@ app.use(cookieParser());
 
 // Инициализация базы данных 
 if (api_config.db_settings.enabled) {
-  app.use(require('./db'));
+  require('./db/connection')
+  const {checkConnection} = require('./db/utils')
+  app.use(checkConnection);
 } else {
   console.log('Не подключаемся к базе данных, потому что она отключена в конфиге!');
 }
