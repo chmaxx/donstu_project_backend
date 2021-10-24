@@ -37,11 +37,7 @@ class ArticleController {
     }
 
     async add(req, res, next) {
-        try {
-            if (api_config && !api_config.db_settings.enabled) {
-                return res.status(500).json({msg: 'База данных отключена!'});      
-            }
-            
+        try {           
             if (!req.body.name) { 
                 return res.status(400).json({msg: 'Необходимо ввести название статьи!'});  
             }
@@ -62,10 +58,6 @@ class ArticleController {
 
     async archive(req, res, next) {
         try {
-            if (api_config && !api_config.db_settings.enabled) {
-                return res.status(500).json({msg: 'База данных отключена!'});
-            }
-            
             if (!req.body.article_id) {
                 return res.status(400).json({msg: 'Необходимо ввести ID статьи!'}); 
             }
@@ -78,11 +70,7 @@ class ArticleController {
     }
 
     async unarchive(req, res, next) {
-        try {
-            if (api_config && !api_config.db_settings.enabled) {
-                return res.status(500).json({msg: 'База данных отключена!'});    
-            }  
-            
+        try {           
             if (!req.body.article_id) {
                 return res.status(400).json({msg: 'Необходимо ввести ID статьи!'});  
             }
