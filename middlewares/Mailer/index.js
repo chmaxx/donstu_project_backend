@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const {mailer} = require('../../config/config.json');
 
 class MailService {
     constructor() {
@@ -14,6 +15,10 @@ class MailService {
     }
 
     async sendActivationMail(to, link) {
+        if (!mailer.enabled) {
+            return console.log('Невозможно отправить сообщение, т.к почтовый сервис отключен в конфиге!')
+        }
+
         await this.transporter.sendMail({
             from: api_config.mailer.user,
             to, 

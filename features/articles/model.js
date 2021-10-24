@@ -27,6 +27,8 @@ let ArticleSchema = new Schema({
 		default: "У статьи нет описания!"
 	},
 
+	thumbnail_url: String,
+
 	tags: {},
 
 	create_time: Date, 

@@ -25,6 +25,10 @@ class ApiError extends Error {
     static JsonFormat(Error) {
         return {message: Error.message, errors: Error.errors};
     }
+
+    static Database(errors = []) {
+        return new ApiError(500, 'Невозможно обратиться к базе данных!', errors)
+    }
 }
 
 module.exports = ApiError;

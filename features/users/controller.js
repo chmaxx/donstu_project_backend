@@ -1,20 +1,11 @@
 const ApiError = require('../../middlewares/ApiErrorException');
 const UserService = require('./userService');
-
+const {validationResult} = require('express-validator');
 
 class UserController {
     async register(req, res, next) {
         try {
             const {nickname, email, password} = req.body; 
-
-            if (!email) {
-                throw ApiError.BadRequest("Необходимо ввести почту!");
-            }
-
-            if (!password) {
-                throw ApiError.BadRequest("Необходимо ввести пароль!");q
-            }
-
             const userData = await UserService.registration(nickname, email, password);
 
             // мы должны умножать maxAge на 1000, поскольку в аргументах ожидаются мс (а в конфиге секунды)
