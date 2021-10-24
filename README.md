@@ -45,6 +45,8 @@ npm install
     "port": 587,
     "secure": false,
 
+    "enabled": true,
+
     "user": "почта, с которой будет отправляться письмо",
     "password": "пароль от почты"
   }
