@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ApiError = require('./middlewares/ApiErrorException');
 
 // Функция подключения к базе данных 
 function connectToDB() {
@@ -31,9 +32,7 @@ function checkConnection(res, req, next) {
 		
 		// отключен от базы
 		case 0:
-			var error = new Error('Соединение с базой данных не установлено!');
-			error.status = 500;
-			next(error);
+			next(ApiError.Database(['Соединение с базой данных не установлено!']));
 			break;
 		
 		// активное соедение
@@ -42,23 +41,17 @@ function checkConnection(res, req, next) {
 		
 		// подключение
 		case 2:
-			var error = new Error('Идет соединение с базой данных!');
-			error.status = 500;
-			next(error);
+			next(ApiError.Database(['Идет соединение с базой данных!']));
 			break;
 		
 		// отключение
 		case 3:
-			var error = new Error('Идет отключение от базы данных!');
-			error.status = 500;
-			next(error);
+			next(ApiError.Database(['Идет отключение от базы данных!']));
 			break;	
 		
 		// остальные случаи		
 		default:
-			var error = new Error('Непредвиденное состояние базы данных! mongoose.readyState: ' + mongoose.connection.readyState);
-			error.status = 500;
-			next(error);
+			next(ApiError.Database(['Непредвиденное состояние базы данных! mongoose.readyState: ' + mongoose.connection.readyState]));
 			break;		
 	}
 
