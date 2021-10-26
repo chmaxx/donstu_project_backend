@@ -44,12 +44,12 @@ class Logger {
     //todo: проверка правильности конфига
 
     info(prefix, message) {
-        textlog = format_str(prefix, message);
+        var textlog = format_str(prefix, message);
         output(this.config.info, textlog);
     }
 
     access(req, res) {
-        textlog = format_str(`${req.method}`, `${res.statusCode}: ${req.url}`)
+        var textlog = format_str(`${req.method}`, `${res.statusCode}: ${req.url}`)
         output(this.config.access, textlog);
         //todo: добавление next(); и подключение через app.use();
     }
