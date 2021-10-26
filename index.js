@@ -10,7 +10,7 @@ try {
   config = require('./config/config.json');
   global.api_config = config;
 } catch (err) {
-  console.error('[START] Не удается загрузить конфигурационный файл!');
+  console.error('[Start] Не удается загрузить конфигурационный файл!');
   return;
 }
 
@@ -41,5 +41,5 @@ let ip = config.ip !== undefined ?
   '127.0.0.1';
 
 app.listen(config.port, ip, () => {
-  console.log('[START] Запущено на http://', ip, ':', config.port);
+  console.log('[Start] Запущено на http://', ip, ':', config.port);
 });
