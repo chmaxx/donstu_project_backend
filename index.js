@@ -14,14 +14,6 @@ try {
   return;
 }
 
-// Настройка CORS
-//TODO: перенести в конфиг nginx
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
-
 // Учим Express парсить application/json
 app.use(express.json());
 
