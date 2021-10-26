@@ -46,6 +46,19 @@ npm install
 
     "user": "почта, с которой будет отправляться письмо",
     "password": "пароль от почты"
+  },
+
+  "logger": {
+    "info": {
+      "console": true,
+      "file_write": false,
+      "file_path": "../path/to/info.log",
+    },
+    "access": {
+      "console": false,
+      "file_write": false,
+      "file_path": "../path/to/access.log"
+    }
   }
 }
 ```
