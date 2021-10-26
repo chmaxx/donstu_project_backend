@@ -1,10 +1,10 @@
 const fs = require('fs');
 const errorCatcher = require("./middlewares/ErrorCatcher")
 
-// TODO: отдельная middleware для логирования
-function log(msg) {
-	return console.log('[Features]', msg)
-}
+// подключаем логгер Features
+config = require('./config/config.json');
+const Logger = require('./middlewares/Logger');
+const log = new Logger(config.logger, 'Features');
 
 // Функция для безопасной загрузки файла 
 // может, в ней пока нет необходимости? загружается только один файл
@@ -13,7 +13,7 @@ function safeRequire(featureName, path) {
 	// Пытаемся загрузить файл
 	try {
 		require_return_value = require(path);
-		log('Загружен ' + featureName + '!');
+		log.info('Загружен ' + featureName + '!');
 	// Возможно есть способ обойтись без этого, но я не уверен
 	// просто молчим
 	} catch (err) {}
@@ -21,14 +21,14 @@ function safeRequire(featureName, path) {
 	return require_return_value;
 }
 
-log('Начало загрузки...')
+log.info('Начало загрузки...');
 
-const origin_path = './features/'
+const origin_path = './features/';
 
 module.exports = function(app) {
 	// Получаем содержимое папки features
 	fs.readdir(origin_path, {withFileTypes: true}, (err, contents) => {
-		if (err) return log('Ошибка при загрузке!');
+		if (err) return log.info('Ошибка при загрузке!');
 
 		contents.forEach((matchDirent) => {
 			// Подгружаем только папки

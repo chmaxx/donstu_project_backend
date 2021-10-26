@@ -1,13 +1,18 @@
 const mongoose = require('mongoose');
 const ApiError = require('../middlewares/ApiErrorException');
 
+// подключаем логгер MongoDB
+config = require('../config/config.json');
+const Logger = require('../middlewares/Logger');
+const log = new Logger(config.logger, 'MongoDB');
+
 function connectToDB() {
-	console.log('[MongoDB] Попытка подключиться к базе данных...')
+	log.info('Попытка подключиться к базе данных...')
 	return api_config ?
 		mongoose.connect(api_config.db_settings.url, {keepAlive: true, keepAliveInitialDelay: api_config.db_settings.reconnect_delay}).then(
-			() => {console.log('[MongoDB] Успешное подключение к базе данных!')},
-			() => {console.log('[MongoDB] Не удалось подключиться к базе данных!')}) : 
-		'[MongoDB] Не удается установить соединение с базой данных: отсутствует конфиг!';
+			() => {log.info('Успешное подключение к базе данных!')},
+			() => {log.info('Не удалось подключиться к базе данных!')}) : 
+		'Не удается установить соединение с базой данных: отсутствует конфиг!';
 };
 
 function checkConnection(res, req, next) {

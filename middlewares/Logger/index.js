@@ -45,6 +45,8 @@ class Logger {
 
     //todo: проверка правильности конфига
 
+    //todo: метод для логгирования объектов err
+
     info(message) {
         output(this.config.info, format_str(this.prefix, message));
     }

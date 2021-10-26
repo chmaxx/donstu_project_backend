@@ -9,10 +9,15 @@ let config;
 try {
   config = require('./config/config.json');
   global.api_config = config;
+  console.log('[Config validator] Конфиг загружен')
 } catch (err) {
-  console.error('[Start] Не удается загрузить конфигурационный файл!');
+  console.log('[Config validator] Не удается загрузить конфигурационный файл');
   return;
 }
+
+// подключаем логгер Start
+const Logger = require('./middlewares/Logger');
+const log = new Logger(config.logger, 'Start');
 
 // Учим Express парсить application/json
 app.use(express.json());
@@ -23,13 +28,19 @@ app.use(express.urlencoded({extended: false}));
 // Учим Express работать с Cookie
 app.use(cookieParser());
 
+// подключаем логгер к Express
+app.use((req, res, next) => {
+  log.access(req, res);
+  next();
+});
+
 // Инициализация базы данных 
 if (api_config.db_settings.enabled) {
   require('./db/connection')
   const {checkConnection} = require('./db/utils')
   app.use(checkConnection);
 } else {
-  console.log('[START] Не подключаемся к базе данных, потому что она отключена в конфиге!');
+  log.info('Не подключаемся к базе данных, потому что она отключена в конфиге');
 }
 
 // Подгружаем маршруты
@@ -41,5 +52,5 @@ let ip = config.ip !== undefined ?
   '127.0.0.1';
 
 app.listen(config.port, ip, () => {
-  console.log('[Start] Запущено на http://', ip, ':', config.port);
+  log.info(`Запущено на http://${ip}:${config.port}`)
 });
