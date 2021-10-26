@@ -50,12 +50,12 @@ npm install
 
   "logger": {
     "info": {
-      "console": true,
+      "console_output": true,
       "file_write": false,
-      "file_path": "../path/to/info.log",
+      "file_path": "../path/to/info.log"
     },
     "access": {
-      "console": false,
+      "console_output": false,
       "file_write": false,
       "file_path": "../path/to/access.log"
     }

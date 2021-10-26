@@ -1,15 +1,6 @@
-//набросок логгера
-//туду:
-//правильно оформить middleware
-//вывод в консоль
-//запись в файл
+let fs = require('fs');
 
-const { defaultConfiguration } = require("express/lib/application");
-const { append } = require("express/lib/response");
-
-//готово сейчас: форматирование строки
-
-function format_str (prefix, message) {
+const format_str = (prefix, message) => {
 
     let current_datetime = new Date();
     let formatted_date =
@@ -25,13 +16,45 @@ function format_str (prefix, message) {
       ":" +
       current_datetime.getSeconds();
 
-
     return `[${formatted_date}] [${prefix}] ${message}`;
 };
 
-module.exports = function (prefix, message, next) {
-    if (config.logger.info.console) {
-        console.log(format_str(prefix, message))
+const output = (config, textlog) => {
+
+    if (config.console_output) {
+        console.log(textlog)
     }
-    next();
+
+    if (config.file_write) {
+        fs.appendFile(config.file_path, textlog + "\n", err => {
+            if (err) {
+              console.log(err);
+            }
+        });
+    }
 }
+
+
+class Logger {
+
+    constructor(config) {
+        this.config = config;
+    }
+
+    //todo: проверка правильности конфига
+
+    info(prefix, message) {
+        textlog = format_str(prefix, message);
+        output(this.config.info, textlog);
+    }
+
+    access(req, res) {
+        textlog = format_str(`${req.method}`, `${res.statusCode}: ${req.url}`)
+        output(this.config.access, textlog);
+        //todo: добавление next(); и подключение через app.use();
+    }
+
+}
+
+
+module.exports = Logger;
