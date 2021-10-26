@@ -3,13 +3,13 @@ let app = express();
 let cookieParser = require('cookie-parser');
 let fs = require('fs');
 
-// Подгружаем конфиг 
+// Подгружаем конфиг
 // Если не удается подгрузить - отменяем запуск сервера
 let config;
 try {
   config = require('./config/config.json');
   global.api_config = config;
-  console.log('[Config validator] Конфиг загружен')
+  console.log('[Config validator] Конфиг загружен');
 } catch (err) {
   console.log('[Config validator] Не удается загрузить конфигурационный файл');
   return;
@@ -23,7 +23,7 @@ const log = new Logger(config.logger, 'Start');
 app.use(express.json());
 
 // Учим Express парсить application/x-www-form-urlencoded (и заодно body)
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 // Учим Express работать с Cookie
 app.use(cookieParser());
@@ -34,23 +34,21 @@ app.use((req, res, next) => {
   next();
 });
 
-// Инициализация базы данных 
+// Инициализация базы данных
 if (api_config.db_settings.enabled) {
-  require('./db/connection')
-  const {checkConnection} = require('./db/utils')
+  require('./db/connection');
+  const { checkConnection } = require('./db/utils');
   app.use(checkConnection);
 } else {
   log.info('Не подключаемся к базе данных, потому что она отключена в конфиге');
 }
 
 // Подгружаем маршруты
-require('./features')(app)
+require('./features')(app);
 
 // делаем айпи необязательным значением конфига
-let ip = config.ip !== undefined ?
-  config.ip :
-  '127.0.0.1';
+let ip = config.ip !== undefined ? config.ip : '127.0.0.1';
 
 app.listen(config.port, ip, () => {
-  log.info(`Запущено на http://${ip}:${config.port}`)
+  log.info(`Запущено на http://${ip}:${config.port}`);
 });

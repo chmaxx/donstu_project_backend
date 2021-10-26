@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const {mailer} = require('../../config/config.json');
+const { mailer } = require('../../config/config.json');
 config = require('../../config/config.json');
 
 // подключаем логгер Mailer
@@ -7,37 +7,38 @@ const Logger = require('../Logger');
 const log = new Logger(config.logger, 'Mailer');
 
 class MailService {
-    constructor() {
-        this.transporter = nodemailer.createTransport({
-            host: api_config.mailer.host,
-            port: api_config.mailer.port,
-            secure: api_config.mailer.secure, 
-            auth: {
-                user: api_config.mailer.user,
-                pass: api_config.mailer.password
-            }
-        })
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      host: api_config.mailer.host,
+      port: api_config.mailer.port,
+      secure: api_config.mailer.secure,
+      auth: {
+        user: api_config.mailer.user,
+        pass: api_config.mailer.password,
+      },
+    });
+  }
+
+  async sendActivationMail(to, link) {
+    if (!mailer.enabled) {
+      return log.info(
+        'Невозможно отправить сообщение, т.к почтовый сервис отключен в конфиге!'
+      );
     }
 
-    async sendActivationMail(to, link) {
-        if (!mailer.enabled) {
-            return log.info('Невозможно отправить сообщение, т.к почтовый сервис отключен в конфиге!')
-        }
-
-        await this.transporter.sendMail({
-            from: api_config.mailer.user,
-            to, 
-            subject: "Активация аккаунта",
-            text: '',
-            html:
-            `
+    await this.transporter.sendMail({
+      from: api_config.mailer.user,
+      to,
+      subject: 'Активация аккаунта',
+      text: '',
+      html: `
             <div>
                 <h1>Для активации перейдите по ссылке</h1>
                 <a href = ${link}>${link}</a>
             </div>
-            `
-        })
-    }
+            `,
+    });
+  }
 }
 
 module.exports = new MailService();
