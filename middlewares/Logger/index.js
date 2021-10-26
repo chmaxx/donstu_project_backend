@@ -1,5 +1,6 @@
 let fs = require('fs');
 
+//todo: сделать нормальнее, locales
 const format_str = (prefix, message) => {
 
     let current_datetime = new Date();
@@ -37,21 +38,19 @@ const output = (config, textlog) => {
 
 class Logger {
 
-    constructor(config) {
+    constructor(config, prefix) {
         this.config = config;
+        this.prefix = prefix;
     }
 
     //todo: проверка правильности конфига
 
-    info(prefix, message) {
-        var textlog = format_str(prefix, message);
-        output(this.config.info, textlog);
+    info(message) {
+        output(this.config.info, format_str(this.prefix, message));
     }
 
     access(req, res) {
-        var textlog = format_str(`${req.method}`, `${res.statusCode}: ${req.url}`)
-        output(this.config.access, textlog);
-        //todo: добавление next(); и подключение через app.use();
+        output(this.config.access, format_str(`${req.method}`, `${res.statusCode}: ${req.url}`));
     }
 
 }
