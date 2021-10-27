@@ -4,16 +4,8 @@ let cookieParser = require('cookie-parser');
 let fs = require('fs');
 
 // Подгружаем конфиг
-// Если не удается подгрузить - отменяем запуск сервера
-let config;
-try {
-  config = require('./config/config.json');
-  global.api_config = config;
-  console.log('[Config validator] Конфиг загружен');
-} catch (err) {
-  console.log('[Config validator] Не удается загрузить конфигурационный файл');
-  return;
-}
+const config = require('./middlewares/loadConfig')();
+global.api_config = config;
 
 // подключаем логгер Start
 const Logger = require('./middlewares/Logger');
