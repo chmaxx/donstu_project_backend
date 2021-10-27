@@ -55,6 +55,11 @@ npm install
       "file_write": false,
       "file_path": "../path/to/info.log"
     },
+    "error": {
+      "console_output": true,
+      "file_write": true,
+      "file_path": "../path/to/error.log"
+    },
     "access": {
       "console_output": false,
       "file_write": false,

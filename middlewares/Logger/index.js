@@ -1,21 +1,9 @@
 let fs = require('fs');
+let path = require('path');
 
-//todo: сделать нормальнее, locales
 const format_str = (prefix, message) => {
   let current_datetime = new Date();
-  let formatted_date =
-    current_datetime.getFullYear() +
-    '-' +
-    (current_datetime.getMonth() + 1) +
-    '-' +
-    current_datetime.getDate() +
-    ' ' +
-    current_datetime.getHours() +
-    ':' +
-    current_datetime.getMinutes() +
-    ':' +
-    current_datetime.getSeconds();
-
+  let formatted_date = current_datetime.toLocaleString('es-CL');
   return `[${formatted_date}] [${prefix}] ${message}`;
 };
 
@@ -25,6 +13,10 @@ const output = (config, textlog) => {
   }
 
   if (config.file_write) {
+    if (fs.existsSync(path.dirname(config.file_path)) != true) {
+      fs.mkdirSync(path.dirname(config.file_path), { recursive: true });
+    }
+
     fs.appendFile(config.file_path, textlog + '\n', (err) => {
       if (err) {
         console.log(err);
@@ -41,10 +33,18 @@ class Logger {
 
   //todo: проверка правильности конфига
 
-  //todo: метод для логгирования объектов err
-
   info(message) {
     output(this.config.info, format_str(this.prefix, message));
+  }
+
+  error(err) {
+    output(
+      this.config.error,
+      format_str(
+        this.prefix,
+        String(err).replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g, ' ')
+      )
+    );
   }
 
   access(req, res) {
