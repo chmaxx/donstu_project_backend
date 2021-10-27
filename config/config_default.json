@@ -30,15 +30,18 @@
   "logger": {
     "info": {
       "console_output": true,
-      "file_write": false
+      "file_write": false,
+      "file_path": "../path/to/file.log"
     },
     "error": {
       "console_output": true,
-      "file_write": false
+      "file_write": false,
+      "file_path": "../path/to/file.log"
     },
     "access": {
       "console_output": false,
-      "file_write": false
+      "file_write": false,
+      "file_path": "../path/to/file.log"
     }
   }
 }
