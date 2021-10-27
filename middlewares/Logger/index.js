@@ -33,10 +33,18 @@ class Logger {
 
   //todo: проверка правильности конфига
 
-  //todo: метод для логгирования объектов err
-
   info(message) {
     output(this.config.info, format_str(this.prefix, message));
+  }
+
+  error(err) {
+    output(
+      this.config.error,
+      format_str(
+        this.prefix,
+        String(err).replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g, ' ')
+      )
+    );
   }
 
   access(req, res) {
