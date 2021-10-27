@@ -1,4 +1,5 @@
 let fs = require('fs');
+let path = require('path');
 
 //todo: сделать нормальнее, locales
 const format_str = (prefix, message) => {
@@ -25,6 +26,10 @@ const output = (config, textlog) => {
   }
 
   if (config.file_write) {
+    if (fs.existsSync(path.dirname(config.file_path)) != true) {
+      fs.mkdirSync(path.dirname(config.file_path), { recursive: true });
+    }
+
     fs.appendFile(config.file_path, textlog + '\n', (err) => {
       if (err) {
         console.log(err);
