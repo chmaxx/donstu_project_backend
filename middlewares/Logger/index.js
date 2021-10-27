@@ -1,22 +1,9 @@
 let fs = require('fs');
 let path = require('path');
 
-//todo: сделать нормальнее, locales
 const format_str = (prefix, message) => {
   let current_datetime = new Date();
-  let formatted_date =
-    current_datetime.getFullYear() +
-    '-' +
-    (current_datetime.getMonth() + 1) +
-    '-' +
-    current_datetime.getDate() +
-    ' ' +
-    current_datetime.getHours() +
-    ':' +
-    current_datetime.getMinutes() +
-    ':' +
-    current_datetime.getSeconds();
-
+  let formatted_date = current_datetime.toLocaleString('es-CL');
   return `[${formatted_date}] [${prefix}] ${message}`;
 };
 
