@@ -1,0 +1,44 @@
+{
+    "port": 8000,
+    "ip" : "127.0.0.1",
+    "api_version": "v1",
+  
+    "db_settings": {
+      "url": "mongodb://127.0.0.2:8050/staysecured?retryWrites=true",
+      "enabled": false, 
+      "reconnect_delay": 4000
+    },
+  
+    "jwt": {
+      "access_token_lifetime": 86400,
+      "access_token_secret": "none", 
+  
+      "refresh_token_lifetime": 1209600,
+      "refresh_token_secret": "none"
+    },
+  
+    "mailer": {
+      "host": "none",
+      "port": 587,
+      "secure": false,
+      "enabled": false,
+  
+      "user": "none",
+      "password": "none"
+    },
+  
+    "logger": {
+      "info": {
+        "console_output": true,
+        "file_write": false
+      },
+      "error": {
+        "console_output": true,
+        "file_write": false
+      },
+      "access": {
+        "console_output": false,
+        "file_write": false
+      }
+    }
+}
