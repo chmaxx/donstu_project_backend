@@ -1,12 +1,12 @@
 {
-  "name": "donstu_project_backend",
+  "name": "staysecured",
   "version": "1.0.0",
   "description": "Backend-часть проекта, посвященного информационной безопасности",
   "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chmaxx/donstu_project_backend.git"
+    "url": "git+https://github.com/chmaxx/staysecured.git"
   },
   "keywords": [
     "donstu"
@@ -14,10 +14,11 @@
   "author": "Maksim Zakharenkov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chmaxx/donstu_project_backend/issues"
+    "url": "https://github.com/chmaxx/staysecured/issues"
   },
-  "homepage": "https://github.com/chmaxx/donstu_project_backend#readme",
+  "homepage": "https://github.com/chmaxx/staysecured#readme",
   "dependencies": {
+    "ajv": "^8.6.3",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
