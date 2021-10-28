@@ -16,58 +16,8 @@ npm install
 ## Конфигурация
 
 Перед тем, как запустить приложение, необходимо создать `config.json` в папке `config`
-Содержимое конфига:
 
-```json
-{
-  "port": 8000,
-  "ip": "127.0.0.1",
-  "api_version": "v1",
-
-  "db_settings": {
-    "url": "mongodb://<пользователь>:<пароль>@<сайт>/<база_данных>?retryWrites=true",
-    "enabled": true,
-    "reconnect_delay": 4000
-  },
-
-  "jwt": {
-    "access_token_lifetime": 86400,
-    "access_token_secret": "секретный ключ для JWT Access Token",
-
-    "refresh_token_lifetime": 1209600,
-    "refresh_token_secret": "секретный ключ для JWT Refresh Token"
-  },
-
-  "mailer": {
-    "host": "SMTP-хост",
-    "port": 587,
-    "secure": false,
-
-    "enabled": true,
-
-    "user": "почта, с которой будет отправляться письмо",
-    "password": "пароль от почты"
-  },
-
-  "logger": {
-    "info": {
-      "console_output": true,
-      "file_write": false,
-      "file_path": "../path/to/info.log"
-    },
-    "error": {
-      "console_output": true,
-      "file_write": true,
-      "file_path": "../path/to/error.log"
-    },
-    "access": {
-      "console_output": false,
-      "file_write": false,
-      "file_path": "../path/to/access.log"
-    }
-  }
-}
-```
+[Конфигурация по умолчанию](config/config_default.json)
 
 Здесь:
 
@@ -96,3 +46,5 @@ https://api.domain.ru/<версия_апи>/<маршрут>
 На данный момент доступны следующие маршруты:
 
 - Articles - используется для работы со статьями. [Документация по статьям](docs/articles.md)
+- Users - используется для работы с пользователями.
+- Status - используется для проверки работоспособности приложения.
