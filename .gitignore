@@ -5,6 +5,7 @@ notes
 cert
 
 # Logs
+log
 logs
 *.log
 npm-debug.log*
@@ -124,4 +125,4 @@ dist
 .pnp.*
 
 #Конфиги бекэнда
-config/**
+config.json
