@@ -3,9 +3,8 @@ const UserService = require('./userService');
 const { validationResult } = require('express-validator');
 
 // подключаем логгер Users
-config = require('../../config/config.json');
-const Logger = require('../../middlewares/Logger');
-const log = new Logger(config.logger, 'Users');
+const Logger = require('../../lib/Logger');
+const log = new Logger(api_config.logger, 'Users');
 
 class UserController {
   async register(req, res, next) {
@@ -76,7 +75,7 @@ class UserController {
       const userData = await UserService.refresh(refreshToken);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: config.refresh_token_lifetime,
+        maxAge: api_config.refresh_token_lifetime,
         httpOnly: true,
       });
 

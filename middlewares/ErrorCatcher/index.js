@@ -1,9 +1,8 @@
 const ApiError = require('../ApiErrorException');
 
 // подключаем логгер ErrorCatcher
-config = require('../../config/config.json');
-const Logger = require('../Logger');
-const log = new Logger(config.logger, 'ErrorCatcher');
+const Logger = require('../../lib/Logger');
+const log = new Logger(api_config.logger, 'ErrorCatcher');
 
 module.exports = (err, req, res, next) => {
   log.error(err);
