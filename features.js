@@ -2,9 +2,8 @@ const fs = require('fs');
 const errorCatcher = require('./middlewares/ErrorCatcher');
 
 // подключаем логгер Features
-config = require('./config/config.json');
 const Logger = require('./lib/Logger');
-const log = new Logger(config.logger, 'Features');
+const log = new Logger(api_config.logger, 'Features');
 
 // Функция для безопасной загрузки файла
 // может, в ней пока нет необходимости? загружается только один файл
