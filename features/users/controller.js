@@ -4,7 +4,7 @@ const { validationResult } = require('express-validator');
 
 // подключаем логгер Users
 config = require('../../config/config.json');
-const Logger = require('../../middlewares/Logger');
+const Logger = require('../../lib/Logger');
 const log = new Logger(config.logger, 'Users');
 
 class UserController {

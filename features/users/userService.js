@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 
 const UserModel = require('./userModel');
-const MailService = require('../../middlewares/Mailer');
+const MailService = require('../../lib/Mailer');
 const TokenService = require('./tokenService');
 const UserDto = require('./userDTO');
 const ApiError = require('../../middlewares/ApiErrorException');
