@@ -43,5 +43,7 @@
       "file_write": false,
       "file_path": "../path/to/file.log"
     }
-  }
+  }, 
+
+  "uploads_path": "uploads/"
 }
