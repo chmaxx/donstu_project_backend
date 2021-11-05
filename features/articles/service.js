@@ -81,7 +81,7 @@ class ArticleService {
     try {
       let archivedArticle = await ArticleSchema.findOne({ _id: article_id });
 
-      if (archivedArticle.is_archived != true)
+      if (!archivedArticle.is_archived)
         throw new TypeError('Данной статьи нет в архиве!');
 
       archivedArticle.is_archived = false;
