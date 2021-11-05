@@ -1,29 +1,24 @@
 const ApiError = require('../../middlewares/ApiErrorException');
 const Uploader = require('../../lib/Uploader/uploader');
-const { processFile } = require('../../lib/Uploader/processor');
 
 class UploadService {
-  static async writeFileFromStream(stream, filename, uploadKey, author) {
+  static async registerFile(author, filename, fieldname) {
     const filenameSplitted = filename.split('.');
     const extension = filenameSplitted.pop();
 
-    if (!Uploader.allowedExtensions[extension])
+    if (!Uploader.extensionAllowed(extension))
       throw new ApiError(400, 'Данный формат файлов не поддерживается!');
 
-    const { fileUploadID } = await Uploader.registerFile(
-      stream,
-      filenameSplitted.shift(),
+    const registeredFile = await Uploader.registerFile(
       author,
-      uploadKey,
-      extension
+      filenameSplitted.shift(),
+      fieldname
     );
 
-    return fileUploadID;
+    return [registeredFile._id, extension];
   }
 
-  static async processFile(fileUploadID) {
-    await processFile(fileUploadID);
-  }
+  static writeFile = Uploader.writeFile;
 }
 
 module.exports = UploadService;
