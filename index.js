@@ -35,6 +35,9 @@ if (api_config.db_settings.enabled) {
   log.info('Не подключаемся к базе данных, потому что она отключена в конфиге');
 }
 
+// Создаем директории, необходимые для работы маршрута Uploads
+require('./lib/Uploader');
+
 // Подгружаем маршруты
 require('./features')(app);
 
