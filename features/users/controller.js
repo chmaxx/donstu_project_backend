@@ -1,5 +1,5 @@
 const ApiError = require('../../middlewares/ApiErrorException');
-const UserService = require('./userService');
+const UserService = require('./service');
 const { validationResult } = require('express-validator');
 
 // подключаем логгер Users

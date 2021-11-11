@@ -1,5 +1,5 @@
 const ArticleSchema = require('./model');
-const UserSchema = require('../users/userModel');
+const UserSchema = require('../users/user/model');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleService {

@@ -1,4 +1,4 @@
-const TokenService = require('../../features/users/tokenService');
+const Tokens = require('../../features/users/tokens');
 const ApiError = require('../ApiErrorException');
 
 module.exports = function (req, res, next) {
@@ -15,7 +15,7 @@ module.exports = function (req, res, next) {
       throw ApiError.Unauthorized();
     }
 
-    const userData = TokenService.validateAccessToken(accessToken);
+    const userData = Tokens.validateAccessToken(accessToken);
 
     if (!userData) {
       throw ApiError.Unauthorized();
