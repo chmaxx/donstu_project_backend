@@ -47,5 +47,5 @@
     }
   },
 
-  "uploads_path": "uploads/"
+  "uploads_path": "../uploads"
 }
