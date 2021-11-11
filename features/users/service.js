@@ -4,7 +4,7 @@ const uuid = require('uuid');
 const UserModel = require('./user/model');
 const MailService = require('../../lib/Mailer');
 const Tokens = require('./tokens');
-const UserDto = require('./user/dto');
+const UserDTO = require('./user/dto');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class UserService {
@@ -34,13 +34,13 @@ class UserService {
       `localhost:${api_config.port}/${api_config.api_version}/users/activate/${activationUUID}`
     );
 
-    const userDto = new UserDto(user);
-    const tokens = Tokens.generateTokens({ ...userDto });
-    await Tokens.saveToken(userDto.id, tokens.refreshToken);
+    const defaultUserDTO = UserDTO.Default(user);
+    const tokens = Tokens.generateTokens(defaultUserDTO);
+    await Tokens.saveToken(defaultUserDTO.id, tokens.refreshToken);
 
     return {
       ...tokens,
-      user: userDto,
+      user: defaultUserDTO,
     };
   }
 
@@ -71,13 +71,13 @@ class UserService {
       throw ApiError.BadRequest('Некорректный пароль!');
     }
 
-    const userDto = new UserDto(user);
-    const tokens = Tokens.generateTokens({ ...userDto });
-    await Tokens.saveToken(userDto.id, tokens.refreshToken);
+    const defaultUserDTO = UserDTO.Default(user);
+    const tokens = Tokens.generateTokens(defaultUserDTO);
+    await Tokens.saveToken(defaultUserDTO.id, tokens.refreshToken);
 
     return {
       ...tokens,
-      user: userDto,
+      user: defaultUserDTO,
     };
   }
 
@@ -100,13 +100,13 @@ class UserService {
     }
 
     const user = await UserModel.findById(userData.id);
-    const userDto = new UserDto(user);
-    const tokens = Tokens.generateTokens({ ...userDto });
-    await Tokens.saveToken(userDto.id, tokens.refreshToken);
+    const defaultUserDTO = UserDTO.Default(user);
+    const tokens = Tokens.generateTokens(defaultUserDTO);
+    await Tokens.saveToken(defaultUserDTO.id, tokens.refreshToken);
 
     return {
       ...tokens,
-      user: userDto,
+      user: defaultUserDTO,
     };
   }
 

@@ -1,11 +1,11 @@
-module.exports = class UserDTO {
-  email;
-  id;
-  isActivated;
-
-  constructor(model) {
-    this.email = model.email;
-    this.id = model._id;
-    this.isActivated = model.isActivated;
+class UserDTO {
+  static Default(userModel) {
+    return {
+      email: userModel.email,
+      id: userModel._id,
+      usergroup: userModel.usergroup,
+    };
   }
-};
+}
+
+module.exports = UserDTO;
