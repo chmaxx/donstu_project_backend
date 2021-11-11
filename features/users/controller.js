@@ -34,7 +34,7 @@ class UserController {
       const userData = await UserService.login(email, password);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.jwt.refresh_token_lifetime,
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
       });
 
@@ -75,7 +75,7 @@ class UserController {
       const userData = await UserService.refresh(refreshToken);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.refresh_token_lifetime,
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
       });
 
