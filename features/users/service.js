@@ -4,7 +4,6 @@ const uuid = require('uuid');
 const UserModel = require('./user/model');
 const MailService = require('../../lib/Mailer');
 const Tokens = require('./tokens');
-const UserDTO = require('./user/dto');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class UserService {
@@ -34,26 +33,15 @@ class UserService {
       `localhost:${api_config.port}/${api_config.api_version}/users/activate/${activationUUID}`
     );
 
-    const defaultUserDTO = UserDTO.Default(user);
-    const tokens = Tokens.generateTokens(defaultUserDTO);
-    await Tokens.saveToken(defaultUserDTO.id, tokens.refreshToken);
-
-    return {
-      ...tokens,
-      user: defaultUserDTO,
-    };
+    return await Tokens.registerUserTokens(user);
   }
 
   static async activate(activationUUID) {
     const user = await UserModel.findOne({ activationUUID });
 
-    if (!user) {
-      throw ApiError.BadRequest('Некорректная ссылка активации');
-    }
-
-    if (user.isActivated) {
+    if (!user) throw ApiError.BadRequest('Некорректная ссылка активации');
+    if (user.isActivated)
       throw ApiError.BadRequest('Пользователь уже активирован!');
-    }
 
     user.isActivated = true;
     await user.save();
@@ -61,58 +49,33 @@ class UserService {
 
   static async login(email, password) {
     const user = await UserModel.findOne({ email });
-    if (!user) {
-      throw ApiError.BadRequest('Такого пользователя не существует!');
-    }
+    if (!user) throw ApiError.BadRequest('Такого пользователя не существует!');
 
     const isPassEquals = await bcrypt.compare(password, user.passwordHashed);
+    if (!isPassEquals) throw ApiError.BadRequest('Некорректный пароль!');
 
-    if (!isPassEquals) {
-      throw ApiError.BadRequest('Некорректный пароль!');
-    }
-
-    const defaultUserDTO = UserDTO.Default(user);
-    const tokens = Tokens.generateTokens(defaultUserDTO);
-    await Tokens.saveToken(defaultUserDTO.id, tokens.refreshToken);
-
-    return {
-      ...tokens,
-      user: defaultUserDTO,
-    };
+    return await Tokens.registerUserTokens(user);
   }
 
   static async logout(refreshToken) {
-    const token = await Tokens.removeToken(refreshToken);
+    const token = await Tokens.removeRefreshToken(refreshToken);
     return token;
   }
 
   static async refresh(refreshToken) {
-    if (!refreshToken) {
-      throw ApiError.Unauthorized();
-    }
+    if (!refreshToken) throw ApiError.Unauthorized();
 
     const userData = Tokens.validateRefreshToken(refreshToken);
-    const tokenFromDb = await Tokens.findToken(refreshToken);
+    const tokenFromDb = await Tokens.getRefreshToken(refreshToken);
 
-    if (!userData || !tokenFromDb) {
-      // TODO: возможно, здесь не Unauthorized-случай?
-      throw ApiError.Unauthorized();
-    }
+    if (!userData || !tokenFromDb) throw ApiError.Unauthorized();
 
     const user = await UserModel.findById(userData.id);
-    const defaultUserDTO = UserDTO.Default(user);
-    const tokens = Tokens.generateTokens(defaultUserDTO);
-    await Tokens.saveToken(defaultUserDTO.id, tokens.refreshToken);
-
-    return {
-      ...tokens,
-      user: defaultUserDTO,
-    };
+    return await Tokens.registerUserTokens(user);
   }
 
   static async getAllUsers() {
-    const users = await UserModel.find();
-    return users;
+    return await UserModel.find();
   }
 }
 

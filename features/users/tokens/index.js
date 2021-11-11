@@ -1,20 +1,31 @@
 const jwt = require('jsonwebtoken');
 const TokenSchema = require('./model');
+const UserDTO = require('../user/dto');
+
+// Небольшая функция для быстрой генерации токена с нужными настройками
+const createToken = (payload, kind) => {
+  return jwt.sign(payload, api_config.jwt[`${kind}_token_secret`], {
+    expiresIn: api_config.jwt[`${kind}_token_lifetime`],
+  });
+};
 
 class Tokens {
   static generateTokens(payload) {
-    const accessToken = jwt.sign(payload, api_config.jwt.access_token_secret, {
-      expiresIn: api_config.jwt.access_token_lifetime,
-    });
-    const refreshToken = jwt.sign(
-      payload,
-      api_config.jwt.refresh_token_secret,
-      {
-        expiresIn: api_config.jwt.refresh_token_lifetime,
-      }
-    );
+    const accessToken = createToken(payload, 'access');
+    const refreshToken = createToken(payload, 'refresh');
 
     return { accessToken, refreshToken };
+  }
+
+  static async registerUserTokens(userModel) {
+    const defaultUserDTO = UserDTO.Default(userModel);
+    const tokens = Tokens.generateTokens(defaultUserDTO);
+    await Tokens.saveRefreshToken(defaultUserDTO.id, tokens.refreshToken);
+
+    return {
+      ...tokens,
+      user: defaultUserDTO,
+    };
   }
 
   static validateAccessToken(token) {
@@ -35,27 +46,25 @@ class Tokens {
     }
   }
 
-  static async saveToken(userId, refreshToken) {
-    const tokenData = await TokenSchema.findOne({ user: userId });
+  static async saveRefreshToken(user, refreshToken) {
+    const tokenData = await TokenSchema.findOne({ user });
 
     if (tokenData) {
       tokenData.refreshToken = refreshToken;
-      return tokenData.save();
+      return await tokenData.save();
     }
 
-    const token = await TokenSchema.create({ user: userId, refreshToken });
+    const token = await TokenSchema.create({ user, refreshToken });
 
     return token;
   }
 
-  static async removeToken(refreshToken) {
-    const tokenData = await TokenSchema.deleteOne({ refreshToken });
-    return tokenData;
+  static async removeRefreshToken(refreshToken) {
+    return await TokenSchema.deleteOne({ refreshToken });
   }
 
-  static async findToken(refreshToken) {
-    const tokenData = await TokenSchema.findOne({ refreshToken });
-    return tokenData;
+  static async getRefreshToken(refreshToken) {
+    return await TokenSchema.findOne({ refreshToken });
   }
 }
 
