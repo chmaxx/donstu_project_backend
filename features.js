@@ -2,7 +2,7 @@ const fs = require('fs');
 const errorCatcher = require('./middlewares/ErrorCatcher');
 
 // подключаем логгер Features
-const Logger = require('./lib/Logger');
+const Logger = require('log-my-ass');
 const log = new Logger(api_config.logger, 'Features');
 
 // Функция для безопасной загрузки файла

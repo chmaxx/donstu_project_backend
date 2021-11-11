@@ -8,7 +8,7 @@ const config = require('./lib/ConfigLoader')();
 global.api_config = config;
 
 // подключаем логгер Start
-const Logger = require('./lib/Logger');
+const Logger = require('log-my-ass');
 const log = new Logger(config.logger, 'Start');
 
 // Учим Express парсить application/json

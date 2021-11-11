@@ -3,7 +3,7 @@ const UserService = require('./userService');
 const { validationResult } = require('express-validator');
 
 // подключаем логгер Users
-const Logger = require('../../lib/Logger');
+const Logger = require('log-my-ass');
 const log = new Logger(api_config.logger, 'Users');
 
 class UserController {
