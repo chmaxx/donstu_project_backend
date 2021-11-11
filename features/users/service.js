@@ -9,11 +9,14 @@ const ApiError = require('../../middlewares/ApiErrorException');
 
 class UserService {
   async registration(login, firstName, lastName, email, password) {
-    const candidate = await UserModel.findOne({ email });
+    const candidate = await UserModel.findOne({ $match: { email, login } });
 
     if (candidate) {
       throw ApiError.BadRequest(
-        `Пользователь с почтой ${email} уже существует!`
+        `Пользователь с ${
+          // :)))
+          email == candidate.email ? 'такой почтой' : 'таким логином'
+        } уже существует!`
       );
     }
 

@@ -7,14 +7,25 @@ const DBRoute = require('../../middlewares/DBRoute');
 const BodyValidator = require('../../middlewares/BodyValidator');
 const { body } = require('express-validator');
 
+const {
+  loginValidator,
+  passwordValidator,
+  nameFieldValidator,
+  nameFieldSanitizer,
+} = require('./validators');
+
 router.post(
   '/register',
   DBRoute,
-  body('login').isString().withMessage('Необходимо ввести логин!'),
-  body('firstName').isString().withMessage('Необходимо ввести имя!'),
-  body('lastName').isString().withMessage('Необходимо ввести фамилию!'),
+  body('login').custom(loginValidator),
+  body('firstName')
+    .custom(nameFieldValidator('Имя'))
+    .customSanitizer(nameFieldSanitizer),
+  body('lastName')
+    .custom(nameFieldValidator('Фамилия'))
+    .customSanitizer(nameFieldSanitizer),
   body('email').isEmail().withMessage('Неверный E-Mail!'),
-  body('password').isString().withMessage('Необходимо ввести пароль!'),
+  body('password').custom(passwordValidator),
   BodyValidator,
   UserController.register
 );
