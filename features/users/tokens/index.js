@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const TokenSchema = require('./model');
 
-class TokenService {
-  generateTokens(payload) {
+class Tokens {
+  static generateTokens(payload) {
     const accessToken = jwt.sign(payload, api_config.jwt.access_token_secret, {
       expiresIn: api_config.jwt.access_token_lifetime,
     });
@@ -17,7 +17,7 @@ class TokenService {
     return { accessToken, refreshToken };
   }
 
-  validateAccessToken(token) {
+  static validateAccessToken(token) {
     try {
       const userData = jwt.verify(token, api_config.jwt.access_token_secret);
       return userData;
@@ -26,7 +26,7 @@ class TokenService {
     }
   }
 
-  validateRefreshToken(token) {
+  static validateRefreshToken(token) {
     try {
       const userData = jwt.verify(token, api_config.jwt.refresh_token_secret);
       return userData;
@@ -35,7 +35,7 @@ class TokenService {
     }
   }
 
-  async saveToken(userId, refreshToken) {
+  static async saveToken(userId, refreshToken) {
     const tokenData = await TokenSchema.findOne({ user: userId });
 
     if (tokenData) {
@@ -48,15 +48,15 @@ class TokenService {
     return token;
   }
 
-  async removeToken(refreshToken) {
+  static async removeToken(refreshToken) {
     const tokenData = await TokenSchema.deleteOne({ refreshToken });
     return tokenData;
   }
 
-  async findToken(refreshToken) {
+  static async findToken(refreshToken) {
     const tokenData = await TokenSchema.findOne({ refreshToken });
     return tokenData;
   }
 }
 
-module.exports = new TokenService();
+module.exports = Tokens;

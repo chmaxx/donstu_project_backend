@@ -8,7 +8,7 @@ const UserDto = require('./user/dto');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class UserService {
-  async registration(login, firstName, lastName, email, password) {
+  static async registration(login, firstName, lastName, email, password) {
     const candidate = await UserModel.findOne({ $match: { email, login } });
 
     if (candidate) {
@@ -48,7 +48,7 @@ class UserService {
     };
   }
 
-  async activate(activationUUID) {
+  static async activate(activationUUID) {
     const user = await UserModel.findOne({ activationUUID });
 
     if (!user) {
@@ -63,7 +63,7 @@ class UserService {
     await user.save();
   }
 
-  async login(email, password) {
+  static async login(email, password) {
     const user = await UserModel.findOne({ email });
     if (!user) {
       throw ApiError.BadRequest('Такого пользователя не существует!');
@@ -85,12 +85,12 @@ class UserService {
     };
   }
 
-  async logout(refreshToken) {
+  static async logout(refreshToken) {
     const token = await Tokens.removeToken(refreshToken);
     return token;
   }
 
-  async refresh(refreshToken) {
+  static async refresh(refreshToken) {
     if (!refreshToken) {
       throw ApiError.Unauthorized();
     }
@@ -114,10 +114,10 @@ class UserService {
     };
   }
 
-  async getAllUsers() {
+  static async getAllUsers() {
     const users = await UserModel.find();
     return users;
   }
 }
 
-module.exports = new UserService();
+module.exports = UserService;
