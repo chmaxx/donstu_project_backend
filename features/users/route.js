@@ -10,7 +10,9 @@ const { body } = require('express-validator');
 router.post(
   '/register',
   DBRoute,
-  body('name').isString().withMessage('Необходимо ввести имя пользователя!'),
+  body('login').isString().withMessage('Необходимо ввести логин!'),
+  body('firstName').isString().withMessage('Необходимо ввести имя!'),
+  body('lastName').isString().withMessage('Необходимо ввести фамилию!'),
   body('email').isEmail().withMessage('Неверный E-Mail!'),
   body('password').isString().withMessage('Необходимо ввести пароль!'),
   BodyValidator,

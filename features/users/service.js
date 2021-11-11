@@ -8,7 +8,7 @@ const UserDto = require('./user/dto');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class UserService {
-  async registration(nickname, email, password) {
+  async registration(login, firstName, lastName, email, password) {
     const candidate = await UserModel.findOne({ email });
 
     if (candidate) {
@@ -21,7 +21,9 @@ class UserService {
     const passwordHashed = await bcrypt.hash(password, 3);
 
     const user = await UserModel.create({
-      nickname,
+      login,
+      firstName,
+      lastName,
       email,
       passwordHashed,
       activationUUID,

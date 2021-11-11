@@ -1,6 +1,4 @@
-const ApiError = require('../../middlewares/ApiErrorException');
 const UserService = require('./service');
-const { validationResult } = require('express-validator');
 
 // подключаем логгер Users
 const Logger = require('../../lib/Logger');
@@ -9,9 +7,11 @@ const log = new Logger(api_config.logger, 'Users');
 class UserController {
   async register(req, res, next) {
     try {
-      const { nickname, email, password } = req.body;
+      const { login, firstName, lastName, email, password } = req.body;
       const userData = await UserService.registration(
-        nickname,
+        login,
+        firstName,
+        lastName,
         email,
         password
       );
