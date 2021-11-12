@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const TokenSchema = require('./model');
+const TokenModel = require('./model');
 const UserDTO = require('../user/dto');
 
 // Небольшая функция для быстрой генерации токена с нужными настройками
@@ -47,24 +47,24 @@ class Tokens {
   }
 
   static async saveRefreshToken(user, refreshToken) {
-    const tokenData = await TokenSchema.findOne({ user });
+    const tokenData = await TokenModel.findOne({ user });
 
     if (tokenData) {
       tokenData.refreshToken = refreshToken;
       return await tokenData.save();
     }
 
-    const token = await TokenSchema.create({ user, refreshToken });
+    const token = await TokenModel.create({ user, refreshToken });
 
     return token;
   }
 
   static async removeRefreshToken(refreshToken) {
-    return await TokenSchema.deleteOne({ refreshToken });
+    return await TokenModel.deleteOne({ refreshToken });
   }
 
   static async getRefreshToken(refreshToken) {
-    return await TokenSchema.findOne({ refreshToken });
+    return await TokenModel.findOne({ refreshToken });
   }
 }
 
