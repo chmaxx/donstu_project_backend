@@ -46,12 +46,16 @@ class Tokens {
 
   static async validateRefreshToken(token) {
     try {
-      const jwtData = jwt.verify(token, api_config.jwt.refresh_token_secret);
+      const verifiedJWT = jwt.verify(
+        token,
+        api_config.jwt.refresh_token_secret
+      );
+      if (!verifiedJWT) return null;
+
+      const jwtData = await TokenModel.findOne({ user: verifiedJWT.id });
       if (!jwtData) return null;
 
-      const userData = await TokenModel.findOne({
-        user: new ObjectId(jwtData.id),
-      });
+      const userData = await UserModel.findById(jwtData.user);
       if (!userData) return null;
 
       return { jwt: jwtData, user: userData };
