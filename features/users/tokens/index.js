@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const TokenModel = require('./model');
+const UserModel = require('../user/model');
 const UserDTO = require('../user/dto');
+const { ObjectId } = require('bson');
 
 // Небольшая функция для быстрой генерации токена с нужными настройками
 const createToken = (payload, kind) => {
@@ -28,19 +30,31 @@ class Tokens {
     };
   }
 
-  static validateAccessToken(token) {
+  static async validateAccessToken(token) {
     try {
-      const userData = jwt.verify(token, api_config.jwt.access_token_secret);
-      return userData;
+      const jwtData = jwt.verify(token, api_config.jwt.access_token_secret);
+      if (!jwtData) return null;
+
+      const userData = await UserModel.findById(jwtData.id);
+      if (!userData) return null;
+
+      return { jwt: jwtData, user: userData };
     } catch (e) {
       return null;
     }
   }
 
-  static validateRefreshToken(token) {
+  static async validateRefreshToken(token) {
     try {
-      const userData = jwt.verify(token, api_config.jwt.refresh_token_secret);
-      return userData;
+      const jwtData = jwt.verify(token, api_config.jwt.refresh_token_secret);
+      if (!jwtData) return null;
+
+      const userData = await TokenModel.findOne({
+        user: new ObjectId(jwtData.id),
+      });
+      if (!userData) return null;
+
+      return { jwt: jwtData, user: userData };
     } catch (e) {
       return null;
     }

@@ -69,13 +69,10 @@ class UserService {
   static async refresh(refreshToken) {
     if (!refreshToken) throw ApiError.Unauthorized();
 
-    const userData = Tokens.validateRefreshToken(refreshToken);
-    const tokenFromDb = await Tokens.getRefreshToken(refreshToken);
+    const validationData = await Tokens.validateRefreshToken(refreshToken);
+    if (!validationData) throw ApiError.Unauthorized();
 
-    if (!userData || !tokenFromDb) throw ApiError.Unauthorized();
-
-    const user = await UserModel.findById(userData.id);
-    return await Tokens.registerUserTokens(user);
+    return await Tokens.registerUserTokens(validationData.user);
   }
 
   static async getAllUsers() {
