@@ -1,5 +1,7 @@
 # StaySecured
 
+[![CodeQL](https://github.com/chmaxx/staysecured/workflows/CodeQL/badge.svg)](https://github.com/chmaxx/staysecured/actions?query=workflow%3ACodeQL)
+
 Данный репозиторий создан для совместной разработки Backend-части сайта **StaySecured**.
 **StaySecured** - информационный портал, посвященный информационной безопасности. Идея сайта не возникла сама собой - разработчики являются студентами ДГТУ, которые 6-го сентября начали заниматься проектной деятельностью на интересном им направлении. Наши интересы - разработка Web-сайтов и безопасность.
 
