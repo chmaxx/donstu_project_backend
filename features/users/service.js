@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 
 const UserModel = require('./user/model');
+const UploadModel = require('../../lib/Uploader/model');
 const MailService = require('../../lib/Mailer');
 const Tokens = require('./tokens');
 const ApiError = require('../../middlewares/ApiErrorException');
@@ -64,6 +65,16 @@ class UserService {
   static async logout(refreshToken) {
     const token = await Tokens.removeRefreshToken(refreshToken);
     return token;
+  }
+
+  static async changeAvatar(userID, uploadID) {
+    const user = await UserModel.findById(userID);
+    const upload = await UploadModel.findById(uploadID);
+
+    if (!upload) throw ApiError.BadRequest('Данного файла не существует!');
+
+    user.avatar = upload._id;
+    await user.save();
   }
 
   static async refresh(refreshToken) {

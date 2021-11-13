@@ -40,6 +40,16 @@ router.post(
 );
 
 router.post('/logout', DBRoute, UserController.logout);
+
+router.post(
+  '/changeAvatar',
+  DBRoute,
+  AuthedRoute,
+  body('upload_id').isMongoId().withMessage('Необходимо ввести ID файла!'),
+  BodyValidator,
+  UserController.changeAvatar
+);
+
 router.get('/activate/:link', DBRoute, UserController.activate);
 router.get('/refreshToken', DBRoute, UserController.refreshToken);
 router.get('/getAll', DBRoute, AuthedRoute, UserController.getUsers);

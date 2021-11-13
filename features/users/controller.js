@@ -57,6 +57,15 @@ class UserController {
     }
   }
 
+  static async changeAvatar(req, res, next) {
+    try {
+      await UserService.changeAvatar(req.user._id, req.body.upload_id);
+      return res.json({ message: 'Аватарка обновлена!' });
+    } catch (e) {
+      next(e);
+    }
+  }
+
   static async activate(req, res, next) {
     try {
       const activationLink = req.params.link;
