@@ -64,6 +64,8 @@ router.post(
   UserController.changeAvatar
 );
 
+router.get('/getInfo', DBRoute, AuthedRoute, UserController.getInfo);
+
 router.get('/activate/:link', DBRoute, UserController.activate);
 router.get('/refreshToken', DBRoute, UserController.refreshToken);
 

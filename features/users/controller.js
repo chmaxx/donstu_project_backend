@@ -89,6 +89,19 @@ class UserController {
     }
   }
 
+  static async getInfo(req, res, next) {
+    const user = req.user;
+    return res.json({
+      login: user.login,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isActivated: user.isActivated,
+      usergroup: user.usergroup,
+      avatarUploadID: user.avatar,
+    });
+  }
+
   static async activate(req, res, next) {
     try {
       const activationLink = req.params.link;
