@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const TokenModel = require('./model');
 const UserModel = require('../user/model');
 const UserDTO = require('../user/dto');
-const { ObjectId } = require('bson');
 
 // Небольшая функция для быстрой генерации токена с нужными настройками
 const createToken = (payload, kind) => {
