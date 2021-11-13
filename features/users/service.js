@@ -67,6 +67,21 @@ class UserService {
     return token;
   }
 
+  static async changePassword(userID, oldPassword, newPassword) {
+    if (oldPassword == newPassword)
+      throw ApiError.BadRequest('Новый пароль не может совпадать со старым!');
+
+    const user = await UserModel.findById(userID);
+    const isPassEquals = await bcrypt.compare(oldPassword, user.passwordHashed);
+
+    if (!isPassEquals) throw ApiError.BadRequest('Неправильный старый пароль!');
+
+    user.passwordHashed = await bcrypt.hash(newPassword, 3);
+    await user.save();
+
+    return await Tokens.registerUserTokens(user);
+  }
+
   static async changeAvatar(userID, uploadID) {
     const user = await UserModel.findById(userID);
     const upload = await UploadModel.findById(uploadID);

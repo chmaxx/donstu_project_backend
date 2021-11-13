@@ -42,6 +42,20 @@ router.post(
 router.post('/logout', DBRoute, UserController.logout);
 
 router.post(
+  '/changePassword',
+  DBRoute,
+  AuthedRoute,
+  // Не будем заморачиваться с дотошной проверкой
+  // старого пароля (passwordValidator), она тут ни к чему
+  body('oldPassword')
+    .isString()
+    .withMessage('Необходимо ввести старый пароль!'),
+  body('newPassword').custom(passwordValidator),
+  BodyValidator,
+  UserController.changePassword
+);
+
+router.post(
   '/changeAvatar',
   DBRoute,
   AuthedRoute,

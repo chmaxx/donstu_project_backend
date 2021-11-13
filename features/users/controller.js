@@ -57,6 +57,29 @@ class UserController {
     }
   }
 
+  static async changePassword(req, res, next) {
+    try {
+      const { accessToken, refreshToken } = await UserService.changePassword(
+        req.user._id,
+        req.body.oldPassword,
+        req.body.newPassword
+      );
+
+      res.cookie('refreshToken', refreshToken, {
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
+        httpOnly: true,
+      });
+
+      return res.json({
+        message: 'Успешная смена пароля!',
+        accessToken,
+        refreshToken,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
   static async changeAvatar(req, res, next) {
     try {
       await UserService.changeAvatar(req.user._id, req.body.upload_id);
