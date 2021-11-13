@@ -4,7 +4,7 @@ let cookieParser = require('cookie-parser');
 let fs = require('fs');
 
 // Подгружаем конфиг
-const config = require('./lib/ConfigLoader')();
+const config = require('load-my-config')('config');
 global.api_config = config;
 
 // подключаем логгер Start

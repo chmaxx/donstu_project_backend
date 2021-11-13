@@ -25,6 +25,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
     "jsonwebtoken": "^8.5.1",
+    "load-my-config": "^1.0.3",
     "log-my-ass": "^1.0.2",
     "mongodb": "^4.1.1",
     "mongoose": "^6.0.5",
