@@ -93,15 +93,6 @@ class UserController {
       next(e);
     }
   }
-
-  static async getUsers(req, res, next) {
-    try {
-      const users = await UserService.getAllUsers();
-      res.json(users);
-    } catch (e) {
-      log.error(e);
-    }
-  }
 }
 
 module.exports = UserController;

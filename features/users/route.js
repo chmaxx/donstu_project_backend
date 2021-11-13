@@ -52,6 +52,5 @@ router.post(
 
 router.get('/activate/:link', DBRoute, UserController.activate);
 router.get('/refreshToken', DBRoute, UserController.refreshToken);
-router.get('/getAll', DBRoute, AuthedRoute, UserController.getUsers);
 
 module.exports = router;

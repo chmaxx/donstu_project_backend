@@ -85,10 +85,6 @@ class UserService {
 
     return await Tokens.registerUserTokens(validationData.user);
   }
-
-  static async getAllUsers() {
-    return await UserModel.find();
-  }
 }
 
 module.exports = UserService;
