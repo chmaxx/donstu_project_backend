@@ -41,6 +41,6 @@ require('./lib/Uploader');
 // Подгружаем маршруты
 require('./features')(app);
 
-app.listen(config.port, ip, () => {
-  log.info(`Запущено на http://${ip}:${config.port}`);
+app.listen(config.port, config.ip, () => {
+  log.info(`Запущено на http://${config.ip}:${config.port}`);
 });
