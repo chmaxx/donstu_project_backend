@@ -1,5 +1,6 @@
 # StaySecured
 
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
 [![CodeQL](https://github.com/chmaxx/staysecured/workflows/CodeQL/badge.svg)](https://github.com/chmaxx/staysecured/actions?query=workflow%3ACodeQL)
 
 Данный репозиторий создан для совместной разработки Backend-части сайта **StaySecured**.
@@ -7,8 +8,8 @@
 
 Над исходным кодом работают:
 
-- Максим Захаренков - ВМО11
-- Владимир Горшков - ВПР12
+- [Максим Захаренков](https://github.com/chmaxx) - ВМО11
+- [Владимир Горшков](https://github.com/whitekeep) - ВПР12
 
 ## Установка зависимостей Node.JS
 
@@ -20,7 +21,7 @@ npm ci
 
 ## Конфигурация
 
-Перед тем, как запустить приложение, необходимо создать `config.json` в папке `config`
+Для авктивации всего функционала приложения необходимо создать `config.json` в папке `config`
 
 [Конфигурация по умолчанию](config/config_default.json)
 
