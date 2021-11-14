@@ -41,9 +41,6 @@ require('./lib/Uploader');
 // Подгружаем маршруты
 require('./features')(app);
 
-// делаем айпи необязательным значением конфига
-let ip = config.ip !== undefined ? config.ip : '127.0.0.1';
-
 app.listen(config.port, ip, () => {
   log.info(`Запущено на http://${ip}:${config.port}`);
 });
