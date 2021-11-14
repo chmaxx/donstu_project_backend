@@ -9,7 +9,9 @@
     "url": "git+https://github.com/chmaxx/staysecured.git"
   },
   "keywords": [
-    "donstu"
+    "donstu",
+    "nodejs",
+    "rest-api"
   ],
   "author": "Maksim Zakharenkov",
   "license": "CC0-1.0",
@@ -18,7 +20,6 @@
   },
   "homepage": "https://github.com/chmaxx/staysecured#readme",
   "dependencies": {
-    "ajv": "^8.6.3",
     "bcrypt": "^5.0.1",
     "busboy": "^0.3.1",
     "cookie-parser": "^1.4.5",
