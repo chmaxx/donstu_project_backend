@@ -20,6 +20,8 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       return res.json(userData);
@@ -36,6 +38,8 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       return res.json(userData);
@@ -68,6 +72,8 @@ class UserController {
       res.cookie('refreshToken', refreshToken, {
         maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       return res.json({
@@ -122,6 +128,8 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       res.status(200).json(userData);
