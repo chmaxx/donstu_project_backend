@@ -1,5 +1,6 @@
 # StaySecured
 
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
 [![CodeQL](https://github.com/chmaxx/staysecured/workflows/CodeQL/badge.svg)](https://github.com/chmaxx/staysecured/actions?query=workflow%3ACodeQL)
 
 Данный репозиторий создан для совместной разработки Backend-части сайта **StaySecured**.
