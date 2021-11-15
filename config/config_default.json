@@ -29,6 +29,11 @@
     "password": "none"
   },
 
+  "backup": {
+    "access_token": "full-backup+none",
+    "storage": "../storage"
+  },
+
   "logger": {
     "info": {
       "console_output": true,
