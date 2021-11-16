@@ -4,9 +4,12 @@ const path = require('path');
 const Logger = require('log-my-ass');
 const log = new Logger(api_config.logger, 'Backup');
 
+// TODO: Распихать next() как надо
+// TODO: Добавить маршрут возврата id последнего бэкапа(в боли без json)
+
 class BackupController {
   async getlist(req, res, next) {
-    accessTemplate(req, res, next, function () {
+    accessTemplate(req, res, next, (req, res, next) => {
       var list_path = path.join('../../', api_config.backup.storage, 'list.json');
       var backup_list = require(list_path);
       res.send(backup_list);
@@ -26,6 +29,7 @@ class BackupController {
       res.download(backup_path, file_name, function (err) {
         if (err) {
           log.error(err);
+          // err произошла ошибка при отдаче файла
           res.sendStatus(500);
         }
       });
@@ -33,19 +37,23 @@ class BackupController {
   }
 }
 
+// шаблон проверки доступа (признаю - костыль)
 function accessTemplate(req, res, next, callback) {
   try {
     if (checkAccess(req)) {
       callback(req, res, next);
     } else {
       res.sendStatus(403);
+      // access_token неверный
     }
   } catch (err) {
-    log.error(err, err.stack);
+    log.error(err);
     res.sendStatus(500);
+    // произошла неизвестная ошибка
   }
 }
 
+// логика проверки валидности токена
 function checkAccess(req) {
   try {
     if (req.get('access_token') == api_config.backup.access_token) {
