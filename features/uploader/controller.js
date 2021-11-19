@@ -17,7 +17,7 @@ class UploadController {
         );
 
         await UploaderService.writeFile(file, fileUploadID, extension);
-        res.sendStatus(200);
+        res.json({ message: 'Файл успешно загружен!', fileUploadID });
       } catch (e) {
         next(e);
       }
