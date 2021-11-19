@@ -1,5 +1,5 @@
-const ArticleSchema = require('./model');
-const UserSchema = require('../users/userModel');
+const ArticleModel = require('./model');
+const UserModel = require('../users/user/model');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleService {
@@ -7,7 +7,7 @@ class ArticleService {
     let code, response_contents;
 
     try {
-      response_contents = await ArticleSchema.find(filter);
+      response_contents = await ArticleModel.find(filter);
       code = 200;
     } catch (e) {
       response_contents = { msg: err.message };
@@ -21,13 +21,13 @@ class ArticleService {
     let code, response_contents;
     let currentDate = new Date();
 
-    const userExists = await UserSchema.findById(author_id);
+    const userExists = await UserModel.findById(author_id);
 
     if (!userExists) {
       throw ApiError.Unauthorized();
     }
 
-    const new_article = new ArticleSchema({
+    const new_article = new ArticleModel({
       header,
       author_id,
       contents,
@@ -57,7 +57,7 @@ class ArticleService {
     let code, response_contents;
 
     try {
-      let articleToArchive = await ArticleSchema.findOne({ _id: article_id });
+      let articleToArchive = await ArticleModel.findOne({ _id: article_id });
 
       if (articleToArchive.is_archived)
         throw new TypeError('Статья уже заархивирована!');
@@ -79,7 +79,7 @@ class ArticleService {
     let code, response_contents;
 
     try {
-      let archivedArticle = await ArticleSchema.findOne({ _id: article_id });
+      let archivedArticle = await ArticleModel.findOne({ _id: article_id });
 
       if (!archivedArticle.is_archived)
         throw new TypeError('Данной статьи нет в архиве!');

@@ -13,7 +13,6 @@ router.post(
   DBRoute,
   AuthedRoute,
   body('name').isString().withMessage('Необходимо ввести название статьи!'),
-  body('id').isMongoId().withMessage('Необходимо ввести ID автора!'),
   body('contents').isString().withMessage('У статьи нет содержимого!'),
   body('description').isString().withMessage('У статьи нет описания!'),
   body('tags').isString().withMessage('У статьи нет тегов!'),

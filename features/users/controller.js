@@ -1,17 +1,17 @@
-const ApiError = require('../../middlewares/ApiErrorException');
-const UserService = require('./userService');
-const { validationResult } = require('express-validator');
+const UserService = require('./service');
 
 // подключаем логгер Users
 const Logger = require('log-my-ass');
 const log = new Logger(api_config.logger, 'Users');
 
 class UserController {
-  async register(req, res, next) {
+  static async register(req, res, next) {
     try {
-      const { nickname, email, password } = req.body;
+      const { login, firstName, lastName, email, password } = req.body;
       const userData = await UserService.registration(
-        nickname,
+        login,
+        firstName,
+        lastName,
         email,
         password
       );
@@ -20,6 +20,8 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       return res.json(userData);
@@ -28,14 +30,16 @@ class UserController {
     }
   }
 
-  async login(req, res, next) {
+  static async login(req, res, next) {
     try {
       const { email, password } = req.body;
       const userData = await UserService.login(email, password);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.jwt.refresh_token_lifetime,
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       return res.json(userData);
@@ -44,7 +48,7 @@ class UserController {
     }
   }
 
-  async logout(req, res, next) {
+  static async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
       const token = await UserService.logout(refreshToken);
@@ -57,7 +61,54 @@ class UserController {
     }
   }
 
-  async activate(req, res, next) {
+  static async changePassword(req, res, next) {
+    try {
+      const { accessToken, refreshToken } = await UserService.changePassword(
+        req.user._id,
+        req.body.oldPassword,
+        req.body.newPassword
+      );
+
+      res.cookie('refreshToken', refreshToken, {
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
+        httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
+      });
+
+      return res.json({
+        message: 'Успешная смена пароля!',
+        accessToken,
+        refreshToken,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async changeAvatar(req, res, next) {
+    try {
+      await UserService.changeAvatar(req.user._id, req.body.upload_id);
+      return res.json({ message: 'Аватарка обновлена!' });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async getInfo(req, res, next) {
+    const user = req.user;
+    return res.json({
+      login: user.login,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isActivated: user.isActivated,
+      usergroup: user.usergroup,
+      avatarUploadID: user.avatar,
+    });
+  }
+
+  static async activate(req, res, next) {
     try {
       const activationLink = req.params.link;
       await UserService.activate(activationLink);
@@ -69,14 +120,16 @@ class UserController {
     }
   }
 
-  async refreshToken(req, res, next) {
+  static async refreshToken(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
       const userData = await UserService.refresh(refreshToken);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.refresh_token_lifetime,
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       res.status(200).json(userData);
@@ -84,15 +137,6 @@ class UserController {
       next(e);
     }
   }
-
-  async getUsers(req, res, next) {
-    try {
-      const users = await UserService.getAllUsers();
-      res.json(users);
-    } catch (e) {
-      log.error(e);
-    }
-  }
 }
 
-module.exports = new UserController();
+module.exports = UserController;

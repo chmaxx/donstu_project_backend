@@ -1,7 +1,7 @@
-const TokenService = require('../../features/users/tokenService');
+const Tokens = require('../../features/users/tokens');
 const ApiError = require('../ApiErrorException');
 
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
   try {
     const authorizationHeader = req.headers.authorization;
 
@@ -15,17 +15,13 @@ module.exports = function (req, res, next) {
       throw ApiError.Unauthorized();
     }
 
-    const userData = TokenService.validateAccessToken(accessToken);
+    const validationData = await Tokens.validateAccessToken(accessToken);
 
-    if (!userData) {
+    if (!validationData) {
       throw ApiError.Unauthorized();
     }
 
-    //if (!userData.isActivated) {
-    //    throw ApiError.UnactivatedUser();
-    //}
-
-    req.user = userData;
+    req.user = validationData.user;
 
     next();
   } catch (e) {

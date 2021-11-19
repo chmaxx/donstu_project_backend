@@ -11,7 +11,7 @@ class UploadController {
       // навешиваем try-catch like a boss
       try {
         [fileUploadID, extension] = await UploaderService.registerFile(
-          req.user.id,
+          req.user._id,
           filename,
           fieldname
         );
