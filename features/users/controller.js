@@ -1,9 +1,5 @@
 const UserService = require('./service');
 
-// подключаем логгер Users
-const Logger = require('log-my-ass');
-const log = new Logger(api_config.logger, 'Users');
-
 class UserController {
   static async register(req, res, next) {
     try {
