@@ -1,5 +1,6 @@
 const UploaderService = require('./service');
 const Busboy = require('busboy');
+const { ResponseMessage } = require('../utils');
 
 class UploadController {
   async add(req, res, next) {
@@ -17,7 +18,8 @@ class UploadController {
         );
 
         await UploaderService.writeFile(file, fileUploadID, extension);
-        res.json({ message: 'Файл успешно загружен!', fileUploadID });
+
+        res.json(ResponseMessage('Файл успешно загружен!', { fileUploadID }));
       } catch (e) {
         next(e);
       }

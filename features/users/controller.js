@@ -1,4 +1,5 @@
 const UserService = require('./service');
+const { ResponseMessage } = require('../utils');
 
 class UserController {
   static async register(req, res, next) {
@@ -72,11 +73,9 @@ class UserController {
         secure: true,
       });
 
-      return res.json({
-        message: 'Успешная смена пароля!',
-        accessToken,
-        refreshToken,
-      });
+      return res.json(
+        ResponseMessage('Успешная смена пароля!', { accessToken, refreshToken })
+      );
     } catch (e) {
       next(e);
     }
@@ -85,7 +84,7 @@ class UserController {
   static async changeAvatar(req, res, next) {
     try {
       await UserService.changeAvatar(req.user._id, req.body.upload_id);
-      return res.json({ message: 'Аватарка обновлена!' });
+      return res.json(ResponseMessage('Аватарка успешно обновлена!'));
     } catch (e) {
       next(e);
     }
@@ -110,7 +109,7 @@ class UserController {
       await UserService.activate(activationLink);
 
       // TODO: редирект
-      return res.json({ message: 'Аккаунт успешно активирован!' });
+      return res.json(ResponseMessage('Аккаунт успешно активирован!'));
     } catch (e) {
       next(e);
     }
@@ -128,7 +127,7 @@ class UserController {
         secure: true,
       });
 
-      res.status(200).json(userData);
+      res.json(userData);
     } catch (e) {
       next(e);
     }

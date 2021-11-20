@@ -14,4 +14,14 @@ function isJSON(item) {
   return false;
 }
 
-module.exports.isJSON = isJSON;
+function ResponseMessage(message = undefined, additionalData = {}) {
+  return {
+    message,
+    ...additionalData,
+  };
+}
+
+module.exports = {
+  isJSON,
+  ResponseMessage,
+};
