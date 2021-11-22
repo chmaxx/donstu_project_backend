@@ -10,18 +10,22 @@ class ArticleController {
   static async add(req, res, next) {
     const { header, contents, description, thumbnailURL, tags } = req.body;
 
-    const newArticle = await ArticleService.add(
-      header,
-      req.user._id,
-      contents,
-      description,
-      thumbnailURL,
-      tags
-    );
+    try {
+      const newArticle = await ArticleService.add(
+        header,
+        req.user._id,
+        contents,
+        description,
+        thumbnailURL,
+        tags
+      );
 
-    return res.json(
-      ResponseMessage('Статья успешно добавлена!', { articleID: newArticle._id })
-    );
+      return res.json(
+        ResponseMessage('Статья успешно добавлена!', { articleID: newArticle._id })
+      );
+    } catch (e) {
+      next(e);
+    }
   }
 
   static async delete(req, res, next) {

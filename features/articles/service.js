@@ -9,6 +9,9 @@ class ArticleService {
   static async add(header, authorID, contents, description, thumbnailURL, tags) {
     const curTime = new Date();
 
+    tags = JSON.parse(tags);
+    if (!Array.isArray(tags)) throw ApiError.BadRequest('Теги должны быть массивом!');
+
     const article = new ArticleModel({
       header,
       authorID,
