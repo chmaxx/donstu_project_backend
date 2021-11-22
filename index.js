@@ -4,11 +4,11 @@ let cookieParser = require('cookie-parser');
 let fs = require('fs');
 
 // Подгружаем конфиг
-const config = require('./middlewares/loadConfig')();
+const config = require('load-my-config')('config');
 global.api_config = config;
 
 // подключаем логгер Start
-const Logger = require('./middlewares/Logger');
+const Logger = require('log-my-ass');
 const log = new Logger(config.logger, 'Start');
 
 // Учим Express парсить application/json
@@ -28,19 +28,19 @@ app.use((req, res, next) => {
 
 // Инициализация базы данных
 if (api_config.db_settings.enabled) {
-  require('./db/connection');
-  const { checkConnection } = require('./db/utils');
+  require('./lib/Database');
+  const { checkConnection } = require('./lib/Database/utils');
   app.use(checkConnection);
 } else {
   log.info('Не подключаемся к базе данных, потому что она отключена в конфиге');
 }
 
+// Создаем директории, необходимые для работы маршрута Uploads
+require('./lib/Uploader');
+
 // Подгружаем маршруты
 require('./features')(app);
 
-// делаем айпи необязательным значением конфига
-let ip = config.ip !== undefined ? config.ip : '127.0.0.1';
-
-app.listen(config.port, ip, () => {
-  log.info(`Запущено на http://${ip}:${config.port}`);
+app.listen(config.port, config.ip, () => {
+  log.info(`Запущено на http://${config.ip}:${config.port}`);
 });

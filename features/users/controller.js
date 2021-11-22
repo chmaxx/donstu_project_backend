@@ -1,18 +1,14 @@
-const ApiError = require('../../middlewares/ApiErrorException');
-const UserService = require('./userService');
-const { validationResult } = require('express-validator');
-
-// подключаем логгер Users
-config = require('../../config/config.json');
-const Logger = require('../../middlewares/Logger');
-const log = new Logger(config.logger, 'Users');
+const UserService = require('./service');
+const { ResponseMessage } = require('../utils');
 
 class UserController {
-  async register(req, res, next) {
+  static async register(req, res, next) {
     try {
-      const { nickname, email, password } = req.body;
+      const { login, firstName, lastName, email, password } = req.body;
       const userData = await UserService.registration(
-        nickname,
+        login,
+        firstName,
+        lastName,
         email,
         password
       );
@@ -21,6 +17,8 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       return res.json(userData);
@@ -29,14 +27,16 @@ class UserController {
     }
   }
 
-  async login(req, res, next) {
+  static async login(req, res, next) {
     try {
       const { email, password } = req.body;
       const userData = await UserService.login(email, password);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.jwt.refresh_token_lifetime,
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
       return res.json(userData);
@@ -45,7 +45,7 @@ class UserController {
     }
   }
 
-  async logout(req, res, next) {
+  static async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
       const token = await UserService.logout(refreshToken);
@@ -58,42 +58,80 @@ class UserController {
     }
   }
 
-  async activate(req, res, next) {
+  static async changePassword(req, res, next) {
+    try {
+      const { accessToken, refreshToken } = await UserService.changePassword(
+        req.user._id,
+        req.body.oldPassword,
+        req.body.newPassword
+      );
+
+      res.cookie('refreshToken', refreshToken, {
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
+        httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
+      });
+
+      return res.json(
+        ResponseMessage('Успешная смена пароля!', { accessToken, refreshToken })
+      );
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async changeAvatar(req, res, next) {
+    try {
+      await UserService.changeAvatar(req.user._id, req.body.upload_id);
+      return res.json(ResponseMessage('Аватарка успешно обновлена!'));
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async getInfo(req, res, next) {
+    const user = req.user;
+    return res.json({
+      login: user.login,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isActivated: user.isActivated,
+      usergroup: user.usergroup,
+      avatarUploadID: user.avatar,
+    });
+  }
+
+  static async activate(req, res, next) {
     try {
       const activationLink = req.params.link;
       await UserService.activate(activationLink);
 
       // TODO: редирект
-      return res.json({ message: 'Аккаунт успешно активирован!' });
+      return res.json(ResponseMessage('Аккаунт успешно активирован!'));
     } catch (e) {
       next(e);
     }
   }
 
-  async refreshToken(req, res, next) {
+  static async refreshToken(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
       const userData = await UserService.refresh(refreshToken);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: config.refresh_token_lifetime,
+        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
       });
 
-      res.status(200).json(userData);
+      res.json(userData);
     } catch (e) {
       next(e);
     }
   }
-
-  async getUsers(req, res, next) {
-    try {
-      const users = await UserService.getAllUsers();
-      res.json(users);
-    } catch (e) {
-      log.error(e);
-    }
-  }
 }
 
-module.exports = new UserController();
+module.exports = UserController;

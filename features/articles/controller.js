@@ -41,7 +41,7 @@ class ArticleController {
     try {
       const [code, response_contents] = await ArticleService.create(
         req.body.name, // header
-        req.user.id, // author
+        req.user._id, // author
         req.body.contents, // contents
         req.body.description, // description
         parseTags(req.body.tags) // tags
