@@ -20,22 +20,4 @@ router.post(
   ArticleController.add
 );
 
-router.post(
-  '/archive',
-  DBRoute,
-  AuthedRoute,
-  body('article_id').isMongoId().withMessage('Необходимо ввести ID статьи!'),
-  BodyValidator,
-  ArticleController.archive
-);
-
-router.post(
-  '/unarchive',
-  DBRoute,
-  AuthedRoute,
-  body('article_id').isMongoId().withMessage('Необходимо ввести ID статьи!'),
-  BodyValidator,
-  ArticleController.unarchive
-);
-
 module.exports = router;

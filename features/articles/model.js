@@ -34,11 +34,6 @@ let ArticleSchema = new Schema(
 
     create_time: Date,
     last_update_time: Date,
-
-    is_archived: {
-      type: Boolean,
-      default: false,
-    },
   },
   { versionKey: false }
 );

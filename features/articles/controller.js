@@ -25,9 +25,7 @@ class ArticleController {
         if (req_filters.date_interval) {
           filter.create_time = {
             $gte: req_filters.date_interval[0],
-            $lte: req_filters.date_interval[1]
-              ? req_filters.date_interval[1]
-              : new Date(),
+            $lte: req_filters.date_interval[1] ? req_filters.date_interval[1] : new Date(),
           };
         }
       }
@@ -47,28 +45,6 @@ class ArticleController {
         parseTags(req.body.tags) // tags
       );
 
-      res.status(code).json(response_contents);
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  async archive(req, res, next) {
-    try {
-      var [code, response_contents] = await ArticleService.archive(
-        req.body.article_id
-      );
-      res.status(code).json(response_contents);
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  async unarchive(req, res, next) {
-    try {
-      var [code, response_contents] = await ArticleService.unarchive(
-        req.body.article_id
-      );
       res.status(code).json(response_contents);
     } catch (e) {
       next(e);
