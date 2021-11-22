@@ -1,57 +1,38 @@
 const ArticleModel = require('./model');
-const UserModel = require('../users/user/model');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleService {
-  async get(filter) {
-    let code, response_contents;
-
-    try {
-      response_contents = await ArticleModel.find(filter);
-      code = 200;
-    } catch (e) {
-      response_contents = { msg: err.message };
-      code = 500;
-    }
-
-    return [code, response_contents];
+  static async get(filter = undefined, returnKeys = undefined) {
+    return await ArticleModel.find();
   }
 
-  async create(header, author_id, contents, description, tags = ['Прочее']) {
-    let code, response_contents;
-    let currentDate = new Date();
+  static async add(header, authorID, contents, description, thumbnailURL, tags) {
+    const curTime = new Date();
 
-    const userExists = await UserModel.findById(author_id);
-
-    if (!userExists) {
-      throw ApiError.Unauthorized();
-    }
-
-    const new_article = new ArticleModel({
+    const article = new ArticleModel({
       header,
-      author_id,
+      authorID,
       contents,
       description,
+      thumbnailURL,
       tags,
-      create_time: currentDate,
-      last_update_time: currentDate,
+      createTime: curTime,
+      lastUpdateTime: curTime,
     });
 
-    try {
-      const savedArticle = await new_article.save();
+    return await article.save();
+  }
 
-      response_contents = {
-        msg: 'Статья успешно добавлена!',
-        created_article_id: savedArticle._id,
-      };
-      code = 200;
-    } catch (e) {
-      response_contents = { msg: err.message };
-      code = e.code || 500;
-    }
+  static async delete(articleID, authorID) {
+    const article = await ArticleModel.findById(articleID);
 
-    return [code, response_contents];
+    if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
+
+    if (!article.authorID.equals(authorID))
+      throw ApiError.BadRequest('Вы не являетесь автором данной статьи!');
+
+    await article.delete();
   }
 }
 
-module.exports = new ArticleService();
+module.exports = ArticleService;

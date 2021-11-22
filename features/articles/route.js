@@ -12,12 +12,22 @@ router.post(
   '/add',
   DBRoute,
   AuthedRoute,
-  body('name').isString().withMessage('Необходимо ввести название статьи!'),
+  body('header').isString().withMessage('Необходимо ввести название статьи!'),
   body('contents').isString().withMessage('У статьи нет содержимого!'),
-  body('description').isString().withMessage('У статьи нет описания!'),
-  body('tags').isString().withMessage('У статьи нет тегов!'),
+  body('description').isString().withMessage('Необходимо ввести описание!'),
+  body('thumbnailURL').isURL().withMessage('Необходимо ввести ссылку на превью!'),
+  body('tags').isJSON().withMessage('Необходимо ввести теги!'),
   BodyValidator,
   ArticleController.add
+);
+
+router.post(
+  '/delete',
+  DBRoute,
+  AuthedRoute,
+  body('articleID').isMongoId().withMessage('Необходимо ввести ID статьи!'),
+  BodyValidator,
+  ArticleController.delete
 );
 
 module.exports = router;
