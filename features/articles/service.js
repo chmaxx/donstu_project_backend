@@ -24,7 +24,7 @@ class ArticleService {
   }
 
   static async delete(articleID, authorID) {
-    const article = await ArticleModel.findById(articleID);
+    const article = await ArticleModel.findById(articleID, { authorID: 1 });
 
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
 
