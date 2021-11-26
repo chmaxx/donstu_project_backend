@@ -41,7 +41,14 @@ class ArticleController {
 module.exports = ArticleController;
 
 function parseProjection(projection) {
-  const projectionArr = JSON.parse(projection);
+  let projectionArr;
+
+  try {
+    projectionArr = JSON.parse(projection);
+  } catch (e) {
+    return;
+  }
+
   if (!Array.isArray(projectionArr)) return;
 
   let projectionObject = {};
