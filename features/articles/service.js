@@ -2,8 +2,8 @@ const ArticleModel = require('./model');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleService {
-  static async get(filter = undefined, returnKeys = undefined) {
-    return await ArticleModel.find();
+  static async get(filter = {}, projection = {}) {
+    return await ArticleModel.find(filter, projection);
   }
 
   static async add(header, authorID, contents, description, thumbnailURL, tags) {

@@ -3,7 +3,7 @@ const { ResponseMessage } = require('../utils');
 
 class ArticleController {
   static async get(req, res, next) {
-    const articles = await ArticleService.get();
+    const articles = await ArticleService.get(null, parseProjection(req.body.projection));
     return res.json(articles);
   }
 
@@ -39,3 +39,16 @@ class ArticleController {
 }
 
 module.exports = ArticleController;
+
+function parseProjection(projection) {
+  const projectionArr = JSON.parse(projection);
+  if (!Array.isArray(projectionArr)) return;
+
+  let projectionObject = {};
+
+  for (let key of projectionArr) {
+    projectionObject[key] = 1;
+  }
+
+  return projectionObject;
+}
