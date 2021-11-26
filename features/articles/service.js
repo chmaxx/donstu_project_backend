@@ -26,6 +26,29 @@ class ArticleService {
     return await article.save();
   }
 
+  static async update(articleID, updates) {
+    const article = await ArticleModel.findById(articleID);
+
+    if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
+
+    for (const [path, updateValue] of Object.entries(updates)) {
+      /* ArticleModel.schema.paths содержит в себе данные всех ключей,
+       * которые есть в модели
+       */
+      const articlePath = ArticleModel.schema.paths[path];
+      if (!articlePath) throw ApiError.BadRequest(`У статей нет ключа ${path}!`);
+
+      if (typeof updateValue !== articlePath.instance.toLowerCase())
+        throw ApiError.BadRequest(`Тип ${path} не совпадает с тем, что указан в схеме!`);
+
+      article[path] = updateValue;
+    }
+
+    // TODO: вынести это куда-нибудь в мидлвари Mongoose-схем
+    article.lastUpdateTime = new Date();
+    await article.save();
+  }
+
   static async delete(articleID, authorID) {
     const article = await ArticleModel.findById(articleID, { authorID: 1 });
 

@@ -1,5 +1,6 @@
 const ArticleService = require('./service');
 const { ResponseMessage } = require('../utils');
+const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleController {
   static async get(req, res, next) {
@@ -23,6 +24,22 @@ class ArticleController {
       return res.json(
         ResponseMessage('Статья успешно добавлена!', { articleID: newArticle._id })
       );
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async update(req, res, next) {
+    let updates = {};
+
+    try {
+      updates = JSON.parse(req.body.updateData);
+
+      if (Array.isArray(updates))
+        throw ApiError.BadRequest('Объект обновлений не должен быть массивом!');
+
+      await ArticleService.update(req.body.articleID, updates);
+      return res.json(ResponseMessage('Статья успешно обновлена!'));
     } catch (e) {
       next(e);
     }

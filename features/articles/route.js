@@ -22,6 +22,16 @@ router.post(
 );
 
 router.post(
+  '/update',
+  DBRoute,
+  AuthedRoute,
+  body('articleID').isMongoId().withMessage('Необходимо ввести ID статьи!'),
+  body('updateData').isJSON().withMessage('Необходимо ввести поля для обновления!'),
+  BodyValidator,
+  ArticleController.update
+);
+
+router.post(
   '/delete',
   DBRoute,
   AuthedRoute,
