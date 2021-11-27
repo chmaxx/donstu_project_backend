@@ -1,101 +1,64 @@
 const ArticleModel = require('./model');
-const UserModel = require('../users/user/model');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleService {
-  async get(filter) {
-    let code, response_contents;
-
-    try {
-      response_contents = await ArticleModel.find(filter);
-      code = 200;
-    } catch (e) {
-      response_contents = { msg: err.message };
-      code = 500;
-    }
-
-    return [code, response_contents];
+  static async get(filter = {}, projection = {}) {
+    return await ArticleModel.find(filter, projection);
   }
 
-  async create(header, author_id, contents, description, tags = ['Прочее']) {
-    let code, response_contents;
-    let currentDate = new Date();
+  static async add(header, authorID, contents, description, thumbnailURL, tags) {
+    const curTime = new Date();
 
-    const userExists = await UserModel.findById(author_id);
+    tags = JSON.parse(tags);
+    if (!Array.isArray(tags)) throw ApiError.BadRequest('Теги должны быть массивом!');
 
-    if (!userExists) {
-      throw ApiError.Unauthorized();
-    }
-
-    const new_article = new ArticleModel({
+    const article = new ArticleModel({
       header,
-      author_id,
+      authorID,
       contents,
       description,
+      thumbnailURL,
       tags,
-      create_time: currentDate,
-      last_update_time: currentDate,
+      createTime: curTime,
+      lastUpdateTime: curTime,
     });
 
-    try {
-      const savedArticle = await new_article.save();
-
-      response_contents = {
-        msg: 'Статья успешно добавлена!',
-        created_article_id: savedArticle._id,
-      };
-      code = 200;
-    } catch (e) {
-      response_contents = { msg: err.message };
-      code = e.code || 500;
-    }
-
-    return [code, response_contents];
+    return await article.save();
   }
 
-  async archive(article_id) {
-    let code, response_contents;
+  static async update(articleID, updates) {
+    const article = await ArticleModel.findById(articleID);
 
-    try {
-      let articleToArchive = await ArticleModel.findOne({ _id: article_id });
+    if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
 
-      if (articleToArchive.is_archived)
-        throw new TypeError('Статья уже заархивирована!');
+    for (const [path, updateValue] of Object.entries(updates)) {
+      /* ArticleModel.schema.paths содержит в себе данные всех ключей,
+       * которые есть в модели
+       */
+      const articlePath = ArticleModel.schema.paths[path];
+      if (!articlePath) throw ApiError.BadRequest(`У статей нет ключа ${path}!`);
 
-      articleToArchive.is_archived = true;
-      articleToArchive.save();
+      if (typeof updateValue !== articlePath.instance.toLowerCase())
+        throw ApiError.BadRequest(`Тип ${path} не совпадает с тем, что указан в схеме!`);
 
-      code = 200;
-      response_contents = { msg: 'Статья успешно архивирована!' };
-    } catch (e) {
-      code = err.name === 'TypeError' ? 400 : 500;
-      response_contents = { msg: err.message };
+      article[path] = updateValue;
     }
 
-    return [code, response_contents];
+    // TODO: вынести это куда-нибудь в мидлвари Mongoose-схем
+    article.lastUpdateTime = new Date();
+    await article.save();
   }
 
-  async unarchive(article_id) {
-    let code, response_contents;
+  static async delete(articleID, authorID) {
+    const article = await ArticleModel.findById(articleID, { authorID: 1 });
 
-    try {
-      let archivedArticle = await ArticleModel.findOne({ _id: article_id });
+    if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
 
-      if (!archivedArticle.is_archived)
-        throw new TypeError('Данной статьи нет в архиве!');
+    if (!article.authorID.equals(authorID))
+      throw ApiError.BadRequest('Вы не являетесь автором данной статьи!');
 
-      archivedArticle.is_archived = false;
-      archivedArticle.save();
-
-      code = 200;
-      response_contents = { msg: 'Статья успешно удалена из архива!' };
-    } catch (e) {
-      code = err.name === 'TypeError' ? 400 : 500;
-      response_contents = { msg: err.message };
-    }
-
-    return [code, response_contents];
+    await article.delete();
   }
 }
 
-module.exports = new ArticleService();
+module.exports = ArticleService;
