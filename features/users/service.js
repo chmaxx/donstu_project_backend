@@ -91,6 +91,20 @@ class UserService {
     await user.save();
   }
 
+  static async getInfo(userID) {
+    const user = await UserModel.findById(userID, {
+      firstName: 1,
+      lastName: 1,
+      login: 1,
+      usergroup: 1,
+      avatarUploadID: 1,
+    });
+
+    if (!user) throw ApiError.BadRequest('Такого пользователя не существует!');
+
+    return user;
+  }
+
   static async refresh(refreshToken) {
     if (!refreshToken) throw ApiError.Unauthorized();
 

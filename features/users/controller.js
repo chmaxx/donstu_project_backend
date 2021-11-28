@@ -1,5 +1,6 @@
 const UserService = require('./service');
 const { ResponseMessage } = require('../utils');
+const isMongoId = require('../../node_modules/validator/lib/isMongoId');
 
 class UserController {
   static async register(req, res, next) {
@@ -91,16 +92,32 @@ class UserController {
   }
 
   static async getInfo(req, res, next) {
-    const user = req.user;
-    return res.json({
-      login: user.login,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      isActivated: user.isActivated,
-      usergroup: user.usergroup,
-      avatarUploadID: user.avatar,
-    });
+    const userID = req.body.userID;
+
+    // По умолчанию возвращаем данные пользователя, отправляющего запрос
+    if (!userID || userID == req.user._id) {
+      const user = req.user;
+
+      return res.json({
+        _id: user._id,
+        login: user.login,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        isActivated: user.isActivated,
+        usergroup: user.usergroup,
+        avatarUploadID: user.avatar,
+      });
+    }
+
+    if (!isMongoId(userID)) return res.status(400).json(ResponseMessage('Неверный userID!'));
+
+    try {
+      const user = await UserService.getInfo(userID);
+      res.json(user);
+    } catch (e) {
+      next(e);
+    }
   }
 
   static async activate(req, res, next) {
