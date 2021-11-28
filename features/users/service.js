@@ -45,8 +45,7 @@ class UserService {
     const user = await UserModel.findOne({ activationUUID });
 
     if (!user) throw ApiError.BadRequest('Некорректная ссылка активации');
-    if (user.isActivated)
-      throw ApiError.BadRequest('Пользователь уже активирован!');
+    if (user.isActivated) throw ApiError.BadRequest('Пользователь уже активирован!');
 
     user.isActivated = true;
     await user.save();

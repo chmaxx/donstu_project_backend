@@ -45,10 +45,7 @@ class Tokens {
 
   static async validateRefreshToken(token) {
     try {
-      const verifiedJWT = jwt.verify(
-        token,
-        api_config.jwt.refresh_token_secret
-      );
+      const verifiedJWT = jwt.verify(token, api_config.jwt.refresh_token_secret);
       if (!verifiedJWT) return null;
 
       const jwtData = await TokenModel.findOne({ user: verifiedJWT.id });
