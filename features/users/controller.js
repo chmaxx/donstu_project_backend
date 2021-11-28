@@ -1,6 +1,9 @@
 const UserService = require('./service');
-const { ResponseMessage } = require('../utils');
+const { ResponseMessage, formatUser, formatUpload } = require('../utils');
 const isMongoId = require('../../node_modules/validator/lib/isMongoId');
+
+const Logger = require('log-my-ass');
+const log = new Logger(api_config.logger, 'Users');
 
 class UserController {
   static async register(req, res, next) {
@@ -22,6 +25,14 @@ class UserController {
         secure: true,
       });
 
+      log.info(
+        `Зарегистрирован новый пользователь: ${formatUser({
+          firstName,
+          lastName,
+          _id: userData.user.id,
+        })}`
+      );
+
       return res.json(userData);
     } catch (e) {
       next(e);
@@ -39,6 +50,8 @@ class UserController {
         sameSite: 'Strict',
         secure: true,
       });
+
+      log.info(`Пользователь ${formatUser(userData.user.id.toString())} залогинился`);
 
       return res.json(userData);
     } catch (e) {
@@ -74,6 +87,8 @@ class UserController {
         secure: true,
       });
 
+      log.info(`Пользователь ${formatUser(req.user)} сменил пароль`);
+
       return res.json(
         ResponseMessage('Успешная смена пароля!', { accessToken, refreshToken })
       );
@@ -85,6 +100,13 @@ class UserController {
   static async changeAvatar(req, res, next) {
     try {
       await UserService.changeAvatar(req.user._id, req.body.upload_id);
+
+      log.info(
+        `Пользователь ${formatUser(req.user)} сменил аватар на ${formatUpload(
+          req.body.upload_id
+        )}`
+      );
+
       return res.json(ResponseMessage('Аватарка успешно обновлена!'));
     } catch (e) {
       next(e);
@@ -136,6 +158,8 @@ class UserController {
     try {
       const { refreshToken } = req.cookies;
       const userData = await UserService.refresh(refreshToken);
+
+      log.info(`Пользователь ${formatUser(userData)} обновил refreshToken`);
 
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: api_config.jwt.refresh_token_lifetime * 1000,

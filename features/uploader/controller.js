@@ -1,6 +1,9 @@
 const UploaderService = require('./service');
 const Busboy = require('busboy');
-const { ResponseMessage } = require('../utils');
+const { ResponseMessage, formatUser, formatUpload } = require('../utils');
+
+const Logger = require('log-my-ass');
+const log = new Logger(api_config.logger, 'Uploader');
 
 class UploadController {
   async add(req, res, next) {
@@ -18,6 +21,12 @@ class UploadController {
         );
 
         await UploaderService.writeFile(file, fileUploadID, extension);
+
+        log.info(
+          `Пользователь ${formatUser(req.user)} загрузил файл ${formatUpload(
+            fileUploadID.toString()
+          )}`
+        );
 
         res.json(ResponseMessage('Файл успешно загружен!', { fileUploadID }));
       } catch (e) {

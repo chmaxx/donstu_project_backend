@@ -1,6 +1,9 @@
 const ArticleService = require('./service');
-const { ResponseMessage } = require('../utils');
+const { ResponseMessage, formatUser, formatArticle } = require('../utils');
 const ApiError = require('../../middlewares/ApiErrorException');
+
+const Logger = require('log-my-ass');
+const log = new Logger(api_config.logger, 'Articles');
 
 class ArticleController {
   static async get(req, res, next) {
@@ -21,6 +24,10 @@ class ArticleController {
         tags
       );
 
+      log.info(
+        `Пользователь ${formatUser(req.user)} загрузил статью ${formatArticle(newArticle)}`
+      );
+
       return res.json(
         ResponseMessage('Статья успешно добавлена!', { articleID: newArticle._id })
       );
@@ -39,6 +46,14 @@ class ArticleController {
         throw ApiError.BadRequest('Объект обновлений не должен быть массивом!');
 
       await ArticleService.update(req.body.articleID, updates);
+
+      log.info(
+        `Пользователь ${formatUser(req.user)} обновил статью ${formatArticle(
+          req.body.articleID
+        )}
+          Обновленные поля: ${Object.keys(updates).join(', ')}`
+      );
+
       return res.json(ResponseMessage('Статья успешно обновлена!'));
     } catch (e) {
       next(e);
@@ -48,6 +63,13 @@ class ArticleController {
   static async delete(req, res, next) {
     try {
       await ArticleService.delete(req.body.articleID, req.user._id);
+
+      log.info(
+        `Пользователь ${formatUser(req.user)} удалил статью ${formatArticle(
+          req.body.articleID
+        )}`
+      );
+
       return res.json(ResponseMessage('Статья успешно удалена!'));
     } catch (e) {
       next(e);
