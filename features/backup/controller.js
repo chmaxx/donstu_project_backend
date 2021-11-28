@@ -5,7 +5,7 @@ const Logger = require('log-my-ass');
 const log = new Logger(api_config.logger, 'Backup');
 
 // TODO: Распихать next() как надо
-// TODO: Добавить маршрут возврата id последнего бэкапа(в боли без json)
+// TODO: Добавить маршрут возврата id последнего бэкапа(в боди без json)
 
 class BackupController {
   async getlist(req, res, next) {
@@ -54,6 +54,7 @@ function accessTemplate(req, res, next, callback) {
 }
 
 // логика проверки валидности токена
+// TODO: исправить это недорозумение
 function checkAccess(req) {
   try {
     if (req.get('access_token') == api_config.backup.access_token) {
