@@ -3,7 +3,12 @@ const ApiError = require('../../middlewares/ApiErrorException');
 
 class ArticleService {
   static async get(filter = {}, projection = {}) {
-    return await ArticleModel.find(filter, projection);
+    // TODO: authorID возвращается независимо от того, есть ли он в проекции
+    return await ArticleModel.find(filter, projection).populate('authorID', [
+      'firstName',
+      'lastName',
+      'avatar',
+    ]);
   }
 
   static async add(header, authorID, contents, description, thumbnailURL, tags) {
