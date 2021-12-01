@@ -1,5 +1,5 @@
 const ArticleService = require('./service');
-const { ResponseMessage, formatUser, formatArticle } = require('../utils');
+const { ResponseMessage, formatUser, formatArticle, parseProjection } = require('../utils');
 const ApiError = require('../../middlewares/ApiErrorException');
 
 const Logger = require('log-my-ass');
@@ -78,23 +78,3 @@ class ArticleController {
 }
 
 module.exports = ArticleController;
-
-function parseProjection(projection) {
-  let projectionArr;
-
-  try {
-    projectionArr = JSON.parse(projection);
-  } catch (e) {
-    return;
-  }
-
-  if (!Array.isArray(projectionArr)) return;
-
-  let projectionObject = {};
-
-  for (let key of projectionArr) {
-    projectionObject[key] = 1;
-  }
-
-  return projectionObject;
-}

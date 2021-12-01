@@ -32,6 +32,10 @@ class UploadService {
     await Uploader.deleteFile(upload._id, upload.extension);
     await upload.delete();
   }
+
+  static async getMyUploads(author, projection) {
+    return await UploadModel.find({ author }, projection);
+  }
 }
 
 module.exports = UploadService;

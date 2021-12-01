@@ -40,10 +40,31 @@ function formatUpload(uploadData) {
   return `${uploadData.uploadKey}:${uploadData.filename} (${uploadData._id})`;
 }
 
+function parseProjection(projection) {
+  let projectionArr;
+
+  try {
+    projectionArr = JSON.parse(projection);
+  } catch (e) {
+    return;
+  }
+
+  if (!Array.isArray(projectionArr)) return;
+
+  let projectionObject = {};
+
+  for (let key of projectionArr) {
+    projectionObject[key] = 1;
+  }
+
+  return projectionObject;
+}
+
 module.exports = {
   isJSON,
   ResponseMessage,
   formatUser,
   formatArticle,
   formatUpload,
+  parseProjection,
 };

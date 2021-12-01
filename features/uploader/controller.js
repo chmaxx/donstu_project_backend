@@ -1,6 +1,6 @@
 const UploaderService = require('./service');
 const Busboy = require('busboy');
-const { ResponseMessage, formatUser, formatUpload } = require('../utils');
+const { ResponseMessage, formatUser, formatUpload, parseProjection } = require('../utils');
 
 const Logger = require('log-my-ass');
 const log = new Logger(api_config.logger, 'Uploader');
@@ -49,6 +49,15 @@ class UploadController {
     } catch (e) {
       next(e);
     }
+  }
+
+  async userUploads(req, res, next) {
+    const uploads = await UploaderService.getMyUploads(
+      req.user._id,
+      parseProjection(req.body.projection)
+    );
+
+    return res.json(uploads);
   }
 }
 

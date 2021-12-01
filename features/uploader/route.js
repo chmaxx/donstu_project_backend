@@ -17,4 +17,6 @@ router.post(
   UploadController.delete
 );
 
+router.get('/my', DBRoute, AuthedRoute, UploadController.userUploads);
+
 module.exports = router;
