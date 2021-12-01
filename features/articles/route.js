@@ -8,6 +8,8 @@ const { body } = require('express-validator');
 
 router.get('/', DBRoute, ArticleController.get);
 
+router.get('/:id', DBRoute, ArticleController.getById);
+
 router.post(
   '/add',
   DBRoute,

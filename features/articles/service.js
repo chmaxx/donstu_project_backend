@@ -1,5 +1,6 @@
 const ArticleModel = require('./model');
 const ApiError = require('../../middlewares/ApiErrorException');
+const isMongoId = require('../../node_modules/validator/lib/isMongoId');
 
 class ArticleService {
   static async get(filter = {}, projection = {}) {
@@ -9,6 +10,15 @@ class ArticleService {
       'lastName',
       'avatar',
     ]);
+  }
+
+  static async getById(articleId) {
+    if (!isMongoId(articleId)) throw ApiError.BadRequest('Неверный ID статьи!');
+
+    const article = await ArticleModel.findById(articleId);
+    if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
+
+    return article;
   }
 
   static async add(header, authorID, contents, description, thumbnailURL, tags) {

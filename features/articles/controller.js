@@ -11,6 +11,15 @@ class ArticleController {
     return res.json(articles);
   }
 
+  static async getById(req, res, next) {
+    try {
+      const article = await ArticleService.getById(req.params.id);
+      return res.json(article);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   static async add(req, res, next) {
     const { header, contents, description, thumbnailURL, tags } = req.body;
 
