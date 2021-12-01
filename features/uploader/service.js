@@ -1,5 +1,6 @@
 const ApiError = require('../../middlewares/ApiErrorException');
 const Uploader = require('../../lib/Uploader/uploader');
+const UploadModel = require('../../lib/Uploader/model');
 
 class UploadService {
   static async registerFile(author, filename, fieldname) {
@@ -19,6 +20,18 @@ class UploadService {
   }
 
   static writeFile = Uploader.writeFile;
+
+  static async delete(authorId, uploadId) {
+    const upload = await UploadModel.findById(uploadId);
+
+    if (!upload) throw ApiError.BadRequest('Данного файла не существует!');
+
+    if (!upload.author.equals(authorId))
+      throw ApiError.BadRequest('Вы не можете удалить чужой файл!');
+
+    await Uploader.deleteFile(upload._id, upload.extension);
+    await upload.delete();
+  }
 }
 
 module.exports = UploadService;

@@ -36,6 +36,20 @@ class UploadController {
 
     req.pipe(busboy);
   }
+
+  async delete(req, res, next) {
+    try {
+      await UploaderService.delete(req.user._id, req.body.uploadId);
+
+      log.info(
+        `Пользователь ${formatUser(req.user)} удалил файл ${formatUpload(req.body.uploadId)}`
+      );
+
+      res.json(ResponseMessage('Файл успешно удален!'));
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new UploadController();
