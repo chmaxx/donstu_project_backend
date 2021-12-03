@@ -3,7 +3,7 @@ const { ResponseMessage, formatUser, formatUpload } = require('../utils');
 const isMongoId = require('../../node_modules/validator/lib/isMongoId');
 
 const Logger = require('log-my-ass');
-const log = new Logger(api_config.logger, 'Users');
+const log = new Logger(API_CONFIG.logger, 'Users');
 
 class UserController {
   static async register(req, res, next) {
@@ -19,7 +19,7 @@ class UserController {
 
       // мы должны умножать maxAge на 1000, поскольку в аргументах ожидаются мс (а в конфиге секунды)
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
+        maxAge: API_CONFIG.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
         sameSite: 'Strict',
         secure: true,
@@ -45,7 +45,7 @@ class UserController {
       const userData = await UserService.login(email, password);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
+        maxAge: API_CONFIG.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
         sameSite: 'Strict',
         secure: true,
@@ -81,7 +81,7 @@ class UserController {
       );
 
       res.cookie('refreshToken', refreshToken, {
-        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
+        maxAge: API_CONFIG.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
         sameSite: 'Strict',
         secure: true,
@@ -162,7 +162,7 @@ class UserController {
       log.info(`Пользователь ${formatUser(userData)} обновил refreshToken`);
 
       res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: api_config.jwt.refresh_token_lifetime * 1000,
+        maxAge: API_CONFIG.jwt.refresh_token_lifetime * 1000,
         httpOnly: true,
         sameSite: 'Strict',
         secure: true,

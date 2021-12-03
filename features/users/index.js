@@ -1,5 +1,5 @@
-const api_route_path = '/' + api_config.api_version + '/users';
+const apiRoutePath = '/' + API_CONFIG.api_version + '/users';
 
 module.exports = (app) => {
-  app.use(api_route_path, require('./route'));
+  app.use(apiRoutePath, require('./route'));
 };

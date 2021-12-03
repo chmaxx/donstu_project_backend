@@ -3,7 +3,7 @@ const Busboy = require('busboy');
 const { ResponseMessage, formatUser, formatUpload, parseProjection } = require('../utils');
 
 const Logger = require('log-my-ass');
-const log = new Logger(api_config.logger, 'Uploader');
+const log = new Logger(API_CONFIG.logger, 'Uploader');
 
 class UploadController {
   async add(req, res, next) {

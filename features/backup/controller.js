@@ -2,7 +2,7 @@ const path = require('path');
 
 // подключаем логгер Backup
 const Logger = require('log-my-ass');
-const log = new Logger(api_config.logger, 'Backup');
+const log = new Logger(API_CONFIG.logger, 'Backup');
 
 // TODO: Распихать next() как надо
 // TODO: Добавить маршрут возврата id последнего бэкапа(в боди без json)
@@ -10,7 +10,7 @@ const log = new Logger(api_config.logger, 'Backup');
 class BackupController {
   async getlist(req, res, next) {
     accessTemplate(req, res, next, (req, res, next) => {
-      var list_path = path.join('../../', api_config.backup.storage, 'list.json');
+      var list_path = path.join('../../', API_CONFIG.backup.storage, 'list.json');
       var backup_list = require(list_path);
       res.send(backup_list);
     });
@@ -19,7 +19,7 @@ class BackupController {
   async getbackup(req, res, next) {
     accessTemplate(req, res, next, (req, res, next) => {
       // определяем нужные пути к фалам
-      var storage = path.join('../../', api_config.backup.storage);
+      var storage = path.join('../../', API_CONFIG.backup.storage);
       var list_path = path.join(storage, 'list.json');
       var backup_list = require(list_path);
       var id = req.query.id;
@@ -57,7 +57,7 @@ function accessTemplate(req, res, next, callback) {
 // TODO: исправить это недорозумение
 function checkAccess(req) {
   try {
-    if (req.get('access_token') == api_config.backup.access_token) {
+    if (req.get('access_token') == API_CONFIG.backup.access_token) {
       return true;
     } else {
       return false;

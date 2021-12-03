@@ -35,7 +35,7 @@ class UserService {
     // TODO: генерацию ссылки по данным из конфига желательно вынести в отдельный middleware
     await MailService.sendActivationMail(
       email,
-      `localhost:${api_config.port}/${api_config.api_version}/users/activate/${activationUUID}`
+      `localhost:${API_CONFIG.port}/${API_CONFIG.api_version}/users/activate/${activationUUID}`
     );
 
     return await Tokens.registerUserTokens(user);

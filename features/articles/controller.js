@@ -3,7 +3,7 @@ const { ResponseMessage, formatUser, formatArticle, parseProjection } = require(
 const ApiError = require('../../lib/ApiError');
 
 const Logger = require('log-my-ass');
-const log = new Logger(api_config.logger, 'Articles');
+const log = new Logger(API_CONFIG.logger, 'Articles');
 
 class ArticleController {
   static async get(req, res, next) {
