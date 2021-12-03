@@ -3,7 +3,7 @@ const errorCatcher = require('./middlewares/ErrorCatcher');
 
 // подключаем логгер Features
 const Logger = require('log-my-ass');
-const log = new Logger(api_config.logger, 'Features');
+const log = new Logger(API_CONFIG.logger, 'Features');
 
 // Функция для безопасной загрузки файла
 // может, в ней пока нет необходимости? загружается только один файл

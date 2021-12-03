@@ -5,7 +5,7 @@ let fs = require('fs');
 
 // Подгружаем конфиг
 const config = require('load-my-config')('config');
-global.api_config = config;
+global.API_CONFIG = config;
 
 // подключаем логгер Start
 const Logger = require('log-my-ass');
@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 });
 
 // Инициализация базы данных
-if (api_config.db_settings.enabled) {
+if (API_CONFIG.db_settings.enabled) {
   require('./lib/Database');
   const { checkConnection } = require('./lib/Database/utils');
   app.use(checkConnection);

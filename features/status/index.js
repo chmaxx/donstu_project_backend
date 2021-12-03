@@ -13,6 +13,6 @@ module.exports = (app) => {
     res.sendStatus(200);
   });
 
-  app.use('/' + api_config.api_version, router);
-  app.use('/' + api_config.api_version + '/status', router);
+  app.use('/' + API_CONFIG.api_version, router);
+  app.use('/' + API_CONFIG.api_version + '/status', router);
 };

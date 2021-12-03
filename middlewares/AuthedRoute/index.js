@@ -1,5 +1,5 @@
 const Tokens = require('../../features/users/tokens');
-const ApiError = require('../ApiErrorException');
+const ApiError = require('../../lib/ApiError');
 
 module.exports = async function (req, res, next) {
   try {
