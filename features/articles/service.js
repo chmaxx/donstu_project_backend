@@ -1,5 +1,5 @@
 const ArticleModel = require('./model');
-const ApiError = require('../../middlewares/ApiErrorException');
+const ApiError = require('../../lib/ApiError');
 const isMongoId = require('../../node_modules/validator/lib/isMongoId');
 
 class ArticleService {

@@ -1,6 +1,6 @@
 const ArticleService = require('./service');
 const { ResponseMessage, formatUser, formatArticle, parseProjection } = require('../utils');
-const ApiError = require('../../middlewares/ApiErrorException');
+const ApiError = require('../../lib/ApiError');
 
 const Logger = require('log-my-ass');
 const log = new Logger(api_config.logger, 'Articles');

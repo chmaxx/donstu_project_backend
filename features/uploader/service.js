@@ -1,4 +1,4 @@
-const ApiError = require('../../middlewares/ApiErrorException');
+const ApiError = require('../../lib/ApiError');
 const Uploader = require('../../lib/Uploader/uploader');
 const UploadModel = require('../../lib/Uploader/model');
 

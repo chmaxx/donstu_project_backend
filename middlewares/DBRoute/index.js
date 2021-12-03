@@ -1,4 +1,4 @@
-const ApiError = require('../ApiErrorException');
+const ApiError = require('../../lib/ApiError');
 const { checkConnection } = require('../../lib/Database/utils');
 
 module.exports = function (req, res, next) {

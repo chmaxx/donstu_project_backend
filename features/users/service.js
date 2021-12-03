@@ -5,7 +5,7 @@ const UserModel = require('./user/model');
 const UploadModel = require('../../lib/Uploader/model');
 const MailService = require('../../lib/Mailer');
 const Tokens = require('./tokens');
-const ApiError = require('../../middlewares/ApiErrorException');
+const ApiError = require('../../lib/ApiError');
 
 class UserService {
   static async registration(login, firstName, lastName, email, password) {
