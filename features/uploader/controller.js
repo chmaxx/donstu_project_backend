@@ -1,31 +1,63 @@
 const UploaderService = require('./service');
 const Busboy = require('busboy');
-const { ResponseMessage } = require('../utils');
+const { ResponseMessage, formatUser, formatUpload, parseProjection } = require('../utils');
+
+const Logger = require('log-my-ass');
+const log = new Logger(API_CONFIG.logger, 'Uploader');
 
 class UploadController {
   async add(req, res, next) {
     const busboy = new Busboy({ headers: req.headers });
 
-    let fileUploadID, extension;
+    let fileUploadId, extension;
 
     busboy.on('file', async (fieldname, file, filename, encoding, mimetype) => {
       // навешиваем try-catch like a boss
       try {
-        [fileUploadID, extension] = await UploaderService.registerFile(
+        [fileUploadId, extension] = await UploaderService.registerFile(
           req.user._id,
           filename,
           fieldname
         );
 
-        await UploaderService.writeFile(file, fileUploadID, extension);
+        await UploaderService.writeFile(file, fileUploadId, extension);
 
-        res.json(ResponseMessage('Файл успешно загружен!', { fileUploadID }));
+        log.info(
+          `Пользователь ${formatUser(req.user)} загрузил файл ${formatUpload(
+            fileUploadId.toString()
+          )}`
+        );
+
+        res.json(ResponseMessage('Файл успешно загружен!', { fileUploadId }));
       } catch (e) {
         next(e);
       }
     });
 
     req.pipe(busboy);
+  }
+
+  async delete(req, res, next) {
+    try {
+      await UploaderService.delete(req.user._id, req.body.uploadId);
+
+      log.info(
+        `Пользователь ${formatUser(req.user)} удалил файл ${formatUpload(req.body.uploadId)}`
+      );
+
+      res.json(ResponseMessage('Файл успешно удален!'));
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async userUploads(req, res, next) {
+    const uploads = await UploaderService.getMyUploads(
+      req.user._id,
+      parseProjection(req.body.projection)
+    );
+
+    return res.json(uploads);
   }
 }
 

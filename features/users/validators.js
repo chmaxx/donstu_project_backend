@@ -1,16 +1,12 @@
 const loginValidator = (value) => {
   if (!value) throw new Error('Необходимо ввести логин!');
 
-  if (value.length < 5)
-    throw new Error('Логин должен быть не менее 5 символов в длину!');
+  if (value.length < 5) throw new Error('Логин должен быть не менее 5 символов в длину!');
 
-  if (value.length > 16)
-    throw new Error('Логин должен быть не более 16 символов в длину!');
+  if (value.length > 16) throw new Error('Логин должен быть не более 16 символов в длину!');
 
   if (value.match(/[^\da-zA-Z_]+/))
-    throw new Error(
-      'Логин может содержать только латиницу, цифры и нижние подчеркивания'
-    );
+    throw new Error('Логин может содержать только латиницу, цифры и нижние подчеркивания');
 
   return true;
 };
@@ -18,11 +14,9 @@ const loginValidator = (value) => {
 const passwordValidator = (value) => {
   if (!value) throw new Error('Необходимо ввести пароль!');
 
-  if (value.length < 8)
-    throw new Error('Пароль должен быть не менее 8 символов в длину!');
+  if (value.length < 8) throw new Error('Пароль должен быть не менее 8 символов в длину!');
 
-  if (value.length > 32)
-    throw new Error('Пароль должен быть не более 32 символов в длину!');
+  if (value.length > 32) throw new Error('Пароль должен быть не более 32 символов в длину!');
 
   if (value.match(' ')) {
     throw new Error('Пароль не должен содержать пробел!');

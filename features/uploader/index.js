@@ -1,5 +1,5 @@
-var api_route_path = '/' + api_config.api_version + '/uploader';
+var apiRoutePath = '/' + API_CONFIG.api_version + '/uploader';
 
 module.exports = (app) => {
-  app.use(api_route_path, require('./route'));
+  app.use(apiRoutePath, require('./route'));
 };

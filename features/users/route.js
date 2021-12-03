@@ -18,12 +18,8 @@ router.post(
   '/register',
   DBRoute,
   body('login').custom(loginValidator),
-  body('firstName')
-    .custom(nameFieldValidator('Имя'))
-    .customSanitizer(nameFieldSanitizer),
-  body('lastName')
-    .custom(nameFieldValidator('Фамилия'))
-    .customSanitizer(nameFieldSanitizer),
+  body('firstName').custom(nameFieldValidator('Имя')).customSanitizer(nameFieldSanitizer),
+  body('lastName').custom(nameFieldValidator('Фамилия')).customSanitizer(nameFieldSanitizer),
   body('email').isEmail().withMessage('Неверный E-Mail!'),
   body('password').custom(passwordValidator),
   BodyValidator,
@@ -47,9 +43,7 @@ router.post(
   AuthedRoute,
   // Не будем заморачиваться с дотошной проверкой
   // старого пароля (passwordValidator), она тут ни к чему
-  body('oldPassword')
-    .isString()
-    .withMessage('Необходимо ввести старый пароль!'),
+  body('oldPassword').isString().withMessage('Необходимо ввести старый пароль!'),
   body('newPassword').custom(passwordValidator),
   BodyValidator,
   UserController.changePassword
@@ -59,7 +53,7 @@ router.post(
   '/changeAvatar',
   DBRoute,
   AuthedRoute,
-  body('upload_id').isMongoId().withMessage('Необходимо ввести ID файла!'),
+  body('upload_id').isMongoId().withMessage('Необходимо ввести Id файла!'),
   BodyValidator,
   UserController.changeAvatar
 );

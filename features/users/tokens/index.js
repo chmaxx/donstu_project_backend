@@ -5,8 +5,8 @@ const UserDTO = require('../user/dto');
 
 // Небольшая функция для быстрой генерации токена с нужными настройками
 const createToken = (payload, kind) => {
-  return jwt.sign(payload, api_config.jwt[`${kind}_token_secret`], {
-    expiresIn: api_config.jwt[`${kind}_token_lifetime`],
+  return jwt.sign(payload, API_CONFIG.jwt[`${kind}_token_secret`], {
+    expiresIn: API_CONFIG.jwt[`${kind}_token_lifetime`],
   });
 };
 
@@ -31,7 +31,7 @@ class Tokens {
 
   static async validateAccessToken(token) {
     try {
-      const jwtData = jwt.verify(token, api_config.jwt.access_token_secret);
+      const jwtData = jwt.verify(token, API_CONFIG.jwt.access_token_secret);
       if (!jwtData) return null;
 
       const userData = await UserModel.findById(jwtData.id);
@@ -45,10 +45,7 @@ class Tokens {
 
   static async validateRefreshToken(token) {
     try {
-      const verifiedJWT = jwt.verify(
-        token,
-        api_config.jwt.refresh_token_secret
-      );
+      const verifiedJWT = jwt.verify(token, API_CONFIG.jwt.refresh_token_secret);
       if (!verifiedJWT) return null;
 
       const jwtData = await TokenModel.findOne({ user: verifiedJWT.id });

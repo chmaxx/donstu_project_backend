@@ -7,7 +7,7 @@ let ArticleSchema = new Schema(
       required: [true, 'Необходимо ввести название статьи!'],
     },
 
-    authorID: {
+    authorId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'Необходимо указать автора поста!'],

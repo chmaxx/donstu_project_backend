@@ -1,11 +1,23 @@
 const ArticleService = require('./service');
-const { ResponseMessage } = require('../utils');
-const ApiError = require('../../middlewares/ApiErrorException');
+const { ResponseMessage, formatUser, formatArticle, parseProjection } = require('../utils');
+const ApiError = require('../../lib/ApiError');
+
+const Logger = require('log-my-ass');
+const log = new Logger(API_CONFIG.logger, 'Articles');
 
 class ArticleController {
   static async get(req, res, next) {
     const articles = await ArticleService.get(null, parseProjection(req.body.projection));
     return res.json(articles);
+  }
+
+  static async getById(req, res, next) {
+    try {
+      const article = await ArticleService.getById(req.params.id);
+      return res.json(article);
+    } catch (e) {
+      next(e);
+    }
   }
 
   static async add(req, res, next) {
@@ -21,8 +33,12 @@ class ArticleController {
         tags
       );
 
+      log.info(
+        `Пользователь ${formatUser(req.user)} загрузил статью ${formatArticle(newArticle)}`
+      );
+
       return res.json(
-        ResponseMessage('Статья успешно добавлена!', { articleID: newArticle._id })
+        ResponseMessage('Статья успешно добавлена!', { articleId: newArticle._id })
       );
     } catch (e) {
       next(e);
@@ -38,7 +54,15 @@ class ArticleController {
       if (Array.isArray(updates))
         throw ApiError.BadRequest('Объект обновлений не должен быть массивом!');
 
-      await ArticleService.update(req.body.articleID, updates);
+      await ArticleService.update(req.body.articleId, updates);
+
+      log.info(
+        `Пользователь ${formatUser(req.user)} обновил статью ${formatArticle(
+          req.body.articleId
+        )}
+          Обновленные поля: ${Object.keys(updates).join(', ')}`
+      );
+
       return res.json(ResponseMessage('Статья успешно обновлена!'));
     } catch (e) {
       next(e);
@@ -47,7 +71,14 @@ class ArticleController {
 
   static async delete(req, res, next) {
     try {
-      await ArticleService.delete(req.body.articleID, req.user._id);
+      await ArticleService.delete(req.body.articleId, req.user._id);
+
+      log.info(
+        `Пользователь ${formatUser(req.user)} удалил статью ${formatArticle(
+          req.body.articleId
+        )}`
+      );
+
       return res.json(ResponseMessage('Статья успешно удалена!'));
     } catch (e) {
       next(e);
@@ -56,23 +87,3 @@ class ArticleController {
 }
 
 module.exports = ArticleController;
-
-function parseProjection(projection) {
-  let projectionArr;
-
-  try {
-    projectionArr = JSON.parse(projection);
-  } catch (e) {
-    return;
-  }
-
-  if (!Array.isArray(projectionArr)) return;
-
-  let projectionObject = {};
-
-  for (let key of projectionArr) {
-    projectionObject[key] = 1;
-  }
-
-  return projectionObject;
-}

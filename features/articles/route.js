@@ -8,6 +8,8 @@ const { body } = require('express-validator');
 
 router.get('/', DBRoute, ArticleController.get);
 
+router.get('/:id', DBRoute, ArticleController.getById);
+
 router.post(
   '/add',
   DBRoute,
@@ -25,7 +27,7 @@ router.post(
   '/update',
   DBRoute,
   AuthedRoute,
-  body('articleID').isMongoId().withMessage('Необходимо ввести ID статьи!'),
+  body('articleId').isMongoId().withMessage('Необходимо ввести ID статьи!'),
   body('updateData').isJSON().withMessage('Необходимо ввести поля для обновления!'),
   BodyValidator,
   ArticleController.update
@@ -35,7 +37,7 @@ router.post(
   '/delete',
   DBRoute,
   AuthedRoute,
-  body('articleID').isMongoId().withMessage('Необходимо ввести ID статьи!'),
+  body('articleId').isMongoId().withMessage('Необходимо ввести ID статьи!'),
   BodyValidator,
   ArticleController.delete
 );
