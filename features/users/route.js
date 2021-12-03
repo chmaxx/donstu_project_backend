@@ -53,7 +53,7 @@ router.post(
   '/changeAvatar',
   DBRoute,
   AuthedRoute,
-  body('upload_id').isMongoId().withMessage('Необходимо ввести ID файла!'),
+  body('upload_id').isMongoId().withMessage('Необходимо ввести Id файла!'),
   BodyValidator,
   UserController.changeAvatar
 );

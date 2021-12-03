@@ -66,11 +66,11 @@ class UserService {
     return token;
   }
 
-  static async changePassword(userID, oldPassword, newPassword) {
+  static async changePassword(userId, oldPassword, newPassword) {
     if (oldPassword == newPassword)
       throw ApiError.BadRequest('Новый пароль не может совпадать со старым!');
 
-    const user = await UserModel.findById(userID);
+    const user = await UserModel.findById(userId);
     const isPassEquals = await bcrypt.compare(oldPassword, user.passwordHashed);
 
     if (!isPassEquals) throw ApiError.BadRequest('Неправильный старый пароль!');
@@ -81,9 +81,9 @@ class UserService {
     return await Tokens.registerUserTokens(user);
   }
 
-  static async changeAvatar(userID, uploadID) {
-    const user = await UserModel.findById(userID);
-    const upload = await UploadModel.findById(uploadID);
+  static async changeAvatar(userId, uploadId) {
+    const user = await UserModel.findById(userId);
+    const upload = await UploadModel.findById(uploadId);
 
     if (!upload) throw ApiError.BadRequest('Данного файла не существует!');
 
@@ -91,13 +91,13 @@ class UserService {
     await user.save();
   }
 
-  static async getInfo(userID) {
-    const user = await UserModel.findById(userID, {
+  static async getInfo(userId) {
+    const user = await UserModel.findById(userId, {
       firstName: 1,
       lastName: 1,
       login: 1,
       usergroup: 1,
-      avatarUploadID: 1,
+      avatarUploadId: 1,
     });
 
     if (!user) throw ApiError.BadRequest('Такого пользователя не существует!');

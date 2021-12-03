@@ -38,7 +38,7 @@ class ArticleController {
       );
 
       return res.json(
-        ResponseMessage('Статья успешно добавлена!', { articleID: newArticle._id })
+        ResponseMessage('Статья успешно добавлена!', { articleId: newArticle._id })
       );
     } catch (e) {
       next(e);
@@ -54,11 +54,11 @@ class ArticleController {
       if (Array.isArray(updates))
         throw ApiError.BadRequest('Объект обновлений не должен быть массивом!');
 
-      await ArticleService.update(req.body.articleID, updates);
+      await ArticleService.update(req.body.articleId, updates);
 
       log.info(
         `Пользователь ${formatUser(req.user)} обновил статью ${formatArticle(
-          req.body.articleID
+          req.body.articleId
         )}
           Обновленные поля: ${Object.keys(updates).join(', ')}`
       );
@@ -71,11 +71,11 @@ class ArticleController {
 
   static async delete(req, res, next) {
     try {
-      await ArticleService.delete(req.body.articleID, req.user._id);
+      await ArticleService.delete(req.body.articleId, req.user._id);
 
       log.info(
         `Пользователь ${formatUser(req.user)} удалил статью ${formatArticle(
-          req.body.articleID
+          req.body.articleId
         )}`
       );
 

@@ -9,26 +9,26 @@ class UploadController {
   async add(req, res, next) {
     const busboy = new Busboy({ headers: req.headers });
 
-    let fileUploadID, extension;
+    let fileUploadId, extension;
 
     busboy.on('file', async (fieldname, file, filename, encoding, mimetype) => {
       // навешиваем try-catch like a boss
       try {
-        [fileUploadID, extension] = await UploaderService.registerFile(
+        [fileUploadId, extension] = await UploaderService.registerFile(
           req.user._id,
           filename,
           fieldname
         );
 
-        await UploaderService.writeFile(file, fileUploadID, extension);
+        await UploaderService.writeFile(file, fileUploadId, extension);
 
         log.info(
           `Пользователь ${formatUser(req.user)} загрузил файл ${formatUpload(
-            fileUploadID.toString()
+            fileUploadId.toString()
           )}`
         );
 
-        res.json(ResponseMessage('Файл успешно загружен!', { fileUploadID }));
+        res.json(ResponseMessage('Файл успешно загружен!', { fileUploadId }));
       } catch (e) {
         next(e);
       }

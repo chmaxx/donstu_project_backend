@@ -114,10 +114,10 @@ class UserController {
   }
 
   static async getInfo(req, res, next) {
-    const userID = req.body.userID;
+    const userId = req.body.userId;
 
     // По умолчанию возвращаем данные пользователя, отправляющего запрос
-    if (!userID || userID == req.user._id) {
+    if (!userId || userId == req.user._id) {
       const user = req.user;
 
       return res.json({
@@ -128,14 +128,14 @@ class UserController {
         email: user.email,
         isActivated: user.isActivated,
         usergroup: user.usergroup,
-        avatarUploadID: user.avatar,
+        avatarUploadId: user.avatar,
       });
     }
 
-    if (!isMongoId(userID)) return res.status(400).json(ResponseMessage('Неверный userID!'));
+    if (!isMongoId(userId)) return res.status(400).json(ResponseMessage('Неверный userId!'));
 
     try {
-      const user = await UserService.getInfo(userID);
+      const user = await UserService.getInfo(userId);
       res.json(user);
     } catch (e) {
       next(e);

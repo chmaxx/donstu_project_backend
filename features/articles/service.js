@@ -4,8 +4,8 @@ const isMongoId = require('../../node_modules/validator/lib/isMongoId');
 
 class ArticleService {
   static async get(filter = {}, projection = {}) {
-    // TODO: authorID возвращается независимо от того, есть ли он в проекции
-    return await ArticleModel.find(filter, projection).populate('authorID', [
+    // TODO: authorId возвращается независимо от того, есть ли он в проекции
+    return await ArticleModel.find(filter, projection).populate('authorId', [
       'firstName',
       'lastName',
       'avatar',
@@ -13,7 +13,7 @@ class ArticleService {
   }
 
   static async getById(articleId) {
-    if (!isMongoId(articleId)) throw ApiError.BadRequest('Неверный ID статьи!');
+    if (!isMongoId(articleId)) throw ApiError.BadRequest('Неверный Id статьи!');
 
     const article = await ArticleModel.findById(articleId);
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
@@ -21,7 +21,7 @@ class ArticleService {
     return article;
   }
 
-  static async add(header, authorID, contents, description, thumbnailURL, tags) {
+  static async add(header, authorId, contents, description, thumbnailURL, tags) {
     const curTime = new Date();
 
     tags = JSON.parse(tags);
@@ -29,7 +29,7 @@ class ArticleService {
 
     const article = new ArticleModel({
       header,
-      authorID,
+      authorId,
       contents,
       description,
       thumbnailURL,
@@ -41,8 +41,8 @@ class ArticleService {
     return await article.save();
   }
 
-  static async update(articleID, updates) {
-    const article = await ArticleModel.findById(articleID);
+  static async update(articleId, updates) {
+    const article = await ArticleModel.findById(articleId);
 
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
 
@@ -64,12 +64,12 @@ class ArticleService {
     await article.save();
   }
 
-  static async delete(articleID, authorID) {
-    const article = await ArticleModel.findById(articleID, { authorID: 1 });
+  static async delete(articleId, authorId) {
+    const article = await ArticleModel.findById(articleId, { authorId: 1 });
 
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
 
-    if (!article.authorID.equals(authorID))
+    if (!article.authorId.equals(authorId))
       throw ApiError.BadRequest('Вы не являетесь автором данной статьи!');
 
     await article.delete();
