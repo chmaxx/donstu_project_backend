@@ -15,7 +15,12 @@ class ArticleService {
   static async getById(articleId) {
     if (!isMongoId(articleId)) throw ApiError.BadRequest('Неверный Id статьи!');
 
-    const article = await ArticleModel.findById(articleId);
+    const article = await ArticleModel.findById(articleId).populate('authorId', [
+      'firstName',
+      'lastName',
+      'avatar',
+    ]);
+
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
 
     return article;
