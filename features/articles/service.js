@@ -74,9 +74,6 @@ class ArticleService {
 
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
 
-    if (!article.authorId.equals(authorId))
-      throw ApiError.BadRequest('Вы не являетесь автором данной статьи!');
-
     await article.delete();
   }
 }

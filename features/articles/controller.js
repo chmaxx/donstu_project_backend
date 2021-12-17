@@ -23,6 +23,10 @@ class ArticleController {
   static async add(req, res, next) {
     const { header, contents, description, thumbnailURL, tags } = req.body;
 
+    if (req.ability.cannot('write', 'Article')) {
+      return next(ApiError.Forbidden('Вы не можете публиковать статьи!'));
+    }
+
     try {
       const newArticle = await ArticleService.add(
         header,
@@ -48,6 +52,10 @@ class ArticleController {
   static async update(req, res, next) {
     let updates = {};
 
+    if (req.ability.cannot('update', 'Article')) {
+      return next(ApiError.Forbidden('У Вас недостаточно прав для обновления данной статьи.'));
+    }
+
     try {
       updates = JSON.parse(req.body.updateData);
 
@@ -70,6 +78,10 @@ class ArticleController {
   }
 
   static async delete(req, res, next) {
+    if (req.ability.cannot('delete', 'Article')) {
+      return next(ApiError.Forbidden('У Вас недостаточно прав для удаления данной статьи.'));
+    }
+
     try {
       await ArticleService.delete(req.body.articleId, req.user._id);
 
