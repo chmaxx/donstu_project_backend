@@ -13,7 +13,7 @@ class UserController {
         login,
         firstName,
         lastName,
-        email,
+        email.toLowerCase(),
         password
       );
 
@@ -42,7 +42,7 @@ class UserController {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const userData = await UserService.login(email, password);
+      const userData = await UserService.login(email.toLowerCase(), password);
 
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: API_CONFIG.jwt.refresh_token_lifetime * 1000,
