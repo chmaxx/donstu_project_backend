@@ -43,12 +43,8 @@ class UploadController {
   }
 
   async delete(req, res, next) {
-    if (req.ability.cannot('write', 'Upload')) {
-      return next(ApiError.Forbidden('Вы не можете удалять файлы!'));
-    }
-
     try {
-      await UploaderService.delete(req.user._id, req.body.uploadId);
+      await UploaderService.delete(req.ability, req.user._id, req.body.uploadId);
 
       log.info(
         `Пользователь ${formatUser(req.user)} удалил файл ${formatUpload(req.body.uploadId)}`

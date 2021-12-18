@@ -21,13 +21,14 @@ class UploadService {
 
   static writeFile = Uploader.writeFile;
 
-  static async delete(authorId, uploadId) {
+  static async delete(ability, authorId, uploadId) {
     const upload = await UploadModel.findById(uploadId);
 
     if (!upload) throw ApiError.BadRequest('Данного файла не существует!');
 
-    if (!upload.author.equals(authorId))
-      throw ApiError.BadRequest('Вы не можете удалить чужой файл!');
+    if (ability.cannot('delete', upload)) {
+      throw ApiError.Forbidden('У Вас недостаточно прав для удаления данного файла!');
+    }
 
     await Uploader.deleteFile(upload._id, upload.extension);
     await upload.delete();

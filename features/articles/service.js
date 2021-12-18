@@ -26,7 +26,11 @@ class ArticleService {
     return article;
   }
 
-  static async add(header, authorId, contents, description, thumbnailURL, tags) {
+  static async add(ability, header, authorId, contents, description, thumbnailURL, tags) {
+    if (ability.cannot('write', 'Article')) {
+      throw ApiError.Forbidden('У Вас недостаточно прав для публикования статей!');
+    }
+
     const curTime = new Date();
 
     tags = JSON.parse(tags);
@@ -46,10 +50,14 @@ class ArticleService {
     return await article.save();
   }
 
-  static async update(articleId, updates) {
+  static async update(ability, articleId, updates) {
     const article = await ArticleModel.findById(articleId);
 
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
+
+    if (ability.cannot('update', article)) {
+      throw ApiError.Forbidden('У Вас недостаточно прав для редактирования этой статьи!');
+    }
 
     for (const [path, updateValue] of Object.entries(updates)) {
       /* ArticleModel.schema.paths содержит в себе данные всех ключей,
@@ -69,10 +77,14 @@ class ArticleService {
     await article.save();
   }
 
-  static async delete(articleId, authorId) {
+  static async delete(ability, articleId, authorId) {
     const article = await ArticleModel.findById(articleId, { authorId: 1 });
 
     if (!article) throw ApiError.BadRequest('Данной статьи не существует!');
+
+    if (ability.cannot('delete', article)) {
+      throw ApiError.Forbidden('У Вас недостаточно прав для удаления этой статьи!');
+    }
 
     await article.delete();
   }

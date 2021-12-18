@@ -7,7 +7,8 @@ const articleAbilities = (user) =>
         can('manage', 'all');
         break;
       case 'editor':
-        can(['write', 'update', 'delete'], 'Article');
+        can('write', 'Article');
+        can(['update', 'delete'], 'Article', { authorId: user._id });
         break;
     }
   });

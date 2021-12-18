@@ -7,7 +7,8 @@ const uploadAbilities = (user) =>
         can('manage', 'all');
         break;
       case 'editor':
-        can(['write', 'delete'], 'Upload');
+        can('write', 'Upload');
+        can('delete', 'Upload', { author: user._id });
         break;
     }
   });
