@@ -11,6 +11,14 @@
     "reconnect_delay": 4000
   },
 
+  "super_user_settings": {
+    "email": "admin@staysecured.online",
+    "login": "admin",
+    "password": "none",
+    "first_name": "Администратор",
+    "last_name": "Сайта"
+  },
+
   "jwt": {
     "access_token_lifetime": 86400,
     "access_token_secret": "none",
