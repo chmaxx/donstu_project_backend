@@ -113,6 +113,25 @@ class UserService {
 
     return await Tokens.registerUserTokens(validationData.user);
   }
+
+  // дубликат ArticleService.update (почти)
+  static async changeUserInfo(userId, updates) {
+    const user = await UserModel.findById(userId);
+
+    if (!user) throw ApiError.BadRequest('Данного пользователя не существует!');
+
+    for (const [path, updateValue] of Object.entries(updates)) {
+      const userPath = UserModel.schema.paths[path];
+      if (!userPath) throw ApiError.BadRequest(`У пользователей нет ключа ${path}!`);
+
+      if (typeof updateValue !== userPath.instance.toLowerCase())
+        throw ApiError.BadRequest(`Тип ${path} не совпадает с тем, что указан в схеме!`);
+
+      user[path] = updateValue;
+    }
+
+    await user.save();
+  }
 }
 
 module.exports = UserService;

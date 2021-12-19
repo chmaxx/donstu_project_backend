@@ -5,15 +5,18 @@ const AuthedRoute = require('../../middlewares/AuthedRoute');
 const DBRoute = require('../../middlewares/DBRoute');
 const BodyValidator = require('../../middlewares/BodyValidator');
 const { body } = require('express-validator');
+const defineUserAbility = require('../../middlewares/DefineAbility');
+const articleAbilities = require('./abilities');
 
-router.get('/', DBRoute, ArticleController.get);
+router.use(DBRoute);
 
-router.get('/:id', DBRoute, ArticleController.getById);
+router.get('/', ArticleController.get);
+router.get('/:id', ArticleController.getById);
+
+router.use(AuthedRoute, defineUserAbility(articleAbilities));
 
 router.post(
   '/add',
-  DBRoute,
-  AuthedRoute,
   body('header').isString().withMessage('Необходимо ввести название статьи!'),
   body('contents').isString().withMessage('У статьи нет содержимого!'),
   body('description').isString().withMessage('Необходимо ввести описание!'),
@@ -25,8 +28,6 @@ router.post(
 
 router.post(
   '/update',
-  DBRoute,
-  AuthedRoute,
   body('articleId').isMongoId().withMessage('Необходимо ввести ID статьи!'),
   body('updateData').isJSON().withMessage('Необходимо ввести поля для обновления!'),
   BodyValidator,
@@ -35,8 +36,6 @@ router.post(
 
 router.post(
   '/delete',
-  DBRoute,
-  AuthedRoute,
   body('articleId').isMongoId().withMessage('Необходимо ввести ID статьи!'),
   BodyValidator,
   ArticleController.delete

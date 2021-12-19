@@ -5,18 +5,20 @@ const AuthedRoute = require('../../middlewares/AuthedRoute');
 const DBRoute = require('../../middlewares/DBRoute');
 const BodyValidator = require('../../middlewares/BodyValidator');
 const { body } = require('express-validator');
+const defineUserAbility = require('../../middlewares/DefineAbility');
+const uploadAbilities = require('./abilities');
 
-router.put('/add', DBRoute, AuthedRoute, UploadController.add);
+router.use(DBRoute, AuthedRoute, defineUserAbility(uploadAbilities));
+
+router.put('/add', UploadController.add);
 
 router.post(
   '/delete',
-  DBRoute,
-  AuthedRoute,
   body('uploadId').isMongoId().withMessage('Необходимо ввести ID публикации!'),
   BodyValidator,
   UploadController.delete
 );
 
-router.get('/my', DBRoute, AuthedRoute, UploadController.userUploads);
+router.get('/my', UploadController.userUploads);
 
 module.exports = router;

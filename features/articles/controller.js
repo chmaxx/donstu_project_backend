@@ -25,6 +25,7 @@ class ArticleController {
 
     try {
       const newArticle = await ArticleService.add(
+        req.ability,
         header,
         req.user._id,
         contents,
@@ -54,7 +55,7 @@ class ArticleController {
       if (Array.isArray(updates))
         throw ApiError.BadRequest('Объект обновлений не должен быть массивом!');
 
-      await ArticleService.update(req.body.articleId, updates);
+      await ArticleService.update(req.ability, req.body.articleId, updates);
 
       log.info(
         `Пользователь ${formatUser(req.user)} обновил статью ${formatArticle(
@@ -71,7 +72,7 @@ class ArticleController {
 
   static async delete(req, res, next) {
     try {
-      await ArticleService.delete(req.body.articleId, req.user._id);
+      await ArticleService.delete(req.ability, req.body.articleId, req.user._id);
 
       log.info(
         `Пользователь ${formatUser(req.user)} удалил статью ${formatArticle(
