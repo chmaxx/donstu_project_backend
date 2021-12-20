@@ -65,20 +65,18 @@ class Tokens {
 
     if (tokenData) {
       tokenData.refreshToken = refreshToken;
-      return await tokenData.save();
+      return tokenData.save();
     }
 
-    const token = await TokenModel.create({ user, refreshToken });
-
-    return token;
+    return TokenModel.create({ user, refreshToken });
   }
 
   static async removeRefreshToken(refreshToken) {
-    return await TokenModel.deleteOne({ refreshToken });
+    return TokenModel.deleteOne({ refreshToken });
   }
 
   static async getRefreshToken(refreshToken) {
-    return await TokenModel.findOne({ refreshToken });
+    return TokenModel.findOne({ refreshToken });
   }
 }
 

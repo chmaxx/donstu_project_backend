@@ -36,4 +36,9 @@ let ArticleSchema = new Schema(
   { versionKey: false }
 );
 
+ArticleSchema.pre('save', function changeLastUpdateData(next) {
+  this.lastUpdateTime = new Date();
+  next();
+});
+
 module.exports = model('Article', ArticleSchema);
