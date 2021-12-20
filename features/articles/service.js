@@ -5,7 +5,7 @@ const isMongoId = require('../../node_modules/validator/lib/isMongoId');
 class ArticleService {
   static async get(filter = {}, projection = {}) {
     // TODO: authorId возвращается независимо от того, есть ли он в проекции
-    return await ArticleModel.find(filter, projection).populate('authorId', [
+    return ArticleModel.find(filter, projection).populate('authorId', [
       'firstName',
       'lastName',
       'avatar',
@@ -47,7 +47,7 @@ class ArticleService {
       lastUpdateTime: curTime,
     });
 
-    return await article.save();
+    return article.save();
   }
 
   static async update(ability, articleId, updates) {

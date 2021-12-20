@@ -35,7 +35,7 @@ class UploadService {
   }
 
   static async getMyUploads(author, projection) {
-    return await UploadModel.find({ author }, projection);
+    return UploadModel.find({ author }, projection);
   }
 }
 

@@ -38,7 +38,7 @@ class UserService {
       `localhost:${API_CONFIG.port}/${API_CONFIG.api_version}/users/activate/${activationUUID}`
     );
 
-    return await Tokens.registerUserTokens(user);
+    return Tokens.registerUserTokens(user);
   }
 
   static async activate(activationUUID) {
@@ -58,7 +58,7 @@ class UserService {
     const isPassEquals = await bcrypt.compare(password, user.passwordHashed);
     if (!isPassEquals) throw ApiError.BadRequest('Некорректный пароль!');
 
-    return await Tokens.registerUserTokens(user);
+    return Tokens.registerUserTokens(user);
   }
 
   static async logout(refreshToken) {
@@ -78,7 +78,7 @@ class UserService {
     user.passwordHashed = await bcrypt.hash(newPassword, 3);
     await user.save();
 
-    return await Tokens.registerUserTokens(user);
+    return Tokens.registerUserTokens(user);
   }
 
   static async changeAvatar(userId, uploadId) {
@@ -111,7 +111,7 @@ class UserService {
     const validationData = await Tokens.validateRefreshToken(refreshToken);
     if (!validationData) throw ApiError.Unauthorized();
 
-    return await Tokens.registerUserTokens(validationData.user);
+    return Tokens.registerUserTokens(validationData.user);
   }
 
   // дубликат ArticleService.update (почти)
