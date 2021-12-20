@@ -148,7 +148,6 @@ class UserController {
       const activationLink = req.params.link;
       await UserService.activate(activationLink);
 
-      // TODO: редирект
       return res.json(ResponseMessage('Аккаунт успешно активирован!'));
     } catch (e) {
       next(e);
