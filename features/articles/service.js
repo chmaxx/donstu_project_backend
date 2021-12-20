@@ -4,12 +4,11 @@ const isMongoId = require('../../node_modules/validator/lib/isMongoId');
 
 class ArticleService {
   static async get(filter = {}, projection = {}) {
-    // TODO: authorId возвращается независимо от того, есть ли он в проекции
-    return ArticleModel.find(filter, projection).populate('authorId', [
-      'firstName',
-      'lastName',
-      'avatar',
-    ]);
+    const articles = await ArticleModel.find(filter, projection);
+
+    return projection.authorId
+      ? articles.populate('authorId', ['firstName', 'lastName', 'avatar'])
+      : articles;
   }
 
   static async getById(articleId) {
