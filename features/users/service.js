@@ -62,8 +62,7 @@ class UserService {
   }
 
   static async logout(refreshToken) {
-    const token = await Tokens.removeRefreshToken(refreshToken);
-    return token;
+    return Tokens.removeRefreshToken(refreshToken);
   }
 
   static async changePassword(userId, oldPassword, newPassword) {

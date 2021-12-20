@@ -68,9 +68,7 @@ class Tokens {
       return tokenData.save();
     }
 
-    const token = await TokenModel.create({ user, refreshToken });
-
-    return token;
+    return TokenModel.create({ user, refreshToken });
   }
 
   static async removeRefreshToken(refreshToken) {
