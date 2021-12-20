@@ -4,6 +4,10 @@ let app = express();
 let cookieParser = require('cookie-parser');
 let fs = require('fs');
 
+// Теперь никто не знает, что мы используем ExpressJS
+// Безопасненько...
+app.disable('x-powered-by');
+
 // Подгружаем конфиг
 const config = require('load-my-config')('config');
 global.API_CONFIG = config;
