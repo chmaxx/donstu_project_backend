@@ -71,8 +71,6 @@ class ArticleService {
       article[path] = updateValue;
     }
 
-    // TODO: вынести это куда-нибудь в мидлвари Mongoose-схем
-    article.lastUpdateTime = new Date();
     await article.save();
   }
 
