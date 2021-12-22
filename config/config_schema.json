@@ -6,635 +6,493 @@
   "description": "The root schema comprises the entire JSON document.",
   "default": {},
   "examples": [
-      {
-          "config_validate": true,
-          "port": 8000,
-          "ip": "127.0.0.1",
-          "api_version": "v1",
-          "db_settings": {
-              "url": "mongodb://127.0.0.2:8050/staysecured?retryWrites=true",
-              "enabled": false,
-              "reconnect_delay": 4000
-          },
-          "super_user_settings": {
-              "email": "admin@staysecured.online",
-              "login": "admin",
-              "password": "none",
-              "first_name": "Администратор",
-              "last_name": "Сайта"
-          },
-          "jwt": {
-              "access_token_lifetime": 86400,
-              "access_token_secret": "none",
-              "refresh_token_lifetime": 1209600,
-              "refresh_token_secret": "none"
-          },
-          "mailer": {
-              "host": "none",
-              "port": 587,
-              "secure": false,
-              "enabled": false,
-              "user": "none",
-              "password": "none"
-          },
-          "backup": {
-              "access_token": "full-backup+none",
-              "storage": "../storage"
-          },
-          "logger": {
-              "info": {
-                  "console_output": true,
-                  "file_write": false,
-                  "file_path": "../path/to/file.log"
-              },
-              "error": {
-                  "console_output": true,
-                  "file_write": false,
-                  "file_path": "../path/to/file.log"
-              },
-              "access": {
-                  "console_output": false,
-                  "file_write": false,
-                  "file_path": "../path/to/file.log"
-              }
-          },
-          "uploads_path": "../uploads"
-      }
+    {
+      "config_validate": true,
+      "port": 8000,
+      "ip": "127.0.0.1",
+      "api_version": "v1",
+      "db_settings": {
+        "url": "mongodb://127.0.0.2:8050/staysecured?retryWrites=true",
+        "enabled": false,
+        "reconnect_delay": 4000
+      },
+      "super_user_settings": {
+        "email": "admin@staysecured.online",
+        "login": "admin",
+        "password": "none",
+        "first_name": "Администратор",
+        "last_name": "Сайта"
+      },
+      "jwt": {
+        "access_token_lifetime": 86400,
+        "access_token_secret": "none",
+        "refresh_token_lifetime": 1209600,
+        "refresh_token_secret": "none"
+      },
+      "mailer": {
+        "host": "none",
+        "port": 587,
+        "secure": false,
+        "enabled": false,
+        "user": "none",
+        "password": "none"
+      },
+      "logger": {
+        "info": {
+          "console_output": true,
+          "file_write": false,
+          "file_path": "../path/to/file.log"
+        },
+        "error": {
+          "console_output": true,
+          "file_write": false,
+          "file_path": "../path/to/file.log"
+        },
+        "access": {
+          "console_output": false,
+          "file_write": false,
+          "file_path": "../path/to/file.log"
+        }
+      },
+      "uploads_path": "../uploads"
+    }
   ],
   "required": [
-      "config_validate",
-      "port",
-      "ip",
-      "api_version",
-      "db_settings",
-      "super_user_settings",
-      "jwt",
-      "mailer",
-      "backup",
-      "logger",
-      "uploads_path"
+    "config_validate",
+    "port",
+    "ip",
+    "api_version",
+    "db_settings",
+    "super_user_settings",
+    "jwt",
+    "mailer",
+    "logger",
+    "uploads_path"
   ],
   "properties": {
-      "config_validate": {
-          "$id": "#/properties/config_validate",
+    "config_validate": {
+      "$id": "#/properties/config_validate",
+      "type": "boolean",
+      "title": "The config_validate schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": false,
+      "examples": [true]
+    },
+    "port": {
+      "$id": "#/properties/port",
+      "type": "integer",
+      "title": "The port schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [8000]
+    },
+    "ip": {
+      "$id": "#/properties/ip",
+      "type": "string",
+      "title": "The ip schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": ["127.0.0.1"]
+    },
+    "api_version": {
+      "$id": "#/properties/api_version",
+      "type": "string",
+      "title": "The api_version schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": ["v1"]
+    },
+    "db_settings": {
+      "$id": "#/properties/db_settings",
+      "type": "object",
+      "title": "The db_settings schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "url": "mongodb://127.0.0.2:8050/staysecured?retryWrites=true",
+          "enabled": false,
+          "reconnect_delay": 4000
+        }
+      ],
+      "required": ["url", "enabled", "reconnect_delay"],
+      "properties": {
+        "url": {
+          "$id": "#/properties/db_settings/properties/url",
+          "type": "string",
+          "title": "The url schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["mongodb://127.0.0.2:8050/staysecured?retryWrites=true"]
+        },
+        "enabled": {
+          "$id": "#/properties/db_settings/properties/enabled",
           "type": "boolean",
-          "title": "The config_validate schema",
+          "title": "The enabled schema",
           "description": "An explanation about the purpose of this instance.",
           "default": false,
-          "examples": [
-              true
-          ]
+          "examples": [false]
+        },
+        "reconnect_delay": {
+          "$id": "#/properties/db_settings/properties/reconnect_delay",
+          "type": "integer",
+          "title": "The reconnect_delay schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [4000]
+        }
       },
-      "port": {
-          "$id": "#/properties/port",
+      "additionalProperties": true
+    },
+    "super_user_settings": {
+      "$id": "#/properties/super_user_settings",
+      "type": "object",
+      "title": "The super_user_settings schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "email": "admin@staysecured.online",
+          "login": "admin",
+          "password": "none",
+          "first_name": "Администратор",
+          "last_name": "Сайта"
+        }
+      ],
+      "required": ["email", "login", "password", "first_name", "last_name"],
+      "properties": {
+        "email": {
+          "$id": "#/properties/super_user_settings/properties/email",
+          "type": "string",
+          "title": "The email schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["admin@staysecured.online"]
+        },
+        "login": {
+          "$id": "#/properties/super_user_settings/properties/login",
+          "type": "string",
+          "title": "The login schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["admin"]
+        },
+        "password": {
+          "$id": "#/properties/super_user_settings/properties/password",
+          "type": "string",
+          "title": "The password schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["none"]
+        },
+        "first_name": {
+          "$id": "#/properties/super_user_settings/properties/first_name",
+          "type": "string",
+          "title": "The first_name schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["Администратор"]
+        },
+        "last_name": {
+          "$id": "#/properties/super_user_settings/properties/last_name",
+          "type": "string",
+          "title": "The last_name schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["Сайта"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "jwt": {
+      "$id": "#/properties/jwt",
+      "type": "object",
+      "title": "The jwt schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "access_token_lifetime": 86400,
+          "access_token_secret": "none",
+          "refresh_token_lifetime": 1209600,
+          "refresh_token_secret": "none"
+        }
+      ],
+      "required": [
+        "access_token_lifetime",
+        "access_token_secret",
+        "refresh_token_lifetime",
+        "refresh_token_secret"
+      ],
+      "properties": {
+        "access_token_lifetime": {
+          "$id": "#/properties/jwt/properties/access_token_lifetime",
+          "type": "integer",
+          "title": "The access_token_lifetime schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [86400]
+        },
+        "access_token_secret": {
+          "$id": "#/properties/jwt/properties/access_token_secret",
+          "type": "string",
+          "title": "The access_token_secret schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["none"]
+        },
+        "refresh_token_lifetime": {
+          "$id": "#/properties/jwt/properties/refresh_token_lifetime",
+          "type": "integer",
+          "title": "The refresh_token_lifetime schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [1209600]
+        },
+        "refresh_token_secret": {
+          "$id": "#/properties/jwt/properties/refresh_token_secret",
+          "type": "string",
+          "title": "The refresh_token_secret schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["none"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "mailer": {
+      "$id": "#/properties/mailer",
+      "type": "object",
+      "title": "The mailer schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "host": "none",
+          "port": 587,
+          "secure": false,
+          "enabled": false,
+          "user": "none",
+          "password": "none"
+        }
+      ],
+      "required": ["host", "port", "secure", "enabled", "user", "password"],
+      "properties": {
+        "host": {
+          "$id": "#/properties/mailer/properties/host",
+          "type": "string",
+          "title": "The host schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": ["none"]
+        },
+        "port": {
+          "$id": "#/properties/mailer/properties/port",
           "type": "integer",
           "title": "The port schema",
           "description": "An explanation about the purpose of this instance.",
           "default": 0,
-          "examples": [
-              8000
-          ]
-      },
-      "ip": {
-          "$id": "#/properties/ip",
+          "examples": [587]
+        },
+        "secure": {
+          "$id": "#/properties/mailer/properties/secure",
+          "type": "boolean",
+          "title": "The secure schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": false,
+          "examples": [false]
+        },
+        "enabled": {
+          "$id": "#/properties/mailer/properties/enabled",
+          "type": "boolean",
+          "title": "The enabled schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": false,
+          "examples": [false]
+        },
+        "user": {
+          "$id": "#/properties/mailer/properties/user",
           "type": "string",
-          "title": "The ip schema",
+          "title": "The user schema",
           "description": "An explanation about the purpose of this instance.",
           "default": "",
-          "examples": [
-              "127.0.0.1"
-          ]
-      },
-      "api_version": {
-          "$id": "#/properties/api_version",
+          "examples": ["none"]
+        },
+        "password": {
+          "$id": "#/properties/mailer/properties/password",
           "type": "string",
-          "title": "The api_version schema",
+          "title": "The password schema",
           "description": "An explanation about the purpose of this instance.",
           "default": "",
-          "examples": [
-              "v1"
-          ]
+          "examples": ["none"]
+        }
       },
-      "db_settings": {
-          "$id": "#/properties/db_settings",
+      "additionalProperties": true
+    },
+    "logger": {
+      "$id": "#/properties/logger",
+      "type": "object",
+      "title": "The logger schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "info": {
+            "console_output": true,
+            "file_write": false,
+            "file_path": "../path/to/file.log"
+          },
+          "error": {
+            "console_output": true,
+            "file_write": false,
+            "file_path": "../path/to/file.log"
+          },
+          "access": {
+            "console_output": false,
+            "file_write": false,
+            "file_path": "../path/to/file.log"
+          }
+        }
+      ],
+      "required": ["info", "error", "access"],
+      "properties": {
+        "info": {
+          "$id": "#/properties/logger/properties/info",
           "type": "object",
-          "title": "The db_settings schema",
+          "title": "The info schema",
           "description": "An explanation about the purpose of this instance.",
           "default": {},
           "examples": [
-              {
-                  "url": "mongodb://127.0.0.2:8050/staysecured?retryWrites=true",
-                  "enabled": false,
-                  "reconnect_delay": 4000
-              }
+            {
+              "console_output": true,
+              "file_write": false,
+              "file_path": "../path/to/file.log"
+            }
           ],
-          "required": [
-              "url",
-              "enabled",
-              "reconnect_delay"
-          ],
+          "required": ["console_output", "file_write", "file_path"],
           "properties": {
-              "url": {
-                  "$id": "#/properties/db_settings/properties/url",
-                  "type": "string",
-                  "title": "The url schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "mongodb://127.0.0.2:8050/staysecured?retryWrites=true"
-                  ]
-              },
-              "enabled": {
-                  "$id": "#/properties/db_settings/properties/enabled",
-                  "type": "boolean",
-                  "title": "The enabled schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": false,
-                  "examples": [
-                      false
-                  ]
-              },
-              "reconnect_delay": {
-                  "$id": "#/properties/db_settings/properties/reconnect_delay",
-                  "type": "integer",
-                  "title": "The reconnect_delay schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": 0,
-                  "examples": [
-                      4000
-                  ]
-              }
+            "console_output": {
+              "$id": "#/properties/logger/properties/info/properties/console_output",
+              "type": "boolean",
+              "title": "The console_output schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": false,
+              "examples": [true]
+            },
+            "file_write": {
+              "$id": "#/properties/logger/properties/info/properties/file_write",
+              "type": "boolean",
+              "title": "The file_write schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": false,
+              "examples": [false]
+            },
+            "file_path": {
+              "$id": "#/properties/logger/properties/info/properties/file_path",
+              "type": "string",
+              "title": "The file_path schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": ["../path/to/file.log"]
+            }
           },
           "additionalProperties": true
-      },
-      "super_user_settings": {
-          "$id": "#/properties/super_user_settings",
+        },
+        "error": {
+          "$id": "#/properties/logger/properties/error",
           "type": "object",
-          "title": "The super_user_settings schema",
+          "title": "The error schema",
           "description": "An explanation about the purpose of this instance.",
           "default": {},
           "examples": [
-              {
-                  "email": "admin@staysecured.online",
-                  "login": "admin",
-                  "password": "none",
-                  "first_name": "Администратор",
-                  "last_name": "Сайта"
-              }
+            {
+              "console_output": true,
+              "file_write": false,
+              "file_path": "../path/to/file.log"
+            }
           ],
-          "required": [
-              "email",
-              "login",
-              "password",
-              "first_name",
-              "last_name"
-          ],
+          "required": ["console_output", "file_write", "file_path"],
           "properties": {
-              "email": {
-                  "$id": "#/properties/super_user_settings/properties/email",
-                  "type": "string",
-                  "title": "The email schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "admin@staysecured.online"
-                  ]
-              },
-              "login": {
-                  "$id": "#/properties/super_user_settings/properties/login",
-                  "type": "string",
-                  "title": "The login schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "admin"
-                  ]
-              },
-              "password": {
-                  "$id": "#/properties/super_user_settings/properties/password",
-                  "type": "string",
-                  "title": "The password schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "none"
-                  ]
-              },
-              "first_name": {
-                  "$id": "#/properties/super_user_settings/properties/first_name",
-                  "type": "string",
-                  "title": "The first_name schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "Администратор"
-                  ]
-              },
-              "last_name": {
-                  "$id": "#/properties/super_user_settings/properties/last_name",
-                  "type": "string",
-                  "title": "The last_name schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "Сайта"
-                  ]
-              }
+            "console_output": {
+              "$id": "#/properties/logger/properties/error/properties/console_output",
+              "type": "boolean",
+              "title": "The console_output schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": false,
+              "examples": [true]
+            },
+            "file_write": {
+              "$id": "#/properties/logger/properties/error/properties/file_write",
+              "type": "boolean",
+              "title": "The file_write schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": false,
+              "examples": [false]
+            },
+            "file_path": {
+              "$id": "#/properties/logger/properties/error/properties/file_path",
+              "type": "string",
+              "title": "The file_path schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": ["../path/to/file.log"]
+            }
           },
           "additionalProperties": true
-      },
-      "jwt": {
-          "$id": "#/properties/jwt",
+        },
+        "access": {
+          "$id": "#/properties/logger/properties/access",
           "type": "object",
-          "title": "The jwt schema",
+          "title": "The access schema",
           "description": "An explanation about the purpose of this instance.",
           "default": {},
           "examples": [
-              {
-                  "access_token_lifetime": 86400,
-                  "access_token_secret": "none",
-                  "refresh_token_lifetime": 1209600,
-                  "refresh_token_secret": "none"
-              }
+            {
+              "console_output": false,
+              "file_write": false,
+              "file_path": "../path/to/file.log"
+            }
           ],
-          "required": [
-              "access_token_lifetime",
-              "access_token_secret",
-              "refresh_token_lifetime",
-              "refresh_token_secret"
-          ],
+          "required": ["console_output", "file_write", "file_path"],
           "properties": {
-              "access_token_lifetime": {
-                  "$id": "#/properties/jwt/properties/access_token_lifetime",
-                  "type": "integer",
-                  "title": "The access_token_lifetime schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": 0,
-                  "examples": [
-                      86400
-                  ]
-              },
-              "access_token_secret": {
-                  "$id": "#/properties/jwt/properties/access_token_secret",
-                  "type": "string",
-                  "title": "The access_token_secret schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "none"
-                  ]
-              },
-              "refresh_token_lifetime": {
-                  "$id": "#/properties/jwt/properties/refresh_token_lifetime",
-                  "type": "integer",
-                  "title": "The refresh_token_lifetime schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": 0,
-                  "examples": [
-                      1209600
-                  ]
-              },
-              "refresh_token_secret": {
-                  "$id": "#/properties/jwt/properties/refresh_token_secret",
-                  "type": "string",
-                  "title": "The refresh_token_secret schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "none"
-                  ]
-              }
+            "console_output": {
+              "$id": "#/properties/logger/properties/access/properties/console_output",
+              "type": "boolean",
+              "title": "The console_output schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": false,
+              "examples": [false]
+            },
+            "file_write": {
+              "$id": "#/properties/logger/properties/access/properties/file_write",
+              "type": "boolean",
+              "title": "The file_write schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": false,
+              "examples": [false]
+            },
+            "file_path": {
+              "$id": "#/properties/logger/properties/access/properties/file_path",
+              "type": "string",
+              "title": "The file_path schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": ["../path/to/file.log"]
+            }
           },
           "additionalProperties": true
+        }
       },
-      "mailer": {
-          "$id": "#/properties/mailer",
-          "type": "object",
-          "title": "The mailer schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-              {
-                  "host": "none",
-                  "port": 587,
-                  "secure": false,
-                  "enabled": false,
-                  "user": "none",
-                  "password": "none"
-              }
-          ],
-          "required": [
-              "host",
-              "port",
-              "secure",
-              "enabled",
-              "user",
-              "password"
-          ],
-          "properties": {
-              "host": {
-                  "$id": "#/properties/mailer/properties/host",
-                  "type": "string",
-                  "title": "The host schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "none"
-                  ]
-              },
-              "port": {
-                  "$id": "#/properties/mailer/properties/port",
-                  "type": "integer",
-                  "title": "The port schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": 0,
-                  "examples": [
-                      587
-                  ]
-              },
-              "secure": {
-                  "$id": "#/properties/mailer/properties/secure",
-                  "type": "boolean",
-                  "title": "The secure schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": false,
-                  "examples": [
-                      false
-                  ]
-              },
-              "enabled": {
-                  "$id": "#/properties/mailer/properties/enabled",
-                  "type": "boolean",
-                  "title": "The enabled schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": false,
-                  "examples": [
-                      false
-                  ]
-              },
-              "user": {
-                  "$id": "#/properties/mailer/properties/user",
-                  "type": "string",
-                  "title": "The user schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "none"
-                  ]
-              },
-              "password": {
-                  "$id": "#/properties/mailer/properties/password",
-                  "type": "string",
-                  "title": "The password schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "none"
-                  ]
-              }
-          },
-          "additionalProperties": true
-      },
-      "backup": {
-          "$id": "#/properties/backup",
-          "type": "object",
-          "title": "The backup schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-              {
-                  "access_token": "full-backup+none",
-                  "storage": "../storage"
-              }
-          ],
-          "required": [
-              "access_token",
-              "storage"
-          ],
-          "properties": {
-              "access_token": {
-                  "$id": "#/properties/backup/properties/access_token",
-                  "type": "string",
-                  "title": "The access_token schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "full-backup+none"
-                  ]
-              },
-              "storage": {
-                  "$id": "#/properties/backup/properties/storage",
-                  "type": "string",
-                  "title": "The storage schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
-                  "examples": [
-                      "../storage"
-                  ]
-              }
-          },
-          "additionalProperties": true
-      },
-      "logger": {
-          "$id": "#/properties/logger",
-          "type": "object",
-          "title": "The logger schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-              {
-                  "info": {
-                      "console_output": true,
-                      "file_write": false,
-                      "file_path": "../path/to/file.log"
-                  },
-                  "error": {
-                      "console_output": true,
-                      "file_write": false,
-                      "file_path": "../path/to/file.log"
-                  },
-                  "access": {
-                      "console_output": false,
-                      "file_write": false,
-                      "file_path": "../path/to/file.log"
-                  }
-              }
-          ],
-          "required": [
-              "info",
-              "error",
-              "access"
-          ],
-          "properties": {
-              "info": {
-                  "$id": "#/properties/logger/properties/info",
-                  "type": "object",
-                  "title": "The info schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": {},
-                  "examples": [
-                      {
-                          "console_output": true,
-                          "file_write": false,
-                          "file_path": "../path/to/file.log"
-                      }
-                  ],
-                  "required": [
-                      "console_output",
-                      "file_write",
-                      "file_path"
-                  ],
-                  "properties": {
-                      "console_output": {
-                          "$id": "#/properties/logger/properties/info/properties/console_output",
-                          "type": "boolean",
-                          "title": "The console_output schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": false,
-                          "examples": [
-                              true
-                          ]
-                      },
-                      "file_write": {
-                          "$id": "#/properties/logger/properties/info/properties/file_write",
-                          "type": "boolean",
-                          "title": "The file_write schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": false,
-                          "examples": [
-                              false
-                          ]
-                      },
-                      "file_path": {
-                          "$id": "#/properties/logger/properties/info/properties/file_path",
-                          "type": "string",
-                          "title": "The file_path schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": "",
-                          "examples": [
-                              "../path/to/file.log"
-                          ]
-                      }
-                  },
-                  "additionalProperties": true
-              },
-              "error": {
-                  "$id": "#/properties/logger/properties/error",
-                  "type": "object",
-                  "title": "The error schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": {},
-                  "examples": [
-                      {
-                          "console_output": true,
-                          "file_write": false,
-                          "file_path": "../path/to/file.log"
-                      }
-                  ],
-                  "required": [
-                      "console_output",
-                      "file_write",
-                      "file_path"
-                  ],
-                  "properties": {
-                      "console_output": {
-                          "$id": "#/properties/logger/properties/error/properties/console_output",
-                          "type": "boolean",
-                          "title": "The console_output schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": false,
-                          "examples": [
-                              true
-                          ]
-                      },
-                      "file_write": {
-                          "$id": "#/properties/logger/properties/error/properties/file_write",
-                          "type": "boolean",
-                          "title": "The file_write schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": false,
-                          "examples": [
-                              false
-                          ]
-                      },
-                      "file_path": {
-                          "$id": "#/properties/logger/properties/error/properties/file_path",
-                          "type": "string",
-                          "title": "The file_path schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": "",
-                          "examples": [
-                              "../path/to/file.log"
-                          ]
-                      }
-                  },
-                  "additionalProperties": true
-              },
-              "access": {
-                  "$id": "#/properties/logger/properties/access",
-                  "type": "object",
-                  "title": "The access schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": {},
-                  "examples": [
-                      {
-                          "console_output": false,
-                          "file_write": false,
-                          "file_path": "../path/to/file.log"
-                      }
-                  ],
-                  "required": [
-                      "console_output",
-                      "file_write",
-                      "file_path"
-                  ],
-                  "properties": {
-                      "console_output": {
-                          "$id": "#/properties/logger/properties/access/properties/console_output",
-                          "type": "boolean",
-                          "title": "The console_output schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": false,
-                          "examples": [
-                              false
-                          ]
-                      },
-                      "file_write": {
-                          "$id": "#/properties/logger/properties/access/properties/file_write",
-                          "type": "boolean",
-                          "title": "The file_write schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": false,
-                          "examples": [
-                              false
-                          ]
-                      },
-                      "file_path": {
-                          "$id": "#/properties/logger/properties/access/properties/file_path",
-                          "type": "string",
-                          "title": "The file_path schema",
-                          "description": "An explanation about the purpose of this instance.",
-                          "default": "",
-                          "examples": [
-                              "../path/to/file.log"
-                          ]
-                      }
-                  },
-                  "additionalProperties": true
-              }
-          },
-          "additionalProperties": true
-      },
-      "uploads_path": {
-          "$id": "#/properties/uploads_path",
-          "type": "string",
-          "title": "The uploads_path schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": "",
-          "examples": [
-              "../uploads"
-          ]
-      }
+      "additionalProperties": true
+    },
+    "uploads_path": {
+      "$id": "#/properties/uploads_path",
+      "type": "string",
+      "title": "The uploads_path schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": ["../uploads"]
+    }
   },
   "additionalProperties": true
 }
